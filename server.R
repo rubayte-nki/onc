@@ -13,14 +13,12 @@ source("plots/demoPlot2.R")
 source("plots/demoPlot.R")
 
 
-
 readProjectOverview <- function(){
   con <- file("www/oncoscape.txt")
   content <- readLines(con)
   close(con)
   content
 }
-
 
 
 shinyServer(function(input, output, session) {
@@ -141,6 +139,28 @@ shinyServer(function(input, output, session) {
       demoPlot2(input$numberOfGenes)
     }
   })
+  
+  ## downloads
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste('data-', Sys.Date(), '.tsv', sep="\t")
+    },
+    content <- function(filename){
+      write.csv(data.frame(genes[1:input$numberOfGenes]), filename)
+    }
+  )
+  output$downloadPlot <- downloadHandler(
+    filename = function() {
+      paste('plot-', Sys.Date(), '.png', sep="\t")
+    },
+    content <- function(filename){
+      png(file=filename,bg="transparent")
+      demoPlot2(input$numberOfGenes)
+      dev.off()
+    }
+  )
+  
+  
   ## *******************************************************************************
   ## verbatim debug text
   output$cancer <- renderText({

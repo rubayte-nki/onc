@@ -44,7 +44,9 @@ shinyUI(fluidPage(
                           fluidRow(
                             ## plot window 
                             column(10,                            
-                              HTML("<h3> Result Gene(s) plot </h3>"),     
+                              HTML("<h3> Result Gene(s) plot"),
+                              downloadButton('downloadPlot', 'Download Plot', class='btn btn-primary'),
+                              HTML("</h3>"),
                               tabsetPanel(
                                 ## heatmap view type 1
                                 tabPanel("view1",plotOutput("distPlot")),
@@ -56,7 +58,9 @@ shinyUI(fluidPage(
                           fluidRow(
                             ## result genes
                             column(10,
-                                   HTML("<hr><h3> Result Gene(s)</h3>"),
+                                   HTML("<hr><h3> Result Gene(s)"),
+                                   downloadButton('downloadData', 'Download Data', class='btn btn-primary'),
+                                   HTML("</h3>"),
                                    dataTableOutput('genesResTable')
                             )
                           ),
