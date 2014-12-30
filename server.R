@@ -43,6 +43,8 @@ readProjectOverview <- function(){
 #			     	        scores=list(combined="ts.score", Meth="ts.methylation",
 #			     	        CNA="ts.cna", Mut="ts.mutations",
 #			                shRNA="ts.achilles", Expr="ts.exprs"))
+# TCGA combined score
+#tcgaResultsHeatmapCombined = heatmapDataframe(tcgaResults) 
 # CCLE OG scores
 #ccleResultsHeatmapOG = heatmapDataframe(ccleResults, 
 #		 	     	        scores=list(combined="og.score", Meth="og.methylation",
@@ -53,7 +55,8 @@ readProjectOverview <- function(){
 #			     	        scores=list(combined="ts.score", Meth="ts.methylation",
 #			     	        CNA="ts.cna", Mut="ts.mutations",
 #			                shRNA="ts.achilles", Expr="ts.exprs"))
-
+# CCLE combined score
+#ccleResultsHeatmapCombined = heatmapDataframe(ccleResults)
 
 shinyServer(function(input, output, session) {
   
