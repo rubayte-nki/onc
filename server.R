@@ -135,22 +135,22 @@ shinyServer(function(input, output, session) {
   ## score type selector comp1
   output$scoreSelectInputC1 <- renderUI({
     selectInput("selectScoreTypeC1", label = "Score type", 
-                choices = list("Choice 1" = "1", "Choice 2" = "2",
-                               "Choice 3" = "3"), selected = "1")
+                choices = list("Oncogene score" = "1", "Tumor suppressor score" = "2",
+                               "Combined score" = "3"), selected = "1")
   })
   ## number of genes text box
   output$numberOfGenesSelectInput <- renderUI({
-    textInput("numberOfGenes", label = "# of Top Genes", 
-              value = "50")
+    selectInput("scoreCutoff", label = "Score cut-off", 
+              choices = list("2" = "2", "3" = "3", "4" = "4"))
   })
   
   ## tables
   output$genesResTable <- renderDataTable({
     input$refreshPlot
-    if (length(isolate(input$numberOfGenes))>0){
-      data.frame(genes[1:isolate(input$numberOfGenes)])
+    if (length(isolate(input$scoreCutoff))>0){
+      data.frame(genes[1:isolate(input$scoreCutoff)])
     }else{
-      data.frame(genes[1:input$numberOfGenes])
+      data.frame(genes[1:input$scoreCutoff])
     }
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5))
   
@@ -158,10 +158,10 @@ shinyServer(function(input, output, session) {
   ## view 1
   output$distPlot <- renderPlot({
     input$refreshPlot
-    if (length(isolate(input$numberOfGenes))>0){
-      demoPlot2(isolate(input$numberOfGenes))
+    if (length(isolate(input$scoreCutoff))>0){
+      demoPlot2(isolate(input$scoreCutoff))
     }else{
-      demoPlot2(input$numberOfGenes)
+      demoPlot2(input$scoreCutoff)
     }
   })
   ## view 2
