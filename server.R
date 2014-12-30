@@ -32,6 +32,22 @@ readProjectOverview <- function(){
 #rm(results)
 
 
+# Load the TCGA data
+# Copy number
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RDATA/tcga_pancancer4_cna.rdata")
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RDATA/tcga_pancancer4_cna_ccle.rdata")
+#rm(ccle.cna)
+# Gene expression
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RDATA/tcga_pancancer4_exprs.rdata")
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RDATA/tcga_pancancer4_exprs_ccle.rdata")
+#rm(ccle.exprs)
+# DNA methylation
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RDATA/tcga_pancancer4_meth.rdata")
+# Methylation annotation data
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/METHYLATION/illumina_infinium450_annotation.rdata")
+# Project Achilles data
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/CL/CCLE/PROJECT_ACHILLES/20130620/RDATA/achilles.rdata")
+
 # Reformat results for plotting page 1
 # TCGA oncogene (OG) scores
 #tcgaResultsHeatmapOG = heatmapDataframe(tcgaResults, 
@@ -138,13 +154,13 @@ shinyServer(function(input, output, session) {
   ## score type selector comp1
   output$scoreSelectInputC1 <- renderUI({
     selectInput("selectScoreTypeC1", label = "Score type", 
-                choices = list("Oncogene score" = "1", "Tumor suppressor score" = "2",
-                               "Combined score" = "3"), selected = "1")
+                choices = list("Oncogene score" = "OG", "Tumor suppressor score" = "TS",
+                               "Combined score" = "CO"), selected = "OG")
   })
   ## number of genes text box
   output$numberOfGenesSelectInput <- renderUI({
     selectInput("scoreCutoff", label = "Score cut-off", 
-              choices = list("2" = "2", "3" = "3", "4" = "4"))
+              choices = list("2" = 2, "3" = 3, "4" = 4))
   })
   
   ## tables
