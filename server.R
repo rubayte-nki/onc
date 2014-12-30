@@ -7,11 +7,13 @@
 
 library(shiny)
 library(shinysky)
+library(ggplot2)
+library(grid)
 
 ## source plot functions
 source("plots/demoPlot2.R")
 source("plots/demoPlot.R")
-
+#source("OncoScape/plotting.r")
 
 readProjectOverview <- function(){
   con <- file("www/oncoscape.txt")
@@ -19,6 +21,38 @@ readProjectOverview <- function(){
   close(con)
   content
 }
+
+# Load the TCGA results
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RESULTS/ALLGENES/20140416/NORMAL/prioritize_tcga_pancancer_allgenes_step2.rdata")
+#tcgaResults = results
+# Load the CCLE results
+#load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RESULTS/CCLE/20140416/prioritize_tcga_pancancer_allgenes_step2.rdata")
+#ccleResults = results
+# Save some memory
+#rm(results)
+
+
+# Reformat results for plotting page 1
+# TCGA oncogene (OG) scores
+#tcgaResultsHeatmapOG = heatmapDataframe(tcgaResults, 
+#		 	     	        scores=list(combined="og.score", Meth="og.methylation",
+#			     	        CNA="og.cna", Mut="og.mutations",
+#			                shRNA="og.achilles", Expr="og.exprs"))
+# TCGA tumor suppressor (TS) scores
+#tcgaResultsHeatmapTS = heatmapDataframe(tcgaResults, 
+#			     	        scores=list(combined="ts.score", Meth="ts.methylation",
+#			     	        CNA="ts.cna", Mut="ts.mutations",
+#			                shRNA="ts.achilles", Expr="ts.exprs"))
+# CCLE OG scores
+#ccleResultsHeatmapOG = heatmapDataframe(ccleResults, 
+#		 	     	        scores=list(combined="og.score", Meth="og.methylation",
+#			     	        CNA="og.cna", Mut="og.mutations",
+#			                shRNA="og.achilles", Expr="og.exprs"))
+# CCLE OG scores
+#ccleResultsHeatmapTS = heatmapDataframe(ccleResults, 
+#			     	        scores=list(combined="ts.score", Meth="ts.methylation",
+#			     	        CNA="ts.cna", Mut="ts.mutations",
+#			                shRNA="ts.achilles", Expr="ts.exprs"))
 
 
 shinyServer(function(input, output, session) {
