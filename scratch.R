@@ -7,11 +7,13 @@ source("page2.r")
 ## page 1
 ## **********************************************************************************
 
+dir=setwd("path/to")
+
 # Load the TCGA results
-load("C:/Rubayte/Oncoscape/data/prioritize_tcga_pancancer_allgenes_step2.rdata")
+load("prioritize_tcga_pancancer_allgenes_step2.rdata")
 tcgaResults = results
 # Load the CCLE results
-load("C:/Rubayte/Oncoscape/data/prioritize_ccle_pancancer_allgenes_step2.rdata")
+load("prioritize_ccle_pancancer_allgenes_step2.rdata")
 ccleResults = results
 # Save some memory
 rm(results)
@@ -55,19 +57,19 @@ plotHeatmapPage1(tcgaOG, stype[3])
 
 # Load the TCGA data
 # Copy number
-load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_cna.rdata")
-load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_cna_ccle.rdata")
+load("tcga_pancancer4_cna.rdata")
+load("tcga_pancancer4_cna_ccle.rdata")
 rm(ccle.cna)
 # Gene expression
-load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_exprs.rdata")
-load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_exprs_ccle.rdata")
+load("tcga_pancancer4_exprs.rdata")
+load("tcga_pancancer4_exprs_ccle.rdata")
 rm(ccle.exprs)
 # DNA methylation
-load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_meth.rdata")
+load("tcga_pancancer4_meth.rdata")
 # Methylation annotation data
-load("C:/Rubayte/Oncoscape/data/illumina_infinium450_annotation.rdata")
+load("illumina_infinium450_annotation.rdata")
 # Project Achilles data
-load("C:/Rubayte/Oncoscape/data/achilles.rdata")
+load("achilles.rdata")
 
 
 #############################################################################
