@@ -39,7 +39,7 @@ getPage2Plots = function(cancer, gene, sampleSelection) {
 		achilles.lt = ccleResults[[cancer]]$achilles.thresholds[1]
 		color.palette=c("#E69F00", "#009E73")
 		lab.group1="Tumors" 
-		lab.group2="Cell lines",
+		lab.group2="Cell lines"
 		pvalue=FALSE
 	}
 	meth.anno = infinium450.probe.ann

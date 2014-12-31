@@ -30,8 +30,11 @@ shinyUI(fluidPage(
                             uiOutput("scoreSelectInputC1"),                          
                           
                             ## number of cutoff genes
+                            uiOutput("scoreCutoffSelectorC1"),
+                            
+                            ## number of cutoff genes
                             uiOutput("numberOfGenesSelectInput"),
-                          
+                            
                             ## tumors or cell-lines
                             uiOutput("sampleSelectorC1"),
                             tags$hr(),

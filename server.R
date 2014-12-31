@@ -13,7 +13,8 @@ library(grid)
 ## source plot functions
 source("plots/demoPlot2.R")
 source("plots/demoPlot.R")
-#source("OncoScape/plotting.r")
+source("plots/plotting.R")
+source("page1.r")
 
 readProjectOverview <- function(){
   con <- file("www/oncoscape.txt")
@@ -47,6 +48,7 @@ readProjectOverview <- function(){
 #load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/METHYLATION/illumina_infinium450_annotation.rdata")
 # Project Achilles data
 #load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/CL/CCLE/PROJECT_ACHILLES/20130620/RDATA/achilles.rdata")
+
 
 # Reformat results for plotting page 1
 # TCGA oncogene (OG) scores
@@ -148,20 +150,27 @@ shinyServer(function(input, output, session) {
   ## sample set selector comp1
   output$sampleSelectorC1 <- renderUI({
     radioButtons("sampleSelectorC1", label = "Select Sample Set",
-                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines"),
+                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines", "Combined" = "combined"),
                  selected = "tumors")
   })
   ## score type selector comp1
   output$scoreSelectInputC1 <- renderUI({
     selectInput("selectScoreTypeC1", label = "Score type", 
-                choices = list("Oncogene score" = "OG", "Tumor suppressor score" = "TS",
-                               "Combined score" = "CO"), selected = "OG")
+                choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
+                               "Combined score" = "combined.score"), selected = "og.score")
   })
+  
+  ## score cut off selector comp1
+  output$scoreCutoffSelectorC1 <- renderUI({
+    selectInput("scoreCutoff", label = "Score cut-off", 
+              choices = list("2" = 2, "3" = 3, "4" = 4),selected = 2)
+  })
+
   ## number of genes text box
   output$numberOfGenesSelectInput <- renderUI({
-    selectInput("scoreCutoff", label = "Score cut-off", 
-              choices = list("2" = 2, "3" = 3, "4" = 4))
+    textInput("genesNumberC1", label = "Number of top genes", value="50")
   })
+  
   
   ## tables
   output$genesResTable <- renderDataTable({
@@ -177,19 +186,18 @@ shinyServer(function(input, output, session) {
   ## view 1
   output$distPlot <- renderPlot({
     input$refreshPlot
-    if (length(isolate(input$scoreCutoff))>0){
-      demoPlot2(isolate(input$scoreCutoff))
+    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+      comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
-      demoPlot2(input$scoreCutoff)
+      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
   })
   ## view 2
   output$distPlot2 <- renderPlot({
-    input$refreshPlot
-    if (length(isolate(input$numberOfGenes))>0){
-      demoPlot2(isolate(input$numberOfGenes))
+    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+      comp1view2Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
-      demoPlot2(input$numberOfGenes)
+      comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
   })
   
@@ -204,11 +212,13 @@ shinyServer(function(input, output, session) {
   )
   output$downloadPlot <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.png', sep="\t")
+      paste('plot-', Sys.Date(), '.pdf', sep="")
     },
     content <- function(filename){
-      png(file=filename,bg="transparent")
-      demoPlot2(input$numberOfGenes)
+      pdf(file=filename)
+      #par(mfrow=c(1,1))
+      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+      comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
       dev.off()
     }
   )
