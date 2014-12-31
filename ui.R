@@ -84,15 +84,20 @@ shinyUI(fluidPage(
              tabPanel("Single Gene in Cancer types",
                       sidebarLayout(
                         column(2,
-                               ## cancer type select
-                               uiOutput("cancerSelectorC2"),
+                               wellPanel(
+                                 ## cancer type select
+                                 uiOutput("cancerSelectorC2"),
+                                 
+                                 ## gene select
+                                 selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Select Gene")),
+                                 
+                                 ## select sample set
+                                 uiOutput("sampleSelectorC2"),
+                                 tags$hr(),
                                
-                               ## gene select
-                               selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Select Gene")),
-                               
-                               ## select sample set
-                                uiOutput("sampleSelectorC2")
-                               
+                                 ## action button
+                                 actionButton("refreshPlotC2",label="Refresh",class='btn btn-primary')
+                               )   
                         ),
                         mainPanel(
                           ## plot window

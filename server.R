@@ -9,12 +9,14 @@ library(shiny)
 library(shinysky)
 library(ggplot2)
 library(grid)
+library(stringr)
 
 ## source plot functions
 source("plots/demoPlot2.R")
 source("plots/demoPlot.R")
 source("plots/plotting.R")
 source("page1.r")
+source("page2.r")
 
 readProjectOverview <- function(){
   con <- file("www/oncoscape.txt")
@@ -79,7 +81,7 @@ readProjectOverview <- function(){
 shinyServer(function(input, output, session) {
   
   ###################################################################################
-  ## load starter rdata object for widgets
+  ## load starter rdata object for widgets and app
   ###################################################################################  
   starter <- load("www/starter.RData")
   genes <- apply(geness, 1, function(r) r)
@@ -256,29 +258,53 @@ shinyServer(function(input, output, session) {
     selectInput("cancerSelectorChoiceC2", "Select a Cancer type", apply(cancers, 1, function(r) r))
   })
   ## gene selector comp2
-  updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE)
+  updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE, selected=genes[100])
   ## sample set selector comp2
   output$sampleSelectorC2 <- renderUI({
     radioButtons("sampleSelectorC2", label = "Select Sample Set",
-                 choices = list("Tumors" = 1, "Cell-lines" = 2, "tumors vs cell-lines" = 3),
+                 choices = list("Tumors" = 1, "Cell-lines" = 2, "Tumors vs Cell lines" = 3),
                  selected = 1)
   })
   
   ## gene expression
   output$geneExpressionPlot <- renderPlot({
-    demoPlot()
+    input$refreshPlotC2
+    if (length(isolate(input$cancerSelectorChoiceC2))>0 && length(isolate(input$geneSelectorChoiceC2))>0 && length(isolate(input$sampleSelectorC2))>0){
+      getPage2Plots(isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["gene.expression"]]
+    }else{
+      getPage2Plots(input$cancerSelectorChoiceC2, input$geneSelectorChoiceC2, input$sampleSelectorC2)
+    }
+    #demoPlot()
   })
   ## copy number
   output$cnvPlot <- renderPlot({
-    demoPlot()
+    input$refreshPlotC2
+    if (length(isolate(input$cancerSelectorChoiceC2))>0 && length(isolate(input$geneSelectorChoiceC2))>0 && length(isolate(input$sampleSelectorC2))>0){
+      getPage2Plots(isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["acgh"]]
+    }else{
+      getPage2Plots(input$cancerSelectorChoiceC2, input$geneSelectorChoiceC2, input$sampleSelectorC2)
+    }
+    #demoPlot()
   })
   ## dna methylation
   output$dnaMethPlot <- renderPlot({
-    demoPlot()
+    input$refreshPlotC2
+    if (length(isolate(input$cancerSelectorChoiceC2))>0 && length(isolate(input$geneSelectorChoiceC2))>0 && length(isolate(input$sampleSelectorC2))>0){
+      getPage2Plots(isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["methylation"]]
+    }else{
+      getPage2Plots(input$cancerSelectorChoiceC2, input$geneSelectorChoiceC2, input$sampleSelectorC2)
+    }
+    #demoPlot()
   })
   ## achilles
   output$achillesPlot <- renderPlot({
-    demoPlot()
+    input$refreshPlotC2
+    if (length(isolate(input$cancerSelectorChoiceC2))>0 && length(isolate(input$geneSelectorChoiceC2))>0 && length(isolate(input$sampleSelectorC2))>0){
+      getPage2Plots(isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["achilles"]]
+    }else{
+      getPage2Plots(input$cancerSelectorChoiceC2, input$geneSelectorChoiceC2, input$sampleSelectorC2)
+    }
+    #demoPlot()
   })
   ###################################################################################
   

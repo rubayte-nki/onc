@@ -1,13 +1,17 @@
-source("plots/plotting.R")
-source("page1.r")
-
 rm (list=ls())
 
+source("plots/plotting.R")
+source("page1.r")
+source("page2.r")
+
+## page 1
+## **********************************************************************************
+
 # Load the TCGA results
-load("www/prioritize_tcga_pancancer_allgenes_step2.rdata")
+load("C:/Rubayte/Oncoscape/data/prioritize_tcga_pancancer_allgenes_step2.rdata")
 tcgaResults = results
 # Load the CCLE results
-load("www/prioritize_ccle_pancancer_allgenes_step2.rdata")
+load("C:/Rubayte/Oncoscape/data/prioritize_ccle_pancancer_allgenes_step2.rdata")
 ccleResults = results
 # Save some memory
 rm(results)
@@ -44,3 +48,48 @@ stype=c("combined.score", "ts.score", "og.score")
 plotHeatmapPage1(tcgaOG, stype[1])
 plotHeatmapPage1(tcgaOG, stype[2])
 plotHeatmapPage1(tcgaOG, stype[3])
+
+
+## page 2
+## **********************************************************************************
+
+# Load the TCGA data
+# Copy number
+load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_cna.rdata")
+load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_cna_ccle.rdata")
+rm(ccle.cna)
+# Gene expression
+load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_exprs.rdata")
+load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_exprs_ccle.rdata")
+rm(ccle.exprs)
+# DNA methylation
+load("C:/Rubayte/Oncoscape/data/tcga_pancancer4_meth.rdata")
+# Methylation annotation data
+load("C:/Rubayte/Oncoscape/data/illumina_infinium450_annotation.rdata")
+# Project Achilles data
+load("C:/Rubayte/Oncoscape/data/achilles.rdata")
+
+
+#############################################################################
+## prepare data frames
+#############################################################################
+#achilles,ccle.cna.combat,ccle.exprs.combat,infinium450.probe.ann,tcga.cna,tcga.cna.combat,tcga.exprs,tcga.exprs.combat,tcga.meth,
+#tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,tcga.mn.meth
+
+#############################################################################
+## update started data frame
+#############################################################################
+load("www/starter.RData")
+save(cancers,geness,tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
+     achilles,ccle.cna.combat,ccle.exprs.combat,infinium450.probe.ann,tcga.cna,tcga.cna.combat,tcga.exprs,tcga.exprs.combat,tcga.meth,
+     tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,tcga.mn.meth,tcgaResults,ccleResults, file="www/starter.RData")
+
+
+
+## test *******************************************************
+
+## let's plot
+getPage2Plots("BLCA", "ATM", 1)
+
+
+
