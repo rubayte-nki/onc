@@ -10,6 +10,9 @@ library(shinysky)
 library(ggplot2)
 library(grid)
 library(gridExtra)
+library(Gviz)
+library(GenomicRanges)
+library(biomaRt)
 
 ## source plot functions
 source("plots/demoPlot2.R")
@@ -34,6 +37,8 @@ source("page2.r")
 # Save some memory
 #rm(results)
 
+# Get the chromosomal location for all genes 
+#sortedGeneLoc = sortGenesByLocation(tcgaResults, ccleResults)
 
 # Load the TCGA data
 # Copy number
