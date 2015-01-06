@@ -151,3 +151,54 @@ comp1view2Plot = function(cutoff,cancer,score,sample){
     }
   }
 }
+
+##' main call to page1 gene data frame
+geneDataFrameResultSet = function(cutoff,cancer,score,sample){
+  if (sample == 'tumors'){
+    if(score == 'og.score'){
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }else if(score == 'ts.score'){
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }else{
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }
+  }else{
+    if(score == 'og.score'){
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }else if(score == 'ts.score'){
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }else{
+      ## subset data frame based on user input
+      resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer)
+      gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',resultsSub$gene,'">','Gene Card','</a>',sep='')
+      dfgenes <- data.frame(resultsSub$gene,gc)
+      colnames(dfgenes) <- c("Genes","External links")
+      dfgenes
+    }
+  }
+}

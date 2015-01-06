@@ -38,7 +38,8 @@ ccleResultsHeatmapCombined = heatmapDataframe(ccleResults)
 ## update started data frame
 #############################################################################
 load("www/starter.RData")
-save(cancers,geness,tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
+save(cancers,geness,file="www/starterWidgets.RData")
+save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
 
 
 ## test *******************************************************

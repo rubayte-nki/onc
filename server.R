@@ -9,7 +9,7 @@ library(shiny)
 library(shinysky)
 library(ggplot2)
 library(grid)
-library(stringr)
+library(gridExtra)
 
 ## source plot functions
 source("plots/demoPlot2.R")
@@ -18,12 +18,12 @@ source("plots/plotting.R")
 source("page1.r")
 source("page2.r")
 
-readProjectOverview <- function(){
-  con <- file("www/oncoscape.txt")
-  content <- readLines(con)
-  close(con)
-  content
-}
+#readProjectOverview <- function(){
+#  con <- file("www/oncoscape.txt")
+#  content <- readLines(con)
+#  close(con)
+#  content
+#}
 
 # Load the TCGA results
 #load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/PRIORITIZATION/TCGA_PAN/RESULTS/ALLGENES/20140416/NORMAL/prioritize_tcga_pancancer_allgenes_step2.rdata")
@@ -82,64 +82,71 @@ shinyServer(function(input, output, session) {
   
   ###################################################################################
   ## load starter rdata object for widgets and app
-  ###################################################################################  
-  starter <- load("www/starter.RData")
+  ################################################################################### 
+  starterWidgets <- load("www/starterWidgets.RData")
   genes <- apply(geness, 1, function(r) r)
   chrms <- c("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12",
              "chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chr21","chr22","chrX","chrY")
   ## this will return the genes from the selected pathway in comp4
   ## currently set to false 4 values
   demoGenesByPathway <- c(genes[1],genes[100],genes[1000],genes[2000])
-  projectDescription <- readProjectOverview()
+  starterData <- load("www/starter.RData")  
+
+  
+#   showshinyalert(session,"welcomeToApp",styleclass="primary",
+#     HTML("
+#         <h1 style='color:#1C1C1C' >OncoScape</h1>
+#         <span style='color:red'><b>beta version</b></span>
+#         
+#         <p style='color:#1C1C1C' > 
+#         OncoScape is a package for gene prioritization in the R statistical programming environment. 
+#         The analysis is run in a contrast fashion, i.e. always two groups of samples are compared with each other. 
+#         Examples include:
+#         1. tumors vs. normals
+#         2. cell lines vs. normals
+#         3. treatment responders vs resistant
+#         4. samples with mutations in gene X vs wild type
+#         Currently, analyses of five data types are implemented in OncoScape:
+#         1. gene expression
+#         2. DNA copy number
+#         3. DNA methylation
+#         4. mutation
+#         5. shRNA knock-down data
+#         Aberrations in each gene are called for each data type separately and scored as 0 (no aberration found) or 1 (aberration found). 
+#         These scores are summed across data types to give the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) 
+#         aberrations and calculates independent scores for both directions. It is possible to run the analysis on any combination of these data types.
+#         </p>
+#         
+#         <button class='btn btn-primary'>
+#           <font size='3'><b>Get started</b></font>
+#         </button>
+#         
+#         </br>
+#         
+#         <hr>
+#         <h3 >Publicatoin</h3>
+#         <p>some text about about this header</p>
+#         <h3 >License, terms of use, privacy </h3>
+#         <p>some text about about this header</p>
+#         <h3 >Github repository (?)</h3>
+#         <p>some text about about this header</p>
+#         <h3 >Contact</h3>
+#         <p>some text about about this header</p>
+#         "
+#     )
+#   )  
+  ###################################################################################  
+  
+
 
   ###################################################################################
   ## comp0: Project overview/about
-  ###################################################################################  
-  showshinyalert(session,"welcomeToApp",styleclass="primary",
-    HTML("
-        <h1 style='color:#1C1C1C' >OncoScape</h1>
-        <span style='color:red'><b>beta version</b></span>
-        
-        <p style='color:#1C1C1C' > 
-        OncoScape is a package for gene prioritization in the R statistical programming environment. 
-        The analysis is run in a contrast fashion, i.e. always two groups of samples are compared with each other. 
-        Examples include:
-        1. tumors vs. normals
-        2. cell lines vs. normals
-        3. treatment responders vs resistant
-        4. samples with mutations in gene X vs wild type
-        Currently, analyses of five data types are implemented in OncoScape:
-        1. gene expression
-        2. DNA copy number
-        3. DNA methylation
-        4. mutation
-        5. shRNA knock-down data
-        Aberrations in each gene are called for each data type separately and scored as 0 (no aberration found) or 1 (aberration found). 
-        These scores are summed across data types to give the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) 
-        aberrations and calculates independent scores for both directions. It is possible to run the analysis on any combination of these data types.
-        </p>
-        
-        <button class='btn btn-primary'>
-          <font size='3'><b>Get started</b></font>
-        </button>
-        
-        </br>
-        
-        <hr>
-        <h3 >Publicatoin</h3>
-        <p>some text about about this header</p>
-        <h3 >License, terms of use, privacy </h3>
-        <p>some text about about this header</p>
-        <h3 >Github repository (?)</h3>
-        <p>some text about about this header</p>
-        <h3 >Contact</h3>
-        <p>some text about about this header</p>
-        "
-    )
-  )  
-  ###################################################################################  
-  
-  
+  ###################################################################################
+  ## html
+  #output$projectDescriptionContent <- renderUI({
+  #  HTML(paste(projectDescription, collapse=""))
+  #})
+
 
   ###################################################################################
   ## comp1: Genes over cancer type
@@ -167,20 +174,15 @@ shinyServer(function(input, output, session) {
     selectInput("scoreCutoff", label = "Score cut-off", 
               choices = list("2" = 2, "3" = 3, "4" = 4),selected = 2)
   })
-
-  ## number of genes text box
-  output$numberOfGenesSelectInput <- renderUI({
-    textInput("genesNumberC1", label = "Number of top genes", value="50")
-  })
   
   
   ## tables
   output$genesResTable <- renderDataTable({
     input$refreshPlot
-    if (length(isolate(input$scoreCutoff))>0){
-      data.frame(genes[1:isolate(input$scoreCutoff)])
+    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+      geneDataFrameResultSet(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
-      data.frame(genes[1:input$scoreCutoff])
+      geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5))
   
@@ -188,6 +190,26 @@ shinyServer(function(input, output, session) {
   ## view 1
   output$distPlot <- renderPlot({
     input$refreshPlot
+    
+    # Create 0-row data frame which will be used to store data
+    dat <- data.frame(x = numeric(0), y = numeric(0))
+    withProgress(message = 'Generating plot', value = 0, {
+      # Number of times we'll go through the loop
+      n <- 30
+      
+      for (i in 1:n) {
+        # Each time through the loop, add another row of data. This is
+        # a stand-in for a long-running computation.
+        dat <- rbind(dat, data.frame(x = rnorm(1), y = rnorm(1)))
+        
+        # Increment the progress bar, and update the detail text.
+        incProgress(1/n, detail = paste("Doing part", i))
+        
+        # Pause for 0.1 seconds to simulate a long computation.
+        Sys.sleep(0.1)
+      }
+    })
+    
     if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
       comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
@@ -196,6 +218,28 @@ shinyServer(function(input, output, session) {
   })
   ## view 2
   output$distPlot2 <- renderPlot({
+    input$refreshPlot
+    
+    # Create 0-row data frame which will be used to store data
+    dat <- data.frame(x = numeric(0), y = numeric(0))
+    withProgress(message = 'Generating plot', value = 0, {
+      # Number of times we'll go through the loop
+      n <- 30
+      
+      for (i in 1:n) {
+        # Each time through the loop, add another row of data. This is
+        # a stand-in for a long-running computation.
+        dat <- rbind(dat, data.frame(x = rnorm(1), y = rnorm(1)))
+        
+        # Increment the progress bar, and update the detail text.
+        incProgress(1/n, detail = paste("Doing part", i))
+        
+        # Pause for 0.1 seconds to simulate a long computation.
+        Sys.sleep(0.1)
+      }
+    })
+    
+    
     if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
       comp1view2Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
@@ -209,41 +253,43 @@ shinyServer(function(input, output, session) {
       paste('data-', Sys.Date(), '.tsv', sep="\t")
     },
     content <- function(filename){
-      write.csv(data.frame(genes[1:input$numberOfGenes]), filename)
+      write.csv(geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), filename)
     }
   )
   output$downloadPlot <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.pdf', sep="")
+      paste('plot-', Sys.Date(), '.jpeg', sep="")
     },
-    content <- function(filename){
-      pdf(file=filename)
-      #par(mfrow=c(1,1))
-      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-      comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-      dev.off()
+    content <- function(file){
+      device <- function(..., width, height) {
+        grDevices::png(..., width = 1000, height = 800,
+                       res = 100, units = "px")
+      }
+      g <- arrangeGrob(comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
+                  comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
+      ggsave(file, plot = g, device = device)
     }
   )
   
   
   ## *******************************************************************************
   ## verbatim debug text
-  output$cancer <- renderText({
-    input$refreshPlot
-    paste("cancer : ", isolate(input$cancerSelectorChoiceC1))
-  })
-  output$score <- renderText({
-    input$refreshPlot
-    paste("score : ", isolate(input$selectScoreTypeC1))
-  })
-  output$number <- renderText({
-    input$refreshPlot    
-    paste("number : ", isolate(input$numberOfGenes))
-  })
-  output$sample <- renderText({
-    input$refreshPlot    
-    paste("sample : ", isolate(input$sampleSelectorC1))
-  })
+#   output$cancer <- renderText({
+#     input$refreshPlot
+#     paste("cancer : ", isolate(input$cancerSelectorChoiceC1))
+#   })
+#   output$score <- renderText({
+#     input$refreshPlot
+#     paste("score : ", isolate(input$selectScoreTypeC1))
+#   })
+#   output$number <- renderText({
+#     input$refreshPlot    
+#     paste("number : ", isolate(input$numberOfGenes))
+#   })
+#   output$sample <- renderText({
+#     input$refreshPlot    
+#     paste("sample : ", isolate(input$sampleSelectorC1))
+#   })
   
   ###################################################################################
   
@@ -336,12 +382,12 @@ shinyServer(function(input, output, session) {
   })
   
   ## view 1
-  output$selectedScorePlot <- renderPlot({
-    demoPlot()
+  output$selectedScorePlot <- renderText({
+    "Section Under Development"
   })
   ## view 2
-  output$perctAffectedSamplesPlot <- renderPlot({
-    demoPlot()
+  output$perctAffectedSamplesPlot <- renderText({
+    "Section Under Development"
   })
   ###################################################################################
   
@@ -368,20 +414,10 @@ shinyServer(function(input, output, session) {
   
   
   ## view 1
-  output$pathwayPlot <- renderPlot({
-    demoPlot()
+  output$pathwayPlot <- renderText({
+    "Section Under Development"
   })
   ###################################################################################
   
-
-  
-  ###################################################################################
-  ## comp5: About 
-  ###################################################################################
-  ## html
-  output$projectDescriptionContent <- renderUI({
-    #paste(projectDescription, collapse="")
-    HTML(paste(projectDescription, collapse=""))
-  })
   
 })

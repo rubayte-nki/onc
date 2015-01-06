@@ -10,12 +10,63 @@ library(shinysky)
 
 shinyUI(fluidPage(
 
-  tags$p(""),
+  #tags$p(""),
     
-  shinyalert("welcomeToApp", click.hide = TRUE, auto.close.after = NULL),
+  #shinyalert("welcomeToApp", click.hide = TRUE, auto.close.after = NULL),
   
   
-  navbarPage("OncoScape beta",
+  navbarPage("OncoScape",
+             windowTitle ="OncoScape",
+             icon="www/NKIlogo.png",
+
+             ## comp0
+             tabPanel("What is OncoScape?",collapsable = TRUE,
+                      mainPanel(
+                        #progressInit(),
+                        ## app about text
+                        fluidRow(
+                          column(5,
+                                 wellPanel(
+                                 tags$h4("Publication"),
+                                 tags$p("some text about about this header."),
+                                 tags$br(),
+                                 tags$h4("Github repository"),
+                                 tags$p("some text about about this header."),
+                                 tags$br(),
+                                 tags$h4("Contacts"),
+                                 tags$p("some text about about this header."),
+                                 tags$br(),
+                                 tags$h4("App version"),
+                                 tags$p("beta"),
+                                 tags$br(),
+                                 tags$h4("License, terms of use, privacy"),
+                                 tags$p("some text about about this header."),
+                                 tags$br(),
+                                 tags$hr(),
+                                 tags$img(src="NKIlogo.png")
+                                 )
+                              ),
+                          column(7,
+                                 tags$h3("What is OncoScape?"),
+                                 tags$hr(),
+                                 tags$p("OncoScape is a package for gene prioritization in the R statistical programming environment. The analysis is run in a contrast fashion, i.e. always two groups of samples are compared with each other. Examples include:"),
+                                 tags$ul(tags$li("Tumors vs. Normals"),
+                                         tags$li("Cell lines vs. Normals"),
+                                         tags$li("Treatment responders vs Resistant"),
+                                         tags$li("Samples with mutations in gene X vs Wild type")),
+                                 tags$p("Currently, analyses of five data types are implemented in OncoScape:"),
+                                 tags$ul(tags$li("Gene Expression"),
+                                         tags$li("DNA Copy Number"),
+                                         tags$li("DNA Methylation"),
+                                         tags$li("mutation"),
+                                         tags$li("shRNA knock-down data")),
+                                 tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no aberration found) or 1 (aberration found). 
+                                        These scores are summed across data types to give the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) 
+                                        aberrations and calculates independent scores for both directions. It is possible to run the analysis on any combination of these data types.")
+                          )
+                        )  
+                      )
+             ),
              
              
              ## comp1
@@ -31,9 +82,6 @@ shinyUI(fluidPage(
                           
                             ## number of cutoff genes
                             uiOutput("scoreCutoffSelectorC1"),
-                            
-                            ## number of cutoff genes
-                            uiOutput("numberOfGenesSelectInput"),
                             
                             ## tumors or cell-lines
                             uiOutput("sampleSelectorC1"),
@@ -66,16 +114,7 @@ shinyUI(fluidPage(
                                    HTML("</h3>"),
                                    dataTableOutput('genesResTable')
                             )
-                          ),
-                          fluidRow(
-                            column(10,
-                                   HTML("<hr><span style='color:red'>debug</span><P></p>"),
-                                   verbatimTextOutput("cancer"),
-                                   verbatimTextOutput("score"),
-                                   verbatimTextOutput("number"),
-                                   verbatimTextOutput("sample")
-                                   )
-                            )
+                          )
                         )
                       )
              ),
@@ -121,27 +160,29 @@ shinyUI(fluidPage(
              tabPanel("Genes across Choromosomes",
                       sidebarLayout(
                           column(2,
-                                 ## cancer type select
-                                 uiOutput("cancerSelectorC3"),
+                                 wellPanel(
+                                   ## cancer type select
+                                   uiOutput("cancerSelectorC3"),
                                  
-                                 ## score type select
-                                 uiOutput("selectScoreTypeC3"),
+                                   ## score type select
+                                   uiOutput("selectScoreTypeC3"),
                                  
-                                 ## chr select
-                                 uiOutput("chrSelector"),
-                                 
-                                 ## tumors or cell-lines
-                                 uiOutput("sampleSelectorC3")  
+                                   ## chr select
+                                   uiOutput("chrSelector"),
+                                   
+                                   ## tumors or cell-lines
+                                   uiOutput("sampleSelectorC3"),
+                                   tags$hr(),
+                                   
+                                   ## action button
+                                   actionButton("refreshPlotC3",label="Refresh",class='btn btn-primary')                         
+                                 )     
                         ),
                         mainPanel(
                           ## plot window
                           fluidRow(
-                            column (10, HTML("<h3>Selected Scores</h3>"),
-                                    plotOutput("selectedScorePlot"))
-                          ),
-                          fluidRow(
-                            column (10, HTML("<h3>Percentage Affected Samples</h3>"),
-                                    plotOutput("perctAffectedSamplesPlot"))
+                            column (10, HTML("<h3>Result Plot</h3>"),
+                                    textOutput("selectedScorePlot"))
                           )
                         )
                       )
@@ -151,51 +192,31 @@ shinyUI(fluidPage(
              tabPanel("Pathways",
                       sidebarLayout(
                         column(2,
-                               ## pathway type select
-                               uiOutput("pathwaySelector"),
-                               
-                               ## multilpe gene select
-                               selectizeInput('geneSelectorChoiceC4', label = "Selected Gene",  choices = NULL, options = list(maxItems = 500,placeholder="Selected Genes")),
-                               
-                               ## tumors or cell lines
-                               uiOutput("sampleSelectorC4")
-                        ),
+                               wellPanel(
+                                 ## pathway type select
+                                 uiOutput("pathwaySelector"),
+                                 
+                                 ## multilpe gene select
+                                 selectizeInput('geneSelectorChoiceC4', label = "Selected Gene",  choices = NULL, options = list(maxItems = 500,placeholder="Selected Genes")),
+                                 
+                                 ## tumors or cell lines
+                                 uiOutput("sampleSelectorC4"),
+                                 tags$hr(),
+                                 
+                                 ## action button
+                                 actionButton("refreshPlotC4",label="Refresh",class='btn btn-primary')                         
+                               )
+                      ),
                         mainPanel(
                           ## plot window
                           fluidRow(
                             column (10, HTML("<h3>Pathway Plot</h3>"),
-                                    plotOutput("pathwayPlot"))
+                                    textOutput("pathwayPlot"))
                           )
                         )
                       )
-             ),
-             
-             
-             ## comp5
-             tabPanel("About",
-                        mainPanel(
-                          ## app about text
-                          column(12,
-                                 tags$h3("OncoScape"),
-                                 uiOutput("projectDescriptionContent"),
-                                 tags$br(),
-                                 tags$h3("Publication"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
-                                 tags$h3("License, terms of use, privacy"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
-                                 tags$h3("Github repository (?)"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
-                                 tags$h3("Contact"),
-                                 tags$p("some text about about this header."),
-                                 tags$br()
-                                 )  
-                        )
              )
              
-             
-  ) 
+    )
   
 ))
