@@ -32,9 +32,9 @@ page1DataFrame = function(results, scoreCutoff, cancerType) {
 ##' @author Andreas Schlicker
 plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "og.score")) {
 	result.df = results
-	colorLow = list(combined.score="#034b87", ts.score="#034b87", og.score="gray98") 
+	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
 	colorMid = list(combined.score="gray98")#,
-	colorHigh = list(combined.score="#880000", ts.score="gray98", og.score="#880000")
+	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
 
 	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
 	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
