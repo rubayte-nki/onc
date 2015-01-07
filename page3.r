@@ -42,7 +42,7 @@ sortGenesByLocation = function(tcgaResults, ccleResults) {
 ##' @return a list with two plotting objects, "score" the actual score and "affected" the percentage of affected samples
 ##' @author Andreas Schlicker (a.schlicker@nki.nl) 
 getScorePlot = function(geneLocs, results, cancType, chrom, scoreType) {
-	scoreType = match.arg(scoreType, c("TS", "OG" "CO"))
+	scoreType = match.arg(scoreType, c("TS", "OG", "CO"))
 	
 	# Get the genes for the selected chromosome
 	genes = subset(geneLocs, chromosome_name==chrom)
@@ -50,14 +50,14 @@ getScorePlot = function(geneLocs, results, cancType, chrom, scoreType) {
 	# Get the score vector
 	score = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "og.score"]
   # And the percentage of affected samples
-	affected = results[[canc]]$prioritize.combined[genes[, "hgnc_symbol"], "og.affected.rel"]
+	affected = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "og.affected.rel"]
 	if (scoreType == "TS") {
 		score = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.score"] * -1
-		affected = results[[canc]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.affected.rel"]
+		affected = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.affected.rel"]
 	} else {
 		score = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "combined.score"]
-		affected = results[[canc]]$prioritize.combined[genes[, "hgnc_symbol"], "og.affected.rel"] - 
-							 results[[canc]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.affected.rel"]
+		affected = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "og.affected.rel"] - 
+							 results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.affected.rel"]
 	}
 	
 	# Get two tracks, one for scores and the other one for percent affected samples 
