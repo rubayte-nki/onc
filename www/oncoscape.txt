@@ -1,0 +1,24 @@
+<p>OncoScape is a package for gene prioritization in the R statistical programming environment. 
+The analysis is run in a contrast fashion, i.e. always two groups of samples are compared with each other. Examples include:
+    <ul>
+      <li>tumors vs. normals</li>
+      <li>cell lines vs. normals</li>
+      <li>treatment responders vs resistant</li>
+      <li>samples with mutations in gene X vs wild type</li>
+    </ul>
+</p>
+
+<p>Currently, analyses of five data types are implemented in OncoScape:
+  <ul>
+    <li>gene expression</li>
+    <li>DNA copy number</li>
+    <li>DNA methylation</li>
+    <li>mutation</li>
+    <li>shRNA knock-down data</li>
+  </ul>
+</p>
+
+<p>Aberrations in each gene are called for each data type separately and scored as 0 (no aberration found) or 1 (aberration found). 
+These scores are summed across data types to give the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) 
+aberrations and calculates independent scores for both directions. It is possible to run the analysis on any combination of these data types.
+</p>
