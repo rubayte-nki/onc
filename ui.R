@@ -21,20 +21,20 @@ shinyUI(fluidPage(
                         fluidRow(
                           column(5,
                                  wellPanel(
-                                 tags$h4("Publication"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
-                                 tags$h4("Github repository"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
-                                 tags$h4("Contacts"),
-                                 tags$p("some text about about this header."),
-                                 tags$br(),
+                                 #tags$h4("Publication"),
+                                 #tags$p("some text about about this header."),
+                                 #tags$br(),
+                                 #tags$h4("Github repository"),
+                                 #tags$p("some text about about this header."),
+                                 #tags$br(),
                                  tags$h4("App version"),
                                  tags$p("beta"),
                                  tags$br(),
                                  tags$h4("License, terms of use, privacy"),
-                                 tags$p("some text about about this header."),
+                                 tags$p("needs to be defined"),
+                                 tags$br(),
+                                 tags$h4("Contacts"),
+                                 tags$p("If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl)."),
                                  tags$br(),
                                  tags$hr(),
                                  tags$img(src="NKIlogo.png")
@@ -43,20 +43,20 @@ shinyUI(fluidPage(
                           column(7,
                                  tags$h3("What is OncoScape?"),
                                  tags$hr(),
-                                 tags$p("OncoScape is a package for gene prioritization in the R statistical programming environment. The analysis is run in a contrast fashion, i.e. always two groups of samples are compared with each other. Examples include:"),
-                                 tags$ul(tags$li("Tumors vs. Normals"),
-                                         tags$li("Cell lines vs. Normals"),
-                                         tags$li("Treatment responders vs Resistant"),
-                                         tags$li("Samples with mutations in gene X vs Wild type")),
-                                 tags$p("Currently, analyses of five data types are implemented in OncoScape:"),
+                                 tags$p("OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:"),
                                  tags$ul(tags$li("Gene Expression"),
                                          tags$li("DNA Copy Number"),
                                          tags$li("DNA Methylation"),
                                          tags$li("mutation"),
                                          tags$li("shRNA knock-down data")),
-                                 tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no aberration found) or 1 (aberration found). 
-                                        These scores are summed across data types to give the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) 
-                                        aberrations and calculates independent scores for both directions. It is possible to run the analysis on any combination of these data types.")
+                                 tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no significant difference found) or 1 (significant difference found). These scores are summed across all data types giving the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as oncogene score minus tumor suppressor score."),
+                                 tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:")
+                                 tags$ul(tags$li("tumors vs. normals"),
+                                         tags$li("cell lines vs. normals"),
+                                         tags$li("samples sensitive to treatment vs resistant ones"),
+                                         tags$li("samples with mutations in gene X vs wild type ones"),
+                                 	 tags$li("different cancer subtypes")),
+                                 tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE).")
                           )
                         )  
                       )
