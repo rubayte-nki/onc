@@ -37,7 +37,6 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
 	colorMid = list(combined.score="gray98")#,
 	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
-	
 	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
 	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
 }
@@ -114,7 +113,7 @@ comp1view1Plot = function(cutoff,cancer,score,sample){
   }else{
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer)      
+      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer)
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotHeatmapPage1(resultsSub, score)        

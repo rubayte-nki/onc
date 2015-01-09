@@ -113,8 +113,9 @@ shinyServer(function(input, output, session) {
   ## this will return the genes from the selected pathway in comp4
   ## currently set to false 4 values
   demoGenesByPathway <- c(genes[1],genes[100],genes[1000],genes[2000])
-  load("starter.RData")
-  load("gloc.RData")
+  starterData <- load("www/starter.RData")  
+
+  
   
 
 
@@ -154,6 +155,7 @@ shinyServer(function(input, output, session) {
       selectInput("scoreCutoff", label = "Score cut-off", 
                   choices = list("2" = 2, "3" = 3, "4" = 4),selected = 2)      
     }
+
   })
   
   
@@ -176,6 +178,7 @@ shinyServer(function(input, output, session) {
       comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
     }else{
       showProgress()
+
       comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
   })
@@ -213,7 +216,9 @@ shinyServer(function(input, output, session) {
                   comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
       ggsave(file, plot = g, device = device)
     }
-  )  
+  )
+  
+  
   ###################################################################################
   
   

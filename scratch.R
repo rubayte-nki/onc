@@ -108,5 +108,3 @@ gloc <- sortGenesByLocation(tcgaResults, ccleResults)
 ## let's plot
 getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
   
-  
-  
