@@ -49,7 +49,7 @@ getScorePlot = function(geneLocs, results, cancType, chrom, scoreType) {
 	
 	# Get the score vector
 	score = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "og.score"]
-  # And the percentage of affected samples
+	# And the percentage of affected samples
 	affected = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "og.affected.rel"]
 	if (scoreType == "TS") {
 		score = results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.score"] * -1
@@ -60,34 +60,24 @@ getScorePlot = function(geneLocs, results, cancType, chrom, scoreType) {
 							 results[[cancType]]$prioritize.combined[genes[, "hgnc_symbol"], "ts.affected.rel"]
 	}
 	
-	# Get two tracks, one for scores and the other one for percent affected samples 
-	tracks = list(DataTrack(GRanges(seqnames=as.character(chrom),
-																	ranges=IRanges(start=genes[, "start_position"],
-																								 end=genes[, "end_position"]),
-																	score,
-																	strand="*"),
-																	name="", 
-																	background.title="white",
-																	background.panel="white"),
-			
-								DataTrack(GRanges(seqnames=as.character(chrom),
-																	ranges=IRanges(start=genes[, "start_position"],
-																								 end=genes[, "end_position"]),
-																	affected,
-																	strand="*"),
-																	name="",
-																	background.title="white",
-																	background.panel="white"))
-			
-	list(score=plotTracks(tracks[1], type=c("h", "g"),
-						 ylim=c(min(unlist(lapply(tracks, function(x) { min(x@data) }))), 
-										max(unlist(lapply(tracks, function(x) { max(x@data) })))),
-						 col.title="black", col.axis="black", cex.axis=0.75, fontface="bold", 
-						 main=""),
-			 affected=plotTracks(tracks[2], type=c("h", "g"),
-						 ylim=c(min(unlist(lapply(tracks, function(x) { min(x@data) }))), 
-										max(unlist(lapply(tracks, function(x) { max(x@data) })))),
-						 col.title="black", col.axis="black", cex.axis=0.75, fontface="bold", 
-						 main=""))
+	# Plot two tracks, one for scores and the other one for percent affected samples 
+	list(score=plotTracks(DataTrack(GRanges(seqnames=as.character(chrom),
+						ranges=IRanges(start=genes[, "start_position"],
+						       	       end=genes[, "end_position"]),
+						score,
+					        strand="*")), 
+			      type=c("h", "g"),
+			      ylim=c(min(score), max(score)),
+			      col.title="black", col.axis="black", cex.axis=0.75, fontface="bold", 
+			      main=""),
+	     affected=plotTracks(DataTrack(GRanges(seqnames=as.character(chrom),
+		      	      			   ranges=IRanges(start=genes[, "start_position"],
+		      	      			   		  end=genes[, "end_position"]),
+		      	      			   affected,
+						   strand="*")), 
+				 type=c("h", "g"),
+				 ylim=c(min(affected), max(affected)),
+				 col.title="black", col.axis="black", cex.axis=0.75, fontface="bold", 
+				 main=""))
 }
 
