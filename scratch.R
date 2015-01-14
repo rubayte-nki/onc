@@ -17,6 +17,9 @@ load("prioritize_ccle_pancancer_allgenes_step2.rdata")
 ccleResults = results
 # Save some memory
 rm(results)
+# switch to main wd
+setwd("C:/Rubayte/Oncoscape/dev3")
+
 
 #############################################################################
 ## prepare data frames
@@ -82,10 +85,26 @@ load("achilles.rdata")
 #############################################################################
 ## update started data frame
 #############################################################################
-load("www/starter.RData")
-save(cancers,geness,tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
-     achilles,ccle.cna.combat,ccle.exprs.combat,infinium450.probe.ann,tcga.cna,tcga.cna.combat,tcga.exprs,tcga.exprs.combat,tcga.meth,
-     tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,tcga.mn.meth,tcgaResults,ccleResults, file="www/starter.RData")
+load("starter.RData")
+
+ccleResultsPlotTrack = NULL
+tcgaResultsPlotTrack = NULL
+
+for (n in names(ccleResults))
+{
+  ccleResultsPlotTrack[[n]] = ccleResults[[n]]$prioritize.combined
+}
+
+for (n in names(tcgaResults))
+{
+  tcgaResultsPlotTrack[[n]] =  tcgaResults[[n]]$prioritize.combined
+}
+
+#tcgaResultsPlotTrack <- tcgaResults[['LUSC']]$prioritize.combined
+#ccleResultsPlotTrack <- ccleResults[['LUSC']]$prioritize.combined
+
+save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
+     tcgaResultsPlotTrack,ccleResultsPlotTrack, file="starter.RData")
 
 
 
@@ -106,5 +125,5 @@ getPage2Plots("BLCA", "ATM", 1)
 gloc <- sortGenesByLocation(tcgaResults, ccleResults)
 
 ## let's plot
-getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
+res <- getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
   

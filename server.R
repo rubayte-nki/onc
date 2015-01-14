@@ -11,16 +11,16 @@ library(ggplot2)
 library(grid)
 library(gridExtra)
 library(plyr)
-#library(Gviz)
-#library(GenomicRanges)
-#library(biomaRt)
+library(Gviz)
+library(GenomicRanges)
+library(biomaRt)
 
 
 ## source plot functions
 source("plotting.R")
 source("page1.r")
 source("page2.r")
-#source("page3.r")
+source("page3.r")
 
 ## functions
 showProgress <- function() {
@@ -107,15 +107,14 @@ shinyServer(function(input, output, session) {
   ## load starter rdata object for widgets and app
   ################################################################################### 
   load("starterWidgets.RData")
+  #load("starter.RData")
+  #load("gloc.RData")
   genes <- apply(geness, 1, function(r) r)
   chrms <- c("1","2","3","4","5","6","7","8","9","10","11","12",
              "13","14","15","16","17","18","19","20","21","22","23","24")
   ## this will return the genes from the selected pathway in comp4
   ## currently set to false 4 values
   demoGenesByPathway <- c(genes[1],genes[100],genes[1000],genes[2000])
-  starterData <- load("www/starter.RData")  
-
-  
   
 
 
@@ -130,17 +129,17 @@ shinyServer(function(input, output, session) {
   ## widgets
   ## cancer selector comp1
   output$cancerSelectorC1 <- renderUI({
-    selectInput("cancerSelectorChoiceC1", "Select a Cancer type", apply(cancers, 1, function(r) r))
+    selectInput("cancerSelectorChoiceC1", label = NULL, choices = apply(cancers, 1, function(r) r))
   })
   ## sample set selector comp1
   output$sampleSelectorC1 <- renderUI({
-    radioButtons("sampleSelectorC1", label = "Select Sample Set",
-                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines", "Combined" = "combined"),
+    radioButtons("sampleSelectorC1", label = NULL,
+                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines"),
                  selected = "tumors")
   })
   ## score type selector comp1
   output$scoreSelectInputC1 <- renderUI({
-    selectInput("selectScoreTypeC1", label = "Score type", 
+    selectInput("selectScoreTypeC1", label = "Select Score type", 
                 choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
                                "Combined score" = "combined.score"), selected = "og.score")
   })
@@ -149,11 +148,11 @@ shinyServer(function(input, output, session) {
   output$scoreCutoffSelectorC1 <- renderUI({
     input$selectScoreTypeC1
     if (input$selectScoreTypeC1 == 'combined.score'){  
-      selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4," -2" = -2, "-3" = -3, "-4" = -4),selected = 2)
+      selectInput("scoreCutoff", label = "Select Cut-off Score", 
+                  choices = list("2" = 2, "3" = 3, "4" = 4," -2" = -2, "-3" = -3, "-4" = -4),selected = 3)
     }else{
-      selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4),selected = 2)      
+      selectInput("scoreCutoff", label = "Select Cut-off Score", 
+                  choices = list("2" = 2, "3" = 3, "4" = 4),selected = 3)      
     }
 
   })
@@ -167,22 +166,11 @@ shinyServer(function(input, output, session) {
     }else{
       geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
   
   ## plots
   ## view 1
-  output$distPlot <- renderPlot({
-    input$refreshPlot
-    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-      showProgress()
-      comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
-    }else{
-      showProgress()
-
-      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-    }
-  })
-  ## view 2
   output$distPlot2 <- renderPlot({
     input$refreshPlot
     if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
@@ -191,6 +179,17 @@ shinyServer(function(input, output, session) {
     }else{
       showProgress()
       comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+    }
+  })  
+  ## view 2
+  output$distPlot <- renderPlot({
+    input$refreshPlot
+    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+      showProgress()
+      comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+    }else{
+      showProgress()
+      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
     }
   })
   
@@ -295,28 +294,70 @@ shinyServer(function(input, output, session) {
   ## score type selector comp3
   output$scoreSelectInputC3 <- renderUI({
     selectInput("selectScoreTypeC3", label = "Score type", 
-                choices = list("Oncogene score" = "OG", "Tumor suppressor gene score" = "TS",
-                                 "Combined score" = "CO"), selected = "OG")
+                choices = list("Oncogene Score" = "OG", "Tumor Suppressor Score" = "TS",
+                                 "Combined score" = "CO"), selected = "TS")
   })
   ## chr selector comp3
   output$chrSelector <- renderUI({
     selectInput("selectChrType", "Select Chromosome", chrms)
   })
-  ## sample type selector comp3
-  output$sampleSelectorC3 <- renderUI({
-    radioButtons("sampleSelectorC3", label = "Select Sample Set",
-                 choices = list("Tumors" = 1, "Cell lines" = 2),
-                 selected = 1)
-  })
   
+  ## sample type selector comp3
+  #output$sampleSelectorC3 <- renderUI({
+  #  radioButtons("sampleSelectorC3", label = "Select Sample Set",
+  #               choices = list("Tumors" = 1, "Cell lines" = 2),
+  #               selected = 1)
+  #})
+  
+  ## plots
   ## view 1
-  output$selectedScorePlot <- renderText({
-    "Section Under Development"
+  output$selectedScorePlot <- renderPlot({
+    input$refreshPlotC3
+    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
+      showProgress()
+      comp3view1Plot(isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
+    }else{
+      showProgress()
+      comp3view1Plot(input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+    }
   })
   ## view 2
-  output$perctAffectedSamplesPlot <- renderText({
-    "Section Under Development"
+  output$perctAffectedSamplesPlot <- renderPlot({
+    input$refreshPlotC3
+    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
+      showProgress()
+      comp3view2Plot(isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
+    }else{
+      showProgress()
+      comp3view2Plot(input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+    }
   })
+  
+  ## downloads
+  ## view 1
+  output$downloadDataView1C3 <- downloadHandler(
+    filename = function() {
+      paste('plot-', Sys.Date(), '.jpeg', sep="")
+    },
+    content <- function(file){
+      jpeg(filename=file,width=1000,height=500,units="px")
+      comp3view1Plot(input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+      dev.off()
+    }
+  )
+  ## view 2
+  output$downloadDataView2C3 <- downloadHandler(
+    filename = function() {
+      paste('plot-', Sys.Date(), '.jpeg', sep="")
+    },
+    content <- function(file){
+      jpeg(filename=file,width=1000,height=500,units="px")
+      comp3view2Plot(input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+      dev.off()
+    }
+  )
+  
+  
   ###################################################################################
   
 
