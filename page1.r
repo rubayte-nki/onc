@@ -26,6 +26,27 @@ page1DataFrame = function(results, scoreCutoff, cancerType) {
 	result.df
 }
 
+page1DataFrameCombinedScore = function(results, cancerType) {
+  # Filter the genes according to user's criteria
+  genes = as.character(subset(results, cancer == cancerType & score.type == "combined")$gene)
+  
+  # Sort the genes according to highest sum across all cancer types
+  # Get the subset with the selected genes and drop unused levels
+  # gene.order = subset(result.df, score.type=="combined" & gene %in% genes)
+  gene.order = subset(results, score.type=="combined" & gene %in% genes)
+  gene.order$gene = droplevels(gene.order$gene)
+  # Do the sorting
+  gene.order = names(sort(unlist(lapply(split(gene.order$score, gene.order$gene), sum, na.rm=TRUE))))
+  
+  # Get the data.frame for plotting
+  result.df = subset(results, gene %in% genes)
+  result.df$gene = factor(result.df$gene, levels=gene.order)
+  result.df$cancer = factor(result.df$cancer, levels=sort(unique(as.character(result.df$cancer))))
+  
+  result.df
+}
+
+
 ##' Get the heatmap for view 1 of page 1.
 ##' @params results a subsetted data.frame as returned by page1DataFrame()
 ##' @params colorLow "#034b87" if selected score was TS or combined, else "gray98"
@@ -35,7 +56,7 @@ page1DataFrame = function(results, scoreCutoff, cancerType) {
 plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "og.score")) {
 	result.df = results
 	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
-	colorMid = list(combined.score="gray98")#,
+	colorMid = list(combined.score="gray98")
 	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
 	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
 	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
@@ -217,107 +238,217 @@ comp1view2Plot = function(cutoff,cancer,score,sample){
 
 ##' main call to page1 gene data frame
 geneDataFrameResultSet = function(cutoff,cancer,score,sample){
+  
+  rgsog= NULL
+  rgsts= NULL
+  rgscom= NULL
+  dfgenes = NULL
+  
   if (sample == 'tumors'){
-      #rgsog= NULL
-      #rgsts= NULL
-      #rgscom= NULL
-    #if(score == 'og.score'){
+    if(score == 'og.score'){
+      
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer)
       rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
       colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Oncogene Score","Cancer","External links")
-      #dfgenes
-    #}else if(score == 'ts.score'){
+      ## handle empty result set
+      if (nrow(rgsog)>0){
+        ## select others
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer)
+        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
+        resultsSub <- page1DataFrameCombinedScore(tcgaResultsHeatmapCombined, cancer)
+        rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgscom) <- c("Genes","Combined Score","Cancer")
+        ## make final data frame
+        temp <- join(rgsog,rgsts,type="left")
+        rgs <- join(temp,rgscom,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        temp <- temp[order(-temp$"Oncogene.Score"),]
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }      
+      
+    }else if(score == 'ts.score'){
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer)
-      #rgs <- unique(resultsSub$gene)
       rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
       colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Tumor Suppressor Score","Cancer","External links")
-      #dfgenes
-    #}else{
+      ## handle empty result set
+      if (nrow(rgsts)>0){
+        ## select others
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer)
+        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
+        resultsSub <- page1DataFrameCombinedScore(tcgaResultsHeatmapCombined, cancer)
+        rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgscom) <- c("Genes","Combined Score","Cancer")
+        ## make final data frame
+        temp <- join(rgsts,rgsog,type="left")
+        rgs <- join(temp,rgscom,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }
+      
+    }else{
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer)
-      #rgs <- unique(resultsSub$gene)
       rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
       colnames(rgscom) <- c("Genes","Combined Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Combined Score","Cancer","External links")
-      #dfgenes
-    #}
-    temp <- join(rgsog,rgsts,type="full")
-    rgs <- join(temp,rgscom,type="full")
-    gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-    temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
-    dfgenes <- replace(temp, is.na(temp), "-")
-    rm(temp)
-    rm(rgs)
-    colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Cancer","External links")
-    if (nrow(dfgenes)>0){
-      dfgenes
-    }else{
-      dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
-      colnames(dfgenes) <- c("")
-      dfgenes
+      ## handle empty result set
+      if (nrow(rgscom)>0){
+        ## select others
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer)
+        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer)
+        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
+        ## make final data frame
+        temp <- join(rgscom,rgsog,type="left")
+        rgs <- join(temp,rgsts,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        if (cutoff > 0)
+        {
+          temp <- temp[order(-temp$"Combined.Score"),]          
+        }else{
+          temp <- temp[order(temp$"Combined.Score"),]
+        }
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }
+      
     }
   }else{
-    #if(score == 'og.score'){
+    
+    if(score == 'og.score'){
+      
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer)
-      #rgs <- unique(resultsSub$gene)
       rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
-      colnames(rgsog) <- c("Genes","OG Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Oncogene Score","Cancer","External links")
-      #dfgenes
-    #}else if(score == 'ts.score'){
+      colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
+      ## handle empty result set
+      if (nrow(rgsog)>0){
+        ## select others
+        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer)
+        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
+        resultsSub <- page1DataFrameCombinedScore(ccleResultsHeatmapCombined, cancer)
+        rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgscom) <- c("Genes","Combined Score","Cancer")
+        ## make final data frame
+        temp <- join(rgsog,rgsts,type="left")
+        rgs <- join(temp,rgscom,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        temp <- temp[order(-temp$"Oncogene.Score"),]
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }      
+      
+    }else if(score == 'ts.score'){
+    
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer)
-      #rgs <- unique(resultsSub$gene)
       rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
-      colnames(rgsts) <- c("Genes","TS Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Tumor Suppressor Score","Cancer","External links")
-      #dfgenes
-    #}else{
+      colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
+      ## handle empty result set
+      if (nrow(rgsts)>0){
+        ## select others
+        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer)
+        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
+        resultsSub <- page1DataFrameCombinedScore(ccleResultsHeatmapCombined, cancer)
+        rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgscom) <- c("Genes","Combined Score","Cancer")
+        ## make final data frame
+        temp <- join(rgsts,rgsog,type="left")
+        rgs <- join(temp,rgscom,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }
+      
+    }else{
+      
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer)
-      #rgs <- unique(resultsSub$gene)
       rgscom <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
       colnames(rgscom) <- c("Genes","Combined Score","Cancer")
-      #rgs <- unique(resultsSub$gene)
-      #gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-      #dfgenes <- data.frame(rgs,gc)
-      #colnames(dfgenes) <- c("Genes","Combined Score","Cancer","External links")
-      #dfgenes
-    #}
-    temp <- join(rgsog,rgsts,type="full")
-    rgs <- join(temp,rgscom,type="full")
-    gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
-    temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
-    dfgenes <- replace(temp, is.na(temp), "-")
-    rm(temp)
-    rm(rgs)
-    colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Cancer","External links")
-    if (nrow(dfgenes)>0){
-      dfgenes
-    }else{
-      dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
-      colnames(dfgenes) <- c("")
-      dfgenes
+      ## handle empty result set
+      if (nrow(rgscom)>0){
+        ## select others
+        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer)
+        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
+        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer)
+        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
+        ## make final data frame
+        temp <- join(rgscom,rgsog,type="left")
+        rgs <- join(temp,rgsts,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
+        if (cutoff > 0)
+        {
+          temp <- temp[order(-temp$"Combined.Score"),]          
+        }else{
+          temp <- temp[order(temp$"Combined.Score"),]
+        }
+        dfgenes <- replace(temp, is.na(temp), "-")
+        rm(temp)
+        rm(rgs)
+        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","Cancer","External links")
+        dfgenes
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }
+
     }
+    
   }
 }

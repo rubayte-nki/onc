@@ -676,50 +676,39 @@
 # ##' @param xaxis.theme optional ggplot2 theme for the x-axis; default: NULL
 # ##' @return a ggplot2 object
 # ##' @author Andreas Schlicker
-# >>>>>>> fa03c8c99ebe27bd8c9fd2ccc34a635920b1753c
-# getHeatmap = function(dataFrame, yaxis.theme, 
-#                       labels=NULL, breaks=NULL, 
-#                       color.low="white", color.mid=NULL, color.high="black", 
-#                       title="", ylab="", xlab="",
-#                       xaxis.theme=NULL) {
-#   p = ggplot(dataFrame, aes(x=cancer, y=gene)) + 
-#     geom_tile(aes(fill=score), color = "white") + 
-#     labs(title=title, x=xlab, y=ylab) +
-#     theme(panel.background=element_rect(color="white", fill="white"),
-#           axis.ticks=element_blank(), 
-# <<<<<<< HEAD
-#           axis.text.x=element_text(color="gray30", face="bold", size=10),
-#           axis.text.y=element_text(color="gray30", face="bold", size=10),
-#           legend.text=element_text(color="gray30", face="bold", size=10),
-#           legend.title=element_blank(),
-#           legend.position="top",
-#           legend.key.width=unit(1.5, "cm")) #+
-#     #yaxis.theme
-# =======
-#           axis.text.x=element_text(color="gray30", face="bold", size=20),
-#           legend.text=element_text(color="gray30", face="bold", size=20),
-#           legend.title=element_blank(),
-#           legend.position="top",
-#           legend.key.width=unit(1.5, "cm")) +
-#     yaxis.theme
-# >>>>>>> fa03c8c99ebe27bd8c9fd2ccc34a635920b1753c
-#   
-#   if (!is.null(color.mid)) {
-#     p = p + scale_fill_gradient2(low=color.low, mid=color.mid, high=color.high)
-#   } else {
-#     p = p + scale_fill_gradient(low=color.low, high=color.high)
-#   }
-#   if (!is.null(labels)) {
-#     p = p + scale_y_discrete(breaks=breaks, labels=labels)
-#   }
-#   if (!is.null(xaxis.theme)) {
-#     p = p + xaxis.theme
-#   }
-#   
-#   p
-# }
-# 
-# <<<<<<< HEAD
+getHeatmap = function(dataFrame, yaxis.theme, 
+                      labels=NULL, breaks=NULL, 
+                      color.low="white", color.mid=NULL, color.high="black", 
+                      title="", ylab="", xlab="",
+                      xaxis.theme=NULL) {
+  p = ggplot(dataFrame, aes(x=cancer, y=gene)) + 
+    geom_tile(aes(fill=score), color = "white") + 
+    labs(title=title, x=xlab, y=ylab) +
+    theme(panel.background=element_rect(color="white", fill="white"),
+          axis.ticks=element_blank(), 
+          axis.text.x=element_text(color="gray30", face="bold", size=10),
+          axis.text.y=element_text(color="gray30", face="bold", size=10),
+          legend.text=element_text(color="gray30", face="bold", size=10),
+          legend.title=element_blank(),
+          legend.position="top",
+          legend.key.width=unit(1.5, "cm")) #+
+    #yaxis.theme
+  
+  if (!is.null(color.mid)) {
+    p = p + scale_fill_gradient2(low=color.low, mid=color.mid, high=color.high)
+  } else {
+    p = p + scale_fill_gradient(low=color.low, high=color.high)
+  }
+  if (!is.null(labels)) {
+    p = p + scale_y_discrete(breaks=breaks, labels=labels)
+  }
+  if (!is.null(xaxis.theme)) {
+    p = p + xaxis.theme
+  }
+  
+  p
+}
+
 # # ##' Generate a distribution plot for prioritization results. 
 # # ##' @param dataFrame approprately formatted data.frame
 # # ##' @param facets string that defines a formula for generating the facets of the plot

@@ -50,7 +50,7 @@ shinyUI(fluidPage(
                                          tags$li("mutation"),
                                          tags$li("shRNA knock-down data")),
                                  tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no significant difference found) or 1 (significant difference found). These scores are summed across all data types giving the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as oncogene score minus tumor suppressor score."),
-                                 tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:")
+                                 tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
                                  tags$ul(tags$li("tumors vs. normals"),
                                          tags$li("cell lines vs. normals"),
                                          tags$li("samples sensitive to treatment vs resistant ones"),
@@ -69,20 +69,30 @@ shinyUI(fluidPage(
                         column(2,
                           wellPanel(
                             ## cancer type select
+                            tags$h4("Select Cancer type"),
                             uiOutput("cancerSelectorC1"),
+                            tags$hr(),
                           
+                            ## gene selection criteria
+                            tags$h4("Gene Selection"),
                             ## score type
-                            uiOutput("scoreSelectInputC1"),                          
-                          
+                            uiOutput("scoreSelectInputC1"),                                                    
                             ## number of cutoff genes
                             uiOutput("scoreCutoffSelectorC1"),
+                            tags$h6("OR"),
+                            fileInput('geneListUploadC1', 'Upload Gene List File',
+                                      accept=c('text/csv', 
+                                               'text/comma-separated-values,text/plain', 
+                                               '.csv')),
+                            tags$hr(),
                             
                             ## tumors or cell-lines
+                            tags$h4("Select Sample type"),
                             uiOutput("sampleSelectorC1"),
                             tags$hr(),
                           
                             ## action button
-                            actionButton("refreshPlot",label="Refresh",class='btn btn-primary')
+                            actionButton("refreshPlot",label="Refresh Results",class='btn btn-primary')
                             )
                           ),
                         mainPanel(
@@ -102,10 +112,10 @@ shinyUI(fluidPage(
                                    downloadButton('downloadPlot', 'Download Plot', class='btn btn-primary'),
                                    HTML("</h3>"),
                                    tabsetPanel(
-                                     ## heatmap view type 1
-                                     tabPanel("view1",plotOutput("distPlot")),
-                                     ## heatmap view type 1
-                                     tabPanel("view2",plotOutput("distPlot2"))
+                                     ## view type 1
+                                     tabPanel("Detailed Aberration Profiles",plotOutput("distPlot2")),
+                                     ## view type 2
+                                     tabPanel("Summary Heat-Map",plotOutput("distPlot"))
                                    )
                             )
                           )
@@ -159,24 +169,33 @@ shinyUI(fluidPage(
                                    uiOutput("cancerSelectorC3"),
                                  
                                    ## score type select
-                                   uiOutput("selectScoreTypeC3"),
+                                   uiOutput("scoreSelectInputC3"),
                                  
                                    ## chr select
                                    uiOutput("chrSelector"),
                                    
                                    ## tumors or cell-lines
-                                   uiOutput("sampleSelectorC3"),
+                                   #uiOutput("sampleSelectorC3"),
                                    tags$hr(),
                                    
                                    ## action button
-                                   actionButton("refreshPlotC3",label="Refresh",class='btn btn-primary')                         
+                                   actionButton("refreshPlotC3",label="Refresh Results",class='btn btn-primary')                         
                                  )     
                         ),
                         mainPanel(
                           ## plot window
                           fluidRow(
-                            column (10, HTML("<h3>Result Plot</h3>"),
-                                    textOutput("selectedScorePlot"))
+                            column (10, HTML("<h3>Score Plot"),
+                                    downloadButton('downloadDataView1C3', 'Download Plot', class='btn btn-primary'),
+                                    HTML("</h3>"),
+                                    plotOutput("selectedScorePlot"))
+                          ),
+                          tags$hr(),
+                          fluidRow(
+                            column (10, HTML("<h3>Affected Samples Plot"),
+                                    downloadButton('downloadDataView2C3', 'Download Plot', class='btn btn-primary'),
+                                    HTML("</h3>"),
+                                    plotOutput("perctAffectedSamplesPlot"))
                           )
                         )
                       )
