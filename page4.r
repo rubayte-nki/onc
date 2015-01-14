@@ -12,7 +12,7 @@
 ##' @param kegg.dir directory with predownloaded KEGG files; all new downloaded files will be stored there;
 ##' default: "."
 ##' @author Andreas Schlicker
-generatePathview = function(tcgaResults, ccleResults, pathway, cancers="avg",
+generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 			    what=c("tcga", "ccle", "both"),
 			    out.dir=".", out.suffix="", kegg.dir=".", 
 	                    scores="combined.score") {
@@ -25,7 +25,7 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="avg",
 	} else if (what == "ccle") {
 		f (cancers == "all") {
 			cancers = names(ccleResults)
-		}
+=		}
 		scoreMat = pathviewMat(ccleResults[intersect(cancers, names(ccleResults))], scores[1])
 	} else {
 		scoreMat = cbind(tcgaResults[[cancers[1]]]$prioritize.combined[, scores],
