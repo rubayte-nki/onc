@@ -14,7 +14,7 @@ library(plyr)
 #library(Gviz)
 #library(GenomicRanges)
 #library(biomaRt)
-
+library(pathview)
 
 ## source plot functions
 source("plotting.R")
@@ -150,10 +150,10 @@ shinyServer(function(input, output, session) {
     input$selectScoreTypeC1
     if (input$selectScoreTypeC1 == 'combined.score'){  
       selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4," -2" = -2, "-3" = -3, "-4" = -4),selected = 2)
+                  choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),selected = 2)
     }else{
       selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4),selected = 2)      
+                  choices = list(">2" = 2, ">3" = 3, ">4" = 4),selected = 2)      
     }
 
   })
