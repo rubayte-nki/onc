@@ -23,9 +23,9 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 		}
 		scoreMat = pathviewMat(tcgaResults[intersect(cancers, names(tcgaResults))], scores[1])
 	} else if (what == "ccle") {
-		f (cancers == "all") {
+		if (cancers == "all") {
 			cancers = names(ccleResults)
-=		}
+		}
 		scoreMat = pathviewMat(ccleResults[intersect(cancers, names(ccleResults))], scores[1])
 	} else {
 		scoreMat = cbind(tcgaResults[[cancers[1]]]$prioritize.combined[, scores],
@@ -42,14 +42,14 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 		mid = list(gene="gray98", cpd="gray")
 		high = list(gene="#880000", cpd="yellow")
 		both.dirs = list(gene=FALSE, cpd=FALSE)
-	} else (scores == "ts.score") {
+	} else {
 		low = list(gene="gray98", cpd="blue")
 		mid = list(gene="gray98", cpd="gray")
 		high = list(gene="#034b87", cpd="yellow")
 		both.dirs = list(gene=FALSE, cpd=FALSE)
 	}
 	
-	limit = ifelse(is.null(limit), max(abs(scoreMat), na.rm=TRUE), limit)
+	limit = c(min(scoreMat, na.rm=TRUE), max(scoreMat, na.rm=TRUE))
 	
 	# Save working directory and switch to new one
 	oldwd = getwd()
@@ -60,8 +60,10 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 		           kegg.native=TRUE, gene.idtype="SYMBOL",
 		           out.suffix=out.suffix, kegg.dir=kegg.dir,
 		           limit=list(gene=limit, cpd=1), node.sum="max.abs",
-		           multi.state=TRUE, low=low, mid=mid, high=high),
-			   both.dirs=both.dirs)
+		           multi.state=TRUE, low=low, mid=mid, high=high,
+			   both.dirs=both.dirs))
 	# Set old working directory
 	setwd(oldwd)
+	
+	paste0(getwd(), "/hsa", pathway, ".", out.suffix, ".multi.png")
 }
