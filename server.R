@@ -115,7 +115,9 @@ shinyServer(function(input, output, session) {
   ## this will return the genes from the selected pathway in comp4
   ## currently set to false 4 values
   demoGenesByPathway <- c(genes[1],genes[100],genes[1000],genes[2000])
-  
+  ## read pathways file
+  pathtemp <- read.delim("kegg_pathways.tsv",sep="\t",header=FALSE)
+  pathways <- paste(pathtemp$V2,':',pathtemp$V3, sep= "")
 
 
   ###################################################################################
@@ -148,19 +150,11 @@ shinyServer(function(input, output, session) {
   output$scoreCutoffSelectorC1 <- renderUI({
     input$selectScoreTypeC1
     if (input$selectScoreTypeC1 == 'combined.score'){  
-<<<<<<< HEAD
       selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),selected = 2)
+                  choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),selected = 3)
     }else{
       selectInput("scoreCutoff", label = "Score cut-off", 
-                  choices = list(">2" = 2, ">3" = 3, ">4" = 4),selected = 2)      
-=======
-      selectInput("scoreCutoff", label = "Select Cut-off Score", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4," -2" = -2, "-3" = -3, "-4" = -4),selected = 3)
-    }else{
-      selectInput("scoreCutoff", label = "Select Cut-off Score", 
-                  choices = list("2" = 2, "3" = 3, "4" = 4),selected = 3)      
->>>>>>> origin/master
+                  choices = list(">2" = 2, ">3" = 3, ">4" = 4),selected = 3)      
     }
 
   })
@@ -242,7 +236,7 @@ shinyServer(function(input, output, session) {
   updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE, selected=genes[100])
   ## sample set selector comp2
   output$sampleSelectorC2 <- renderUI({
-    radioButtons("sampleSelectorC2", label = "Select Sample Set",
+    radioButtons("sampleSelectorC2", label = "Select Sample type",
                  choices = list("Tumors" = 1, "Cell-lines" = 2, "Tumors vs Cell lines" = 3),
                  selected = 1)
   })
@@ -374,23 +368,26 @@ shinyServer(function(input, output, session) {
   ## comp4: Pathways 
   ###################################################################################
   ## widgets
-  ## pathway selector comp4
-  output$pathwaySelector <- renderUI({
-    selectInput("selectPathwayType", label = "Select Pathway", 
-                choices = list("Choice 1" = 1, "Choice 2" = 2,
-                               "Choice 3" = 3), selected = 1)
+  ## cancer selector comp4
+  output$cancerSelectorC4 <- renderUI({
+    selectInput("cancerSelectorChoiceC4", "Select a Cancer type" , choices = c('All',apply(cancers, 1, function(r) r)), selected ="All")
   })
+  ## score type selector comp4
+  output$scoreSelectInputC4 <- renderUI({
+    selectInput("selectScoreTypeC4", label = "Select Score type", 
+                choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
+                               "Combined score" = "combined.score"), selected = "og.score")
+  })  
+  ## pathway selector comp4
+  updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = pathways[1], server = TRUE)
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
-    radioButtons("sampleSelectorC4", label = "Select Sample Set",
-                 choices = list("Tumors" = 1, "Cell-lines" = 2),
-                 selected = 1)
+    radioButtons("sampleSelectorC4", "Select Sample type",
+                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines", "Tumors vs Cell lines" = "tvc"),
+                 selected = "tumors")
   })
-  ## genes selector comp4
-  updateSelectizeInput(session, 'geneSelectorChoiceC4', choices = genes, selected = demoGenesByPathway, server = TRUE)
   
-  
-  ## view 1
+  ## plots
   output$pathwayPlot <- renderText({
     "Section Under Development"
   })

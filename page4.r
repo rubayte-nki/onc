@@ -15,7 +15,7 @@
 generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 			    what=c("tcga", "ccle", "both"),
 			    out.dir=".", out.suffix="", kegg.dir=".", 
-	                    scores="combined.score") {
+	                    scores=c("combined.score","og.score","ts.score")) {
 	# Get the score matrix and combine them if necessary
 	if (what == "tcga") {
 		if (cancers == "all") {

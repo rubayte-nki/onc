@@ -5,6 +5,7 @@ source("plotting.R")
 source("page1.r")
 source("page2.r")
 source("page3.r")
+source("page4.r")
 
 ## page 1
 ## **********************************************************************************
@@ -100,9 +101,6 @@ for (n in names(tcgaResults))
   tcgaResultsPlotTrack[[n]] =  tcgaResults[[n]]$prioritize.combined
 }
 
-#tcgaResultsPlotTrack <- tcgaResults[['LUSC']]$prioritize.combined
-#ccleResultsPlotTrack <- ccleResults[['LUSC']]$prioritize.combined
-
 save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
      tcgaResultsPlotTrack,ccleResultsPlotTrack, file="starter.RData")
 
@@ -127,3 +125,29 @@ gloc <- sortGenesByLocation(tcgaResults, ccleResults)
 ## let's plot
 res <- getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
   
+
+
+## page 4
+## **********************************************************************************
+
+
+
+#############################################################################
+## prepare data frames
+#############################################################################
+
+#############################################################################
+## update started data frame
+#############################################################################
+#load("www/starter.RData")
+#save(cancers,geness,file="www/starterWidgets.RData")
+#save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
+
+
+## test *******************************************************
+
+## let's plot
+res <- generatePathview(tcgaResults, ccleResults, '04910', cancers="all",
+                            what="tcga",
+                            out.dir=".", out.suffix="", kegg.dir=".", 
+                            scores="combined.score")
