@@ -1,0 +1,282 @@
+hsa00232	hsa00232	Caffeine metabolism
+hsa00983	hsa00983	Drug metabolism - other enzymes
+hsa01100	hsa01100	Metabolic pathways
+hsa05204	hsa05204	Chemical carcinogenesis
+hsa00230	hsa00230	Purine metabolism
+hsa05340	hsa05340	Primary immunodeficiency
+hsa04514	hsa04514	Cell adhesion molecules (CAMs)
+hsa05412	hsa05412	Arrhythmogenic right ventricular cardiomyopathy (ARVC)
+hsa04010	hsa04010	MAPK signaling pathway
+hsa04012	hsa04012	ErbB signaling pathway
+hsa04014	hsa04014	Ras signaling pathway
+hsa04015	hsa04015	Rap1 signaling pathway
+hsa04062	hsa04062	Chemokine signaling pathway
+hsa04066	hsa04066	HIF-1 signaling pathway
+hsa04068	hsa04068	FoxO signaling pathway
+hsa04150	hsa04150	mTOR signaling pathway
+hsa04151	hsa04151	PI3K-Akt signaling pathway
+hsa04210	hsa04210	Apoptosis
+hsa04261	hsa04261	Adrenergic signaling in cardiomyocytes
+hsa04370	hsa04370	VEGF signaling pathway
+hsa04380	hsa04380	Osteoclast differentiation
+hsa04510	hsa04510	Focal adhesion
+hsa04530	hsa04530	Tight junction
+hsa04620	hsa04620	Toll-like receptor signaling pathway
+hsa04630	hsa04630	Jak-STAT signaling pathway
+hsa04660	hsa04660	T cell receptor signaling pathway
+hsa04662	hsa04662	B cell receptor signaling pathway
+hsa04664	hsa04664	Fc epsilon RI signaling pathway
+hsa04666	hsa04666	Fc gamma R-mediated phagocytosis
+hsa04668	hsa04668	TNF signaling pathway
+hsa04722	hsa04722	Neurotrophin signaling pathway
+hsa04725	hsa04725	Cholinergic synapse
+hsa04728	hsa04728	Dopaminergic synapse
+hsa04910	hsa04910	Insulin signaling pathway
+hsa04914	hsa04914	Progesterone-mediated oocyte maturation
+hsa04915	hsa04915	Estrogen signaling pathway
+hsa04917	hsa04917	Prolactin signaling pathway
+hsa04919	hsa04919	Thyroid hormone signaling pathway
+hsa04920	hsa04920	Adipocytokine signaling pathway
+hsa04932	hsa04932	Non-alcoholic fatty liver disease (NAFLD)
+hsa04973	hsa04973	Carbohydrate digestion and absorption
+hsa05142	hsa05142	Chagas disease (American trypanosomiasis)
+hsa05145	hsa05145	Toxoplasmosis
+hsa05152	hsa05152	Tuberculosis
+hsa05160	hsa05160	Hepatitis C
+hsa05161	hsa05161	Hepatitis B
+hsa05162	hsa05162	Measles
+hsa05164	hsa05164	Influenza A
+hsa05166	hsa05166	HTLV-I infection
+hsa05169	hsa05169	Epstein-Barr virus infection
+hsa05200	hsa05200	Pathways in cancer
+hsa05205	hsa05205	Proteoglycans in cancer
+hsa05210	hsa05210	Colorectal cancer
+hsa05211	hsa05211	Renal cell carcinoma
+hsa05212	hsa05212	Pancreatic cancer
+hsa05213	hsa05213	Endometrial cancer
+hsa05214	hsa05214	Glioma
+hsa05215	hsa05215	Prostate cancer
+hsa05218	hsa05218	Melanoma
+hsa05220	hsa05220	Chronic myeloid leukemia
+hsa05221	hsa05221	Acute myeloid leukemia
+hsa05222	hsa05222	Small cell lung cancer
+hsa05223	hsa05223	Non-small cell lung cancer
+hsa00120	hsa00120	Primary bile acid biosynthesis
+hsa04146	hsa04146	Peroxisome
+hsa00520	hsa00520	Amino sugar and nucleotide sugar metabolism
+hsa04974	hsa04974	Protein digestion and absorption
+hsa04622	hsa04622	RIG-I-like receptor signaling pathway
+hsa03013	hsa03013	RNA transport
+hsa05034	hsa05034	Alcoholism
+hsa05203	hsa05203	Viral carcinogenesis
+hsa04612	hsa04612	Antigen processing and presentation
+hsa04650	hsa04650	Natural killer cell mediated cytotoxicity
+hsa04670	hsa04670	Leukocyte transendothelial migration
+hsa04640	hsa04640	Hematopoietic cell lineage
+hsa00564	hsa00564	Glycerophospholipid metabolism
+hsa00565	hsa00565	Ether lipid metabolism
+hsa00590	hsa00590	Arachidonic acid metabolism
+hsa00591	hsa00591	Linoleic acid metabolism
+hsa00592	hsa00592	alpha-Linolenic acid metabolism
+hsa04270	hsa04270	Vascular smooth muscle contraction
+hsa04724	hsa04724	Glutamatergic synapse
+hsa04726	hsa04726	Serotonergic synapse
+hsa04730	hsa04730	Long-term depression
+hsa04912	hsa04912	GnRH signaling pathway
+hsa04913	hsa04913	Ovarian steroidogenesis
+hsa04144	hsa04144	Endocytosis
+hsa05206	hsa05206	MicroRNAs in cancer
+hsa04310	hsa04310	Wnt signaling pathway
+hsa00563	hsa00563	Glycosylphosphatidylinositol(GPI)-anchor biosynthesis
+hsa03008	hsa03008	Ribosome biogenesis in eukaryotes
+hsa03410	hsa03410	Base excision repair
+hsa03010	hsa03010	Ribosome
+hsa05130	hsa05130	Pathogenic Escherichia coli infection
+hsa04141	hsa04141	Protein processing in endoplasmic reticulum
+hsa05010	hsa05010	Alzheimer's disease
+hsa05014	hsa05014	Amyotrophic lateral sclerosis (ALS)
+hsa05020	hsa05020	Prion diseases
+hsa04145	hsa04145	Phagosome
+hsa04672	hsa04672	Intestinal immune network for IgA production
+hsa04940	hsa04940	Type I diabetes mellitus
+hsa05140	hsa05140	Leishmaniasis
+hsa05150	hsa05150	Staphylococcus aureus infection
+hsa05168	hsa05168	Herpes simplex infection
+hsa05310	hsa05310	Asthma
+hsa05320	hsa05320	Autoimmune thyroid disease
+hsa05321	hsa05321	Inflammatory bowel disease (IBD)
+hsa05322	hsa05322	Systemic lupus erythematosus
+hsa05323	hsa05323	Rheumatoid arthritis
+hsa05330	hsa05330	Allograft rejection
+hsa05332	hsa05332	Graft-versus-host disease
+hsa05416	hsa05416	Viral myocarditis
+hsa00240	hsa00240	Pyrimidine metabolism
+hsa00760	hsa00760	Nicotinate and nicotinamide metabolism
+hsa00670	hsa00670	One carbon pool by folate
+hsa00512	hsa00512	Mucin type O-Glycan biosynthesis
+hsa05144	hsa05144	Malaria
+hsa03015	hsa03015	mRNA surveillance pathway
+hsa04142	hsa04142	Lysosome
+hsa00190	hsa00190	Oxidative phosphorylation
+hsa05012	hsa05012	Parkinson's disease
+hsa05016	hsa05016	Huntington's disease
+hsa05202	hsa05202	Transcriptional misregulation in cancer
+hsa03420	hsa03420	Nucleotide excision repair
+hsa03040	hsa03040	Spliceosome
+hsa04120	hsa04120	Ubiquitin mediated proteolysis
+hsa00970	hsa00970	Aminoacyl-tRNA biosynthesis
+hsa02010	hsa02010	ABC transporters
+hsa03320	hsa03320	PPAR signaling pathway
+hsa00532	hsa00532	Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate
+hsa04810	hsa04810	Regulation of actin cytoskeleton
+hsa05100	hsa05100	Bacterial invasion of epithelial cells
+hsa05131	hsa05131	Shigellosis
+hsa05132	hsa05132	Salmonella infection
+hsa04080	hsa04080	Neuroactive ligand-receptor interaction
+hsa00260	hsa00260	Glycine, serine and threonine metabolism
+hsa01200	hsa01200	Carbon metabolism
+hsa01230	hsa01230	Biosynthesis of amino acids
+hsa04020	hsa04020	Calcium signaling pathway
+hsa03020	hsa03020	RNA polymerase
+hsa04623	hsa04623	Cytosolic DNA-sensing pathway
+hsa03440	hsa03440	Homologous recombination
+hsa03450	hsa03450	Non-homologous end-joining
+hsa04972	hsa04972	Pancreatic secretion
+hsa03018	hsa03018	RNA degradation
+hsa04360	hsa04360	Axon guidance
+hsa00310	hsa00310	Lysine degradation
+hsa04520	hsa04520	Adherens junction
+hsa00533	hsa00533	Glycosaminoglycan biosynthesis - keratan sulfate
+hsa04110	hsa04110	Cell cycle
+hsa04114	hsa04114	Oocyte meiosis
+hsa04115	hsa04115	p53 signaling pathway
+hsa00830	hsa00830	Retinol metabolism
+hsa05219	hsa05219	Bladder cancer
+hsa00510	hsa00510	N-Glycan biosynthesis
+hsa03050	hsa03050	Proteasome
+hsa05120	hsa05120	Epithelial cell signaling in Helicobacter pylori infection
+hsa05030	hsa05030	Cocaine addiction
+hsa04390	hsa04390	Hippo signaling pathway
+hsa03022	hsa03022	Basal transcription factors
+hsa04130	hsa04130	SNARE interactions in vesicular transport
+hsa00130	hsa00130	Ubiquinone and other terpenoid-quinone biosynthesis
+hsa04911	hsa04911	Insulin secretion
+hsa04727	hsa04727	GABAergic synapse
+hsa00360	hsa00360	Phenylalanine metabolism
+hsa04976	hsa04976	Bile secretion
+hsa00900	hsa00900	Terpenoid backbone biosynthesis
+hsa05217	hsa05217	Basal cell carcinoma
+hsa04350	hsa04350	TGF-beta signaling pathway
+hsa04721	hsa04721	Synaptic vesicle cycle
+hsa04966	hsa04966	Collecting duct acid secretion
+hsa05110	hsa05110	Vibrio cholerae infection
+hsa00601	hsa00601	Glycosphingolipid biosynthesis - lacto and neolacto series
+hsa00603	hsa00603	Glycosphingolipid biosynthesis - globo series
+hsa04512	hsa04512	ECM-receptor interaction
+hsa05146	hsa05146	Amoebiasis
+hsa00010	hsa00010	Glycolysis / Gluconeogenesis
+hsa00561	hsa00561	Glycerolipid metabolism
+hsa01220	hsa01220	Degradation of aromatic compounds
+hsa05216	hsa05216	Thyroid cancer
+hsa04060	hsa04060	Cytokine-cytokine receptor interaction
+hsa00270	hsa00270	Cysteine and methionine metabolism
+hsa00430	hsa00430	Taurine and hypotaurine metabolism
+hsa04260	hsa04260	Cardiac muscle contraction
+hsa05410	hsa05410	Hypertrophic cardiomyopathy (HCM)
+hsa05414	hsa05414	Dilated cardiomyopathy
+hsa04540	hsa04540	Gap junction
+hsa00920	hsa00920	Sulfur metabolism
+hsa04621	hsa04621	NOD-like receptor signaling pathway
+hsa05133	hsa05133	Pertussis
+hsa04070	hsa04070	Phosphatidylinositol signaling system
+hsa04720	hsa04720	Long-term potentiation
+hsa00562	hsa00562	Inositol phosphate metabolism
+hsa00062	hsa00062	Fatty acid elongation
+hsa00071	hsa00071	Fatty acid degradation
+hsa00280	hsa00280	Valine, leucine and isoleucine degradation
+hsa01212	hsa01212	Fatty acid metabolism
+hsa04064	hsa04064	NF-kappa B signaling pathway
+hsa04916	hsa04916	Melanogenesis
+hsa04918	hsa04918	Thyroid hormone synthesis
+hsa04962	hsa04962	Vasopressin-regulated water reabsorption
+hsa05031	hsa05031	Amphetamine addiction
+hsa04140	hsa04140	Regulation of autophagy
+hsa03030	hsa03030	DNA replication
+hsa04975	hsa04975	Fat digestion and absorption
+hsa00600	hsa00600	Sphingolipid metabolism
+hsa00100	hsa00100	Steroid biosynthesis
+hsa04977	hsa04977	Vitamin digestion and absorption
+hsa04978	hsa04978	Mineral absorption
+hsa00514	hsa00514	Other types of O-glycan biosynthesis
+hsa00450	hsa00450	Selenocompound metabolism
+hsa04713	hsa04713	Circadian entrainment
+hsa04723	hsa04723	Retrograde endocannabinoid signaling
+hsa05032	hsa05032	Morphine addiction
+hsa04330	hsa04330	Notch signaling pathway
+hsa04970	hsa04970	Salivary secretion
+hsa04971	hsa04971	Gastric acid secretion
+hsa03430	hsa03430	Mismatch repair
+hsa00040	hsa00040	Pentose and glucuronate interconversions
+hsa00053	hsa00053	Ascorbate and aldarate metabolism
+hsa00140	hsa00140	Steroid hormone biosynthesis
+hsa00500	hsa00500	Starch and sucrose metabolism
+hsa00860	hsa00860	Porphyrin and chlorophyll metabolism
+hsa00980	hsa00980	Metabolism of xenobiotics by cytochrome P450
+hsa00982	hsa00982	Drug metabolism - cytochrome P450
+hsa04610	hsa04610	Complement and coagulation cascades
+hsa05134	hsa05134	Legionellosis
+hsa04740	hsa04740	Olfactory transduction
+hsa00511	hsa00511	Other glycan degradation
+hsa00340	hsa00340	Histidine metabolism
+hsa00531	hsa00531	Glycosaminoglycan degradation
+hsa00620	hsa00620	Pyruvate metabolism
+hsa03060	hsa03060	Protein export
+hsa01040	hsa01040	Biosynthesis of unsaturated fatty acids
+hsa04964	hsa04964	Proximal tubule bicarbonate reclamation
+hsa00290	hsa00290	Valine, leucine and isoleucine biosynthesis
+hsa00785	hsa00785	Lipoic acid metabolism
+hsa00380	hsa00380	Tryptophan metabolism
+hsa04742	hsa04742	Taste transduction
+hsa04961	hsa04961	Endocrine and other factor-regulated calcium reabsorption
+hsa03460	hsa03460	Fanconi anemia pathway
+hsa00910	hsa00910	Nitrogen metabolism
+hsa00330	hsa00330	Arginine and proline metabolism
+hsa00534	hsa00534	Glycosaminoglycan biosynthesis - heparan sulfate / heparin
+hsa05033	hsa05033	Nicotine addiction
+hsa00350	hsa00350	Tyrosine metabolism
+hsa00650	hsa00650	Butanoate metabolism
+hsa00480	hsa00480	Glutathione metabolism
+hsa04614	hsa04614	Renin-angiotensin system
+hsa04340	hsa04340	Hedgehog signaling pathway
+hsa00250	hsa00250	Alanine, aspartate and glutamate metabolism
+hsa04930	hsa04930	Type II diabetes mellitus
+hsa00460	hsa00460	Cyanoamino acid metabolism
+hsa00630	hsa00630	Glyoxylate and dicarboxylate metabolism
+hsa04744	hsa04744	Phototransduction
+hsa04710	hsa04710	Circadian rhythm
+hsa00020	hsa00020	Citrate cycle (TCA cycle)
+hsa01210	hsa01210	2-Oxocarboxylic acid metabolism
+hsa04320	hsa04320	Dorso-ventral axis formation
+hsa00640	hsa00640	Propanoate metabolism
+hsa00472	hsa00472	D-Arginine and D-ornithine metabolism
+hsa04950	hsa04950	Maturity onset diabetes of the young
+hsa05143	hsa05143	African trypanosomiasis
+hsa00790	hsa00790	Folate biosynthesis
+hsa00410	hsa00410	beta-Alanine metabolism
+hsa00770	hsa00770	Pantothenate and CoA biosynthesis
+hsa00051	hsa00051	Fructose and mannose metabolism
+hsa00061	hsa00061	Fatty acid biosynthesis
+hsa00030	hsa00030	Pentose phosphate pathway
+hsa00052	hsa00052	Galactose metabolism
+hsa04960	hsa04960	Aldosterone-regulated sodium reabsorption
+hsa00604	hsa00604	Glycosphingolipid biosynthesis - ganglio series
+hsa00400	hsa00400	Phenylalanine, tyrosine and tryptophan biosynthesis
+hsa00524	hsa00524	Butirosin and neomycin biosynthesis
+hsa00730	hsa00730	Thiamine metabolism
+hsa00471	hsa00471	D-Glutamine and D-glutamate metabolism
+hsa04122	hsa04122	Sulfur relay system
+hsa00750	hsa00750	Vitamin B6 metabolism
+hsa00780	hsa00780	Biotin metabolism
+hsa00072	hsa00072	Synthesis and degradation of ketone bodies
+hsa00300	hsa00300	Lysine biosynthesis
+hsa00740	hsa00740	Riboflavin metabolism

@@ -1489,23 +1489,23 @@ getHeatmap = function(dataFrame, yaxis.theme,
 # ##' @param score name of the column to add to the matrix; default: combined.score
 # ##' @return matrix with genes in rows and cancers in columns
 # ##' @author Andreas Schlicker
-# pathviewMat = function(results, score="combined.score") {
-#   allGenes = c()
-#   for (i in 1:length(results)) {
-#     allGenes = union(allGenes, rownames(results[[i]]$prioritize.combined))
-#   }
-#   
-#   res = matrix(NA, nrow=length(allGenes), ncol=length(results))
-#   rownames(res) = allGenes
-#   colnames(res) = names(results)
-#   for (n in names(results)) {
-#     temp = results[[n]]$prioritize.combined[, score, drop=FALSE]
-#     names(temp) = rownames(results[[n]]$prioritize.combined)
-#     res[, n] = temp[allGenes]
-#   }
-#   
-#   res
-# }
+pathviewMat = function(results, score="combined.score") {
+  allGenes = c()
+  for (i in 1:length(results)) {
+    allGenes = union(allGenes, rownames(results[[i]]$prioritize.combined))
+  }
+  
+  res = matrix(NA, nrow=length(allGenes), ncol=length(results))
+  rownames(res) = allGenes
+  colnames(res) = names(results)
+  for (n in names(results)) {
+    temp = results[[n]]$prioritize.combined[, score, drop=FALSE]
+    names(temp) = rownames(results[[n]]$prioritize.combined)
+    res[, n] = temp[allGenes]
+  }
+  
+  res
+}
 # 
 # # ##' Generates pathview plots for all given results. This function can be used to plot 
 # # ##' different scores for one cancer type or one score across different cancer types.

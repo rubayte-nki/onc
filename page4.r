@@ -15,7 +15,7 @@
 generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 			    what=c("tcga", "ccle", "both"),
 			    out.dir=".", out.suffix="", kegg.dir=".", 
-	                    scores="combined.score") {
+	                    scores=c("combined.score","og.score","ts.score")) {
 	# Get the score matrix and combine them if necessary
 	if (what == "tcga") {
 		if (cancers == "all") {
@@ -23,9 +23,9 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 		}
 		scoreMat = pathviewMat(tcgaResults[intersect(cancers, names(tcgaResults))], scores[1])
 	} else if (what == "ccle") {
-		f (cancers == "all") {
+		if (cancers == "all") {
 			cancers = names(ccleResults)
-=		}
+		}
 		scoreMat = pathviewMat(ccleResults[intersect(cancers, names(ccleResults))], scores[1])
 	} else {
 		scoreMat = cbind(tcgaResults[[cancers[1]]]$prioritize.combined[, scores],
@@ -42,7 +42,7 @@ generatePathview = function(tcgaResults, ccleResults, pathway, cancers="all",
 		mid = list(gene="gray98", cpd="gray")
 		high = list(gene="#880000", cpd="yellow")
 		both.dirs = list(gene=FALSE, cpd=FALSE)
-	} else (scores == "ts.score") {
+	} else  {
 		low = list(gene="gray98", cpd="blue")
 		mid = list(gene="gray98", cpd="gray")
 		high = list(gene="#034b87", cpd="yellow")

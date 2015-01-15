@@ -206,18 +206,22 @@ shinyUI(fluidPage(
                       sidebarLayout(
                         column(2,
                                wellPanel(
-                                 ## pathway type select
-                                 uiOutput("pathwaySelector"),
+                                 ## select cancer type
+                                 uiOutput("cancerSelectorC4"),
+                                 
+                                 ## select score type
+                                 uiOutput("scoreSelectInputC4"),
+                                 
                                  
                                  ## multilpe gene select
-                                 selectizeInput('geneSelectorChoiceC4', label = "Selected Gene",  choices = NULL, options = list(maxItems = 500,placeholder="Selected Genes")),
+                                 selectizeInput('pathwaySelectorChoiceC4', label = "Select Pathway",  choices = NULL, options = list(maxItems = 1,placeholder="Selected Genes")),
                                  
                                  ## tumors or cell lines
                                  uiOutput("sampleSelectorC4"),
                                  tags$hr(),
                                  
                                  ## action button
-                                 actionButton("refreshPlotC4",label="Refresh",class='btn btn-primary')                         
+                                 actionButton("refreshPlotC4",label="Refresh Results",class='btn btn-primary')                         
                                )
                       ),
                         mainPanel(
