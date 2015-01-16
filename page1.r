@@ -240,8 +240,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgscom) <- c("Genes","Combined Score","Cancer")
         ## make final data frame
-        temp <- join(rgsog,rgsts,type="left")
-        rgs <- join(temp,rgscom,type="left")
+        temp <- plyr::join(rgsog,rgsts,type="left")
+        rgs <- plyr::join(temp,rgscom,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         temp <- temp[order(-temp$"Oncogene.Score"),] 
@@ -271,8 +271,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgscom) <- c("Genes","Combined Score","Cancer")
         ## make final data frame
-        temp <- join(rgsts,rgsog,type="left")
-        rgs <- join(temp,rgscom,type="left")
+        temp <- plyr::join(rgsts,rgsog,type="left")
+        rgs <- plyr::join(temp,rgscom,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
@@ -302,8 +302,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         ## make final data frame
-        temp <- join(rgscom,rgsog,type="left")
-        rgs <- join(temp,rgsts,type="left")
+        temp <- plyr::join(rgscom,rgsog,type="left")
+        rgs <- plyr::join(temp,rgsts,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         if (cutoff > 0)
@@ -342,8 +342,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgscom) <- c("Genes","Combined Score","Cancer")
         ## make final data frame
-        temp <- join(rgsog,rgsts,type="left")
-        rgs <- join(temp,rgscom,type="left")
+        temp <- plyr::join(rgsog,rgsts,type="left")
+        rgs <- plyr::join(temp,rgscom,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         temp <- temp[order(-temp$"Oncogene.Score"),]
@@ -374,8 +374,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgscom) <- c("Genes","Combined Score","Cancer")
         ## make final data frame
-        temp <- join(rgsts,rgsog,type="left")
-        rgs <- join(temp,rgscom,type="left")
+        temp <- plyr::join(rgsts,rgsog,type="left")
+        rgs <- plyr::join(temp,rgscom,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
@@ -406,8 +406,8 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         ## make final data frame
-        temp <- join(rgscom,rgsog,type="left")
-        rgs <- join(temp,rgsts,type="left")
+        temp <- plyr::join(rgscom,rgsog,type="left")
+        rgs <- plyr::join(temp,rgsts,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,4,5,3)],gc)
         if (cutoff > 0)

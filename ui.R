@@ -227,8 +227,10 @@ shinyUI(fluidPage(
                         mainPanel(
                           ## plot window
                           fluidRow(
-                            column (10, HTML("<h3>Pathway Plot</h3>"),
-                                    textOutput("pathwayPlot"))
+                            column (10, HTML("<h3>Pathway Plot"),
+                                    downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-primary'),
+                                    HTML("</h3>"),
+                                    imageOutput("pathwayPlot",height="1000"))
                           )
                         )
                       )

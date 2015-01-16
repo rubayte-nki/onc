@@ -1491,7 +1491,7 @@ getHeatmap = function(dataFrame, yaxis.theme,
 # ##' @author Andreas Schlicker
 pathviewMat = function(results, score="combined.score") {
   allGenes = c()
-  for (i in 1:length(results)) {
+  for (i in names(results)) {
     allGenes = union(allGenes, rownames(results[[i]]$prioritize.combined))
   }
   

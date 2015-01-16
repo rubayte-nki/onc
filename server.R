@@ -21,12 +21,13 @@ source("plotting.R")
 source("page1.r")
 source("page2.r")
 source("page3.r")
+source("page4.r")
 
 ## functions
 showProgress <- function() {
   # Create 0-row data frame which will be used to store data
   dat <- data.frame(x = numeric(0), y = numeric(0))
-  withProgress(message = 'Generating plot', value = 0, {
+  withProgress(message = 'Working ', value = 0, {
     # Number of times we'll go through the loop
     n <- 30
     
@@ -383,14 +384,46 @@ shinyServer(function(input, output, session) {
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
     radioButtons("sampleSelectorC4", "Select Sample type",
-                 choices = list("Tumors" = "tumors", "Cell lines" = "cell-lines", "Tumors vs Cell lines" = "tvc"),
-                 selected = "tumors")
+                 choices = list("Tumors" = "tcga", "Cell lines" = "ccle", "Tumors vs Cell lines" = "both"),
+                 selected = "tcga")
   })
   
   ## plots
-  output$pathwayPlot <- renderText({
-    "Section Under Development"
-  })
+  output$pathwayPlot <- renderImage({
+    input$refreshPlotC4
+    if (length(isolate(input$pathwaySelectorChoiceC4))>0 && length(input$cancerSelectorChoiceC4)>0 && length(input$selectScoreTypeC4)>0 && length(input$sampleSelectorC4)>0)
+    {
+      showProgress()
+      list(src = generatePathview2(isolate(input$pathwaySelectorChoiceC4), isolate(input$cancerSelectorChoiceC4),isolate(input$sampleSelectorC4),
+                                   isolate(input$selectScoreTypeC4)),
+           contentType = 'image/png',
+           width = 1000,
+           height = 1000,
+           alt = "This is alternate text")
+    }else{
+      showProgress()
+      list(src = generatePathview2(input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
+                                   input$selectScoreTypeC4),
+           contentType = 'image/png',
+           width = 1000,
+           height = 1000,
+           alt = "This is alternate text")
+      }
+    }, deleteFile = TRUE)
+  
+  
+  ## downloads
+  output$downloadPlotC4 <- downloadHandler(
+    filename = function() { 
+      paste('plot-', Sys.Date(), '.png', sep="")
+    },
+    content <- function(file){
+      file.copy(generatePathview2(input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
+                                  input$selectScoreTypeC4),file)
+    }
+  )
+  
+
   ###################################################################################
   
   

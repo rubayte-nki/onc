@@ -8,7 +8,7 @@ source("page3.r")
 source("page4.r")
 
 ## page 1
-## **********************************************************************************
+
 setwd("C:/Rubayte/Oncoscape/data")
 # Load the TCGA results
 load("prioritize_tcga_pancancer_allgenes_step2.rdata")
@@ -18,8 +18,8 @@ load("prioritize_ccle_pancancer_allgenes_step2.rdata")
 ccleResults = results
 # Save some memory
 rm(results)
-# switch to main wd
 setwd("C:/Rubayte/Oncoscape/dev3")
+
 
 
 #############################################################################
@@ -130,18 +130,49 @@ res <- getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
 ## page 4
 ## **********************************************************************************
 
-
-
 #############################################################################
 ## prepare data frames
 #############################################################################
 
+
+cancers = c(names(tcgaResults),"All")
+
+## tcga
+tcgaScoreMat = NULL
+for(c in cancers)
+{
+  if (c == "All")
+  {
+    temp = names(tcgaResults)
+    tcgaScoreMat[[c]] = pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "combined.score")
+  }else{
+    tcgaScoreMat[[c]] = pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "combined.score")
+  }
+}
+
+cancers = c(names(ccleResults),"All")
+
+## ccle
+ccleScoreMat = NULL
+for(c in cancers)
+{
+  if (c == "All")
+  {
+    temp = names(ccleResults)
+    ccleScoreMat[[c]] = pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "combined.score")
+  }else{
+    ccleScoreMat[[c]] = pathviewMat(ccleResults[intersect(c, names(ccleResults))], "combined.score")
+  }
+}
+
+
+
 #############################################################################
 ## update started data frame
 #############################################################################
-#load("www/starter.RData")
-#save(cancers,geness,file="www/starterWidgets.RData")
-#save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
+load("starter.RData")
+save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
+     tcgaResultsPlotTrack,ccleResultsPlotTrack,tcgaScoreMat,ccleScoreMat, file="starter.RData")
 
 
 ## test *******************************************************
