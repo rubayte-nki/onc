@@ -234,7 +234,39 @@ shinyUI(fluidPage(
                           )
                         )
                       )
-             )
+             ),
+             
+             ## comp5
+             tabPanel("Summary statistics",collapsable = TRUE,
+                      mainPanel(
+                        ## app about text
+                        fluidRow(
+                          column(7,
+                                 tags$h3("Number of samples analyzed"),
+                                 tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),
+                                 dataTableOutput('sampleOverview'),
+                                 tags$br(),
+                                 tags$h3("Number of genes with score >= 1"),
+                                 tags$p("Number of genes with scores greater of equal to 1. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                 dataTableOutput('genesCutoff1'),
+                                 tags$br(),
+                                 tags$h3("Number of genes with score >= 2"),
+                                 tags$p("Number of genes with scores greater of equal to 2. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                 dataTableOutput('geneCutoff2'),
+                                 tags$br(),
+                                 tags$h3("Number of genes with score >= 3"),
+                                 tags$p("Number of genes with scores greater of equal to 3. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                 dataTableOutput('geneCutoff3'),
+                                 tags$br(),
+                                 tags$h3("Number of genes with score >= 4"),
+                                 tags$p("Number of genes with scores greater of equal to 4. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                 dataTableOutput('geneCutoff4'),
+                                 tags$br(),
+                                 
+                          )
+                        )  
+                      )
+             ),
              
     )
   
