@@ -157,9 +157,11 @@ comp3view1Plot <- function (cancer,scoreType,chr)
   if (scoreType == "TS")
   {
     res <- getScorePlot2(gloc, tcgaResultsPlotTrack, cancer, chr, 'TS')
-  }else{
+  } else if (scoreType == "OG") {
     res <- getScorePlot2(gloc, ccleResultsPlotTrack, cancer, chr, 'OG')
-  }
+  } else {
+    res <- getScorePlot2(gloc, ccleResultsPlotTrack, cancer, chr, 'CO')
+  }  
   res
 }
 
@@ -169,8 +171,10 @@ comp3view2Plot <- function (cancer,scoreType,chr)
   if (scoreType == "TS")
   {
     res <- getAffectedPlot2(gloc, tcgaResultsPlotTrack, cancer, chr, 'TS')
-  }else{
+  } else if (scoreType == "OG") {
     res <- getAffectedPlot2(gloc, ccleResultsPlotTrack, cancer, chr, 'OG')
+  } else  {
+    res <- getAffectedPlot2(gloc, ccleResultsPlotTrack, cancer, chr, 'CO')
   }
   res
 }
