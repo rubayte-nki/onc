@@ -100,9 +100,9 @@ getScorePlot2 = function(geneLocs, results, cancType, chrom, scoreType) {
     score = results[[cancType]][genes[, "hgnc_symbol"], "ts.score"] * -1
     #affected = results[[cancType]][genes[, "hgnc_symbol"], "ts.affected.rel"]
   } else {
-    score = results[[cancType]][genes[, "hgnc_symbol"], "combined.score"]
+    score = results[[cancType]][genes[, "hgnc_symbol"], "combined.score"] 
     #affected = results[[cancType]][genes[, "hgnc_symbol"], "og.affected.rel"] - 
-      results[[cancType]][genes[, "hgnc_symbol"], "ts.affected.rel"]
+      #results[[cancType]][genes[, "hgnc_symbol"], "ts.affected.rel"]
   }
   
   # Plot two tracks, one for scores and the other one for percent affected samples 

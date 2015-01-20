@@ -45,6 +45,11 @@ load("www/starter.RData")
 save(cancers,geness,file="www/starterWidgets.RData")
 save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
 
+## add summary statistics data frames
+load("starterWidgets.RData")
+save(cancers,geness,sampleOverview,genesCutoffOne,genesCutoffTwo,genesCutoffThree,genesCutoffFour,file="starterWidgets.RData")
+
+
 
 ## test *******************************************************
 

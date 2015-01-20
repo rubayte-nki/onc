@@ -15,12 +15,10 @@ shinyUI(fluidPage(
              icon="www/NKIlogo.png",
 
              ## comp0
-             tabPanel("What is OncoScape?",collapsable = TRUE,
-                      mainPanel(
-                        ## app about text
-                        fluidRow(
-                          column(5,
-                                 wellPanel(
+             tabPanel("What is OncoScape?",
+                      sidebarLayout(
+                        column(2,
+                               wellPanel(
                                  # shiny::tags$h4("Publication"),
                                  # shiny::tags$p("some text about about this header."),
                                  # shiny::tags$br(),
@@ -38,29 +36,34 @@ shinyUI(fluidPage(
                                  HTML("<br/>"),
                                  HTML("<hr/>"),
                                  HTML("<img src='NKIlogo.png'/>")
-                                 )
-                              ),
-                          column(7,
-                                 HTML("<h3>What is OncoScape?</h3>"),
-                                 HTML("<hr/>"),
-                                 HTML("<p>OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:</p>"),
-                                 shiny::tags$ul(shiny::tags$li("Gene Expression"),
-                                         shiny::tags$li("DNA Copy Number"),
-                                         shiny::tags$li("DNA Methylation"),
-                                         shiny::tags$li("mutation"),
-                                         shiny::tags$li("shRNA knock-down data")),
-                                 shiny::tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no significant difference found) or 1 (significant difference found). These scores are summed across all data types giving the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as oncogene score minus tumor suppressor score."),
-                                 shiny::tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
-                                 shiny::tags$ul(shiny::tags$li("tumors vs. normals"),
-                                         shiny::tags$li("cell lines vs. normals"),
-                                         shiny::tags$li("samples sensitive to treatment vs resistant ones"),
-                                         shiny::tags$li("samples with mutations in gene X vs wild type ones"),
-                                 	 shiny::tags$li("different cancer subtypes")),
-                                 shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE).")
-                          )
-                        )  
-                      )
+                               )
+                        ),
+                        mainPanel(
+                          ## app about text
+                          fluidRow(
+                            column(9,
+                                   HTML("<h3>What is OncoScape?</h3>"),
+                                   HTML("<p>OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:</p>"),
+                                   shiny::tags$ul(shiny::tags$li("Gene Expression"),
+                                                  shiny::tags$li("DNA Copy Number"),
+                                                  shiny::tags$li("DNA Methylation"),
+                                                  shiny::tags$li("mutation"),
+                                                  shiny::tags$li("shRNA knock-down data")),
+                                   shiny::tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no significant difference found) or 1 (significant difference found). These scores are summed across all data types giving the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as oncogene score minus tumor suppressor score."),
+                                   shiny::tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
+                                   shiny::tags$ul(shiny::tags$li("tumors vs. normals"),
+                                                  shiny::tags$li("cell lines vs. normals"),
+                                                  shiny::tags$li("samples sensitive to treatment vs resistant ones"),
+                                                  shiny::tags$li("samples with mutations in gene X vs wild type ones"),
+                                                  shiny::tags$li("different cancer subtypes")),
+                                   shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
+                                   shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary Statistics' tab of the app."))
+                            ))
+                            
+                          )  
+                        )
              ),
+             #),
              
              
              ## comp1
@@ -80,10 +83,7 @@ shinyUI(fluidPage(
                             ## number of cutoff genes
                             uiOutput("scoreCutoffSelectorC1"),
                             shiny::tags$h6(" OR "),
-                            fileInput('geneListUploadC1', 'Upload Gene List File',
-                                      accept=c('text/csv', 
-                                               'text/comma-separated-values,text/plain', 
-                                               '.csv','.tsv')),
+                            fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines
@@ -237,36 +237,40 @@ shinyUI(fluidPage(
              ),
              
              ## comp5
-             tabPanel("Summary statistics",collapsable = TRUE,
-                      mainPanel(
-                        ## app about text
-                        fluidRow(
-                          column(7,
-                                 tags$h3("Number of samples analyzed"),
-                                 tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),
-                                 dataTableOutput('sampleOverview'),
-                                 tags$br(),
-                                 tags$h3("Number of genes with score >= 1"),
-                                 tags$p("Number of genes with scores greater of equal to 1. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                 dataTableOutput('genesCutoff1'),
-                                 tags$br(),
-                                 tags$h3("Number of genes with score >= 2"),
-                                 tags$p("Number of genes with scores greater of equal to 2. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                 dataTableOutput('geneCutoff2'),
-                                 tags$br(),
-                                 tags$h3("Number of genes with score >= 3"),
-                                 tags$p("Number of genes with scores greater of equal to 3. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                 dataTableOutput('geneCutoff3'),
-                                 tags$br(),
-                                 tags$h3("Number of genes with score >= 4"),
-                                 tags$p("Number of genes with scores greater of equal to 4. In case of the combined score (calculated as oncogene score (OG) – tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                 dataTableOutput('geneCutoff4'),
-                                 tags$br(),
-                                 
-                          )
-                        )  
+             tabPanel("Summary statistics",
+                      sidebarLayout(
+                        column(2),
+                        mainPanel(
+                          ## app about text
+                          fluidRow(
+                            column(10,
+                                   shiny::tags$h3("Number of samples analyzed"),
+                                   shiny::tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),
+                                   dataTableOutput('sampleOverviewC5'),
+                                   shiny::tags$br(),
+                                   shiny::tags$h3("Number of genes with score >= 1"),
+                                   shiny::tags$p("Number of genes with scores greater of equal to 1. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   dataTableOutput('genesCutoff1C5'),
+                                   shiny::tags$br(),
+                                   shiny::tags$h3("Number of genes with score >= 2"),
+                                   shiny::tags$p("Number of genes with scores greater of equal to 2. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   dataTableOutput('genesCutoff2C5'),
+                                   shiny::tags$br(),
+                                   shiny::tags$h3("Number of genes with score >= 3"),
+                                   shiny::tags$p("Number of genes with scores greater of equal to 3. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   dataTableOutput('genesCutoff3C5'),
+                                   shiny::tags$br(),
+                                   shiny::tags$h3("Number of genes with score >= 4"),
+                                   shiny::tags$p("Number of genes with scores greater of equal to 4. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   dataTableOutput('genesCutoff4C5'),
+                                   shiny::tags$br()
+                                   
+                            )
+                          )  
+                        )
                       )
-             ),
+                      
+             )
              
     )
   

@@ -124,7 +124,10 @@ shinyServer(function(input, output, session) {
   ###################################################################################
   ## comp0: Project overview/about
   ###################################################################################
-
+  
+  ###################################################################################
+  
+  
 
   ###################################################################################
   ## comp1: Genes over cancer type
@@ -166,25 +169,24 @@ shinyServer(function(input, output, session) {
 
     input$refreshPlot
     
-    #userfile <- isolate(input$geneListUploadC1)
+    userfile <- input$geneListUploadC1
     
-    #if (is.null(userfile))
-    #{
+    if (is.null(userfile))
+    {
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
         geneDataFrameResultSet(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
       }else{  
         geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
       }  
-    #}else{
-    #  userdata <- read.delim(userfile,sep="\t")
-    #  if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-    #    #geneFileDataFrameResultSet(isolate(input$cancerSelectorChoiceC1),indataframe,isolate(input$sampleSelectorC1))
-    #    userdata      
-    #  }else{
-    #    userdata
-        #geneFileDataFrameResultSet(input$cancerSelectorChoiceC1,indataframe,input$sampleSelectorC1)
-    #  }  
-    #}
+    }else{
+      userdata <- read.delim(userfile$datapath,sep="\t")
+      
+      if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+        geneFileDataFrameResultSet(isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+      }else{
+        geneFileDataFrameResultSet(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+      }  
+    }
     
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
@@ -193,24 +195,55 @@ shinyServer(function(input, output, session) {
   ## view 1
   output$distPlot2 <- renderPlot({
     input$refreshPlot
-    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-      showProgress()
-      comp1view2Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+    
+    userfile <- input$geneListUploadC1
+    
+    if (is.null(userfile))
+    {
+      if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+        showProgress()
+        comp1view2Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+      }else{
+        showProgress()
+        comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+      }
+      
     }else{
-      showProgress()
-      comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-    }
+      userdata <- read.delim(userfile$datapath,sep="\t")
+      if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+        comp1view2FilePlot(isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+      }else{
+        comp1view2FilePlot(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+      }  
+      
+    }  
+    
   })  
   ## view 2
   output$distPlot <- renderPlot({
     input$refreshPlot
-    if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-      showProgress()
-      comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+    
+    userfile <- input$geneListUploadC1
+    
+    if (is.null(userfile))
+    {
+      if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+        showProgress()
+        comp1view1Plot(isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+      }else{
+        showProgress()
+        comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+      }  
     }else{
-      showProgress()
-      comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+      userdata <- read.delim(userfile$datapath,sep="\t")
+      if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+        comp1view1FilePlot(isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+      }else{
+        comp1view1FilePlot(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+      }  
     }
+    
+    
   })
   
   ## downloads
@@ -219,7 +252,14 @@ shinyServer(function(input, output, session) {
       paste('data-', Sys.Date(), '.tsv', sep="\t")
     },
     content <- function(filename){
-      write.csv(geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), filename)
+      userfile <- input$geneListUploadC1
+      if (is.null(userfile))
+      {
+        write.csv(geneDataFrameResultSet(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), filename)
+      }else{
+        userdata <- read.delim(userfile$datapath,sep="\t")
+        write.csv(geneFileDataFrameResultSet(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1),filename)      
+      }
     }
   )
   output$downloadPlot <- downloadHandler(
@@ -231,9 +271,17 @@ shinyServer(function(input, output, session) {
         grDevices::png(..., width = 1000, height = 800,
                        res = 100, units = "px")
       }
-      g <- arrangeGrob(comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
-                  comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
-      ggsave(file, plot = g, device = device)
+      userfile <- input$geneListUploadC1
+      if (is.null(userfile))
+      {
+        g <- arrangeGrob(comp1view2Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
+                  comp1view1Plot(input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
+        ggsave(file, plot = g, device = device)
+      }else{
+        g <- arrangeGrob(comp1view2FilePlot(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1),
+                         comp1view1FilePlot(input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1))
+        ggsave(file,plot = g, device = device)
+      }
     }
   )
   
@@ -441,6 +489,35 @@ shinyServer(function(input, output, session) {
   )
   
 
+  ###################################################################################
+  
+  ###################################################################################
+  ## comp5: Summary Statistics
+  ###################################################################################
+  
+  ## tables
+  output$sampleOverviewC5 <- renderDataTable({
+    sampleOverview
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
+  output$genesCutoff1C5 <- renderDataTable({
+    genesCutoffOne
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
+  output$genesCutoff2C5 <- renderDataTable({
+    genesCutoffTwo
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
+  output$genesCutoff3C5 <- renderDataTable({
+    genesCutoffThree
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
+  output$genesCutoff4C5 <- renderDataTable({
+    genesCutoffFour
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  )
+  
+  
   ###################################################################################
   
   
