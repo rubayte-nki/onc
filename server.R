@@ -79,24 +79,24 @@ showProgress <- function() {
 # Reformat results for plotting page 1
 # TCGA oncogene (OG) scores
 #tcgaResultsHeatmapOG = heatmapDataframe(tcgaResults, 
-#		 	     	        scores=list(combined="og.score", Meth="og.methylation",
+#		 	     	        scores=list(Combined="og.score", Meth="og.methylation",
 #			     	        CNA="og.cna", Mut="og.mutations",
 #			                shRNA="og.achilles", Expr="og.exprs"))
 # TCGA tumor suppressor (TS) scores
 #tcgaResultsHeatmapTS = heatmapDataframe(tcgaResults, 
-#			     	        scores=list(combined="ts.score", Meth="ts.methylation",
+#			     	        scores=list(Combined="ts.score", Meth="ts.methylation",
 #			     	        CNA="ts.cna", Mut="ts.mutations",
 #			                shRNA="ts.achilles", Expr="ts.exprs"))
 # TCGA combined score
 #tcgaResultsHeatmapCombined = heatmapDataframe(tcgaResults) 
 # CCLE OG scores
 #ccleResultsHeatmapOG = heatmapDataframe(ccleResults, 
-#		 	     	        scores=list(combined="og.score", Meth="og.methylation",
+#		 	     	        scores=list(Combined="og.score", Meth="og.methylation",
 #			     	        CNA="og.cna", Mut="og.mutations",
 #			                shRNA="og.achilles", Expr="og.exprs"))
 # CCLE OG scores
 #ccleResultsHeatmapTS = heatmapDataframe(ccleResults, 
-#			     	        scores=list(combined="ts.score", Meth="ts.methylation",
+#			     	        scores=list(Combined="ts.score", Meth="ts.methylation",
 #			     	        CNA="ts.cna", Mut="ts.mutations",
 #			                shRNA="ts.achilles", Expr="ts.exprs"))
 # CCLE combined score
