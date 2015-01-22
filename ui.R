@@ -78,12 +78,14 @@ shinyUI(fluidPage(
                           
                             ## gene selection criteria
                             HTML("<h4>Gene Selection</h4>"),
+                            uiOutput("geneSelectionMethodC1"),
+                            uiOutput("geneSelectionPanelC1"),
                             ## score type
-                            uiOutput("scoreSelectInputC1"),                                                    
+                            #uiOutput("scoreSelectInputC1"),                                                    
                             ## number of cutoff genes
-                            uiOutput("scoreCutoffSelectorC1"),
-                            shiny::tags$h6(" OR "),
-                            fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
+                            #uiOutput("scoreCutoffSelectorC1"),
+                            #shiny::tags$h6(" OR "),
+                            #fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines
