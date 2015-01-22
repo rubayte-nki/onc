@@ -47,7 +47,7 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 ##' @author Andreas Schlicker
 plotCategoryOverview = function(results) {
 	result.df = results
-	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "combined"))
+	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "Combined"))
 	
 	# Overwrite the score column with the score type to make it categorical
 	# Combined scores are not plotted later
@@ -57,7 +57,7 @@ plotCategoryOverview = function(results) {
 	
 	#ggplot(subset(result.df, score.type != "combined" & gene %in% topgenes), aes(x=score.type, y=gene)) + 
 	ggplot(subset(result.df, score.type != "combined"), aes(x=score.type, y=gene)) + 
-  geom_tile(aes(fill=score), color="white", size=0.7) +
+	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
 		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA")) +
 	labs(x="", y="") +
