@@ -1,5 +1,3 @@
-load("starter.RData")
-
 ##' Generates pathview plots for all given results. This function can be used to plot 
 ##' different scores for one cancer type or one score across different cancer types.
 ##' If cancers == "all", only the first score in scores is plotted. In all other cases,
@@ -72,7 +70,7 @@ load("starter.RData")
 # }
 
 
-generatePathview2 = function(pathway, cancer,sample,scores) {
+generatePathview2 = function(updateProgress = NULL,pathway, cancer,sample,scores) {
   
   ## get the pathway code out of pathway parameter
   temp <- strsplit(pathway,":")

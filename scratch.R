@@ -26,24 +26,25 @@ setwd("C:/Rubayte/Oncoscape/dev3")
 ## prepare data frames
 #############################################################################
 # TCGA oncogene (OG) scores
-tcgaResultsHeatmapOG = heatmapDataframe(tcgaResults, scores=list(combined="og.score", Meth="og.methylation", CNA="og.cna", Mut="og.mutations",shRNA="og.achilles", Expr="og.exprs"))
+tcgaResultsHeatmapOG = heatmapDataframe(tcgaResults, scores=list(Combined="og.score", Meth="og.methylation", CNA="og.cna", Mut="og.mutations",shRNA="og.achilles", Expr="og.exprs"))
 # TCGA tumor suppressor (TS) scores
-tcgaResultsHeatmapTS = heatmapDataframe(tcgaResults, scores=list(combined="ts.score", Meth="ts.methylation",CNA="ts.cna", Mut="ts.mutations",shRNA="ts.achilles", Expr="ts.exprs"))
+tcgaResultsHeatmapTS = heatmapDataframe(tcgaResults, scores=list(Combined="ts.score", Meth="ts.methylation",CNA="ts.cna", Mut="ts.mutations",shRNA="ts.achilles", Expr="ts.exprs"))
 # TCGA combined score
 tcgaResultsHeatmapCombined = heatmapDataframe(tcgaResults) 
 # CCLE OG scores
-ccleResultsHeatmapOG = heatmapDataframe(ccleResults,scores=list(combined="og.score", Meth="og.methylation",CNA="og.cna", Mut="og.mutations",shRNA="og.achilles", Expr="og.exprs"))
+ccleResultsHeatmapOG = heatmapDataframe(ccleResults,scores=list(Combined="og.score", Meth="og.methylation",CNA="og.cna", Mut="og.mutations",shRNA="og.achilles", Expr="og.exprs"))
 # CCLE OG scores
-ccleResultsHeatmapTS = heatmapDataframe(ccleResults,scores=list(combined="ts.score", Meth="ts.methylation",CNA="ts.cna", Mut="ts.mutations",shRNA="ts.achilles", Expr="ts.exprs"))
+ccleResultsHeatmapTS = heatmapDataframe(ccleResults,scores=list(Combined="ts.score", Meth="ts.methylation",CNA="ts.cna", Mut="ts.mutations",shRNA="ts.achilles", Expr="ts.exprs"))
 # CCLE combined score
 ccleResultsHeatmapCombined = heatmapDataframe(ccleResults)
 
 #############################################################################
 ## update started data frame
 #############################################################################
-load("www/starter.RData")
-save(cancers,geness,file="www/starterWidgets.RData")
-save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="www/starter.RData")
+load("starter.RData")
+save(cancers,geness,file="starterWidgets.RData")
+save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,
+     ccleResultsHeatmapTS,ccleResultsHeatmapCombined,file="starter.RData")
 
 ## add summary statistics data frames
 load("starterWidgets.RData")

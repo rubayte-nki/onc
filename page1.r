@@ -77,7 +77,7 @@ plotCategoryOverview = function(results) {
 
 ##' main call to comp1 plots
 ##' view 1
-comp1view1Plot = function(cutoff,cancer,score,sample){
+comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
@@ -147,7 +147,7 @@ comp1view1Plot = function(cutoff,cancer,score,sample){
   }
 }
 ## for user file input
-comp1view1FilePlot = function(cancer,inputdf,sample)
+comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
 {
   if (sample == 'tumors'){    
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
@@ -163,7 +163,7 @@ comp1view1FilePlot = function(cancer,inputdf,sample)
 }
 
 ##' view 2
-comp1view2Plot = function(cutoff,cancer,score,sample){
+comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
@@ -263,7 +263,7 @@ comp1view2Plot = function(cutoff,cancer,score,sample){
   }
 }
 ## for user file input
-comp1view2FilePlot = function(cancer,inputdf,sample){
+comp1view2FilePlot = function(updateProgress = NULL,cancer,inputdf,sample){
 
   if (sample == 'tumors'){    
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
@@ -282,7 +282,7 @@ comp1view2FilePlot = function(cancer,inputdf,sample){
 
 
 ##' main call to page1 gene data frame
-geneDataFrameResultSet = function(cutoff,cancer,score,sample){
+geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,sample){
   
   rgsog= NULL
   rgsts= NULL
@@ -321,7 +321,7 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgs)
-        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Meth","CNA","Mut","shRNA","Expr","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -359,7 +359,7 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgs)
-        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","Meth","CNA","Mut","shRNA","Expr","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -382,17 +382,26 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
-        #resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "combined")
+        rgsog <- resultsSub[resultsSub[,4]== cancer,]
+        rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        colnames(rgsog) <- c("Genes","OG","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr")
+        
         #rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
-        #resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer, "combined")
+
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer, "combined")
+        rgsts <- resultsSub[resultsSub[,4]== cancer,]
+        rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        colnames(rgsts) <- c("Genes","TS","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr")
+        
         #rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         ## make final data frame
-        #temp <- plyr::join(rgscom,rgsog,type="left")
-        #rgs <- plyr::join(temp,rgsts,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgscom[,1],'">','Gene Card','</a>',sep='')
-        temp <- data.frame(rgscom[,c(1,4,2,3,5,6,7,8)],gc)
+        temp <- plyr::join(rgscom,rgsog,type="left")
+        rgs <- plyr::join(temp,rgsts,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
         if (cutoff > 0)
         {
           temp <- temp[order(-temp$"Combined.Score"),]          
@@ -402,7 +411,9 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgscom)
-        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
+                               "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
+                               "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -444,7 +455,7 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgs)
-        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","Meth","CNA","Mut","shRNA","Expr","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -483,7 +494,7 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgs)
-        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","Meth","CNA","Mut","shRNA","Expr","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -507,17 +518,26 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
-        #resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "combined")
+        rgsog <- resultsSub[resultsSub[,4]== cancer,]
+        rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        colnames(rgsog) <- c("Genes","OG","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr")
+        
         #rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
-        #resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer, "combined")
+        
+        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "combined")
+        rgsts <- resultsSub[resultsSub[,4]== cancer,]
+        rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        colnames(rgsts) <- c("Genes","TS","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr")
+        
         #rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         ## make final data frame
-        #temp <- plyr::join(rgscom,rgsog,type="left")
-        #rgs <- plyr::join(temp,rgsts,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgscom[,1],'">','Gene Card','</a>',sep='')
-        temp <- data.frame(rgscom[,c(1,4,2,3,5,6,7,8)],gc)
+        temp <- plyr::join(rgscom,rgsog,type="left")
+        rgs <- plyr::join(temp,rgsts,type="left")
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
         if (cutoff > 0)
         {
           temp <- temp[order(-temp$"Combined.Score"),]          
@@ -527,7 +547,9 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
         rm(rgscom)
-        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer","External links")
+        colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
+                               "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
+                               "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
         dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -540,7 +562,7 @@ geneDataFrameResultSet = function(cutoff,cancer,score,sample){
   }
 }
 
-geneFileDataFrameResultSet = function(cancer,inputdf,sample){
+geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,inputdf,sample){
   
   if (sample == 'tumors'){
     

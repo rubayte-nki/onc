@@ -1,6 +1,4 @@
-load("starter.RData")
 load("gloc.RData")
-
 
 ##' Fetches the chromosomal locations for all genes and sorts them within each chromosome. 
 ##' @params tcgaResults the list with TCGA results
@@ -152,7 +150,7 @@ getAffectedPlot2 = function(geneLocs, results, cancType, chrom, scoreType) {
 
 ## main call to plot function
 ## view 1
-comp3view1Plot <- function (cancer,scoreType,chr)
+comp3view1Plot <- function (updateProgress = NULL,cancer,scoreType,chr)
 {
   if (scoreType == "TS")
   {
@@ -166,7 +164,7 @@ comp3view1Plot <- function (cancer,scoreType,chr)
 }
 
 ## view 2
-comp3view2Plot <- function (cancer,scoreType,chr)
+comp3view2Plot <- function (updateProgress = NULL,cancer,scoreType,chr)
 {
   if (scoreType == "TS")
   {

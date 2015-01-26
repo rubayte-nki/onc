@@ -12,7 +12,6 @@ shinyUI(fluidPage(
 
   navbarPage("OncoScape",
              windowTitle ="OncoScape",
-             icon="www/NKIlogo.png",
 
              ## comp0
              tabPanel("What is OncoScape?",
@@ -246,6 +245,12 @@ shinyUI(fluidPage(
                           ## app about text
                           fluidRow(
                             column(10,
+                                   shiny::tags$h3("Header?"),
+                                   HTML("<img src='sample_set_sizes.png'/>"),
+                                   shiny::tags$h3("Header?"),
+                                   HTML("<img src='oncogene_alterations.png'/>"),
+                                   shiny::tags$h3("Header?"),
+                                   HTML("<img src='tumor_suppressor_alterations.png'/>"),
                                    shiny::tags$h3("Number of samples analyzed"),
                                    shiny::tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),
                                    dataTableOutput('sampleOverviewC5'),
