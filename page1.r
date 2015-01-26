@@ -47,7 +47,7 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 ##' @author Andreas Schlicker
 plotCategoryOverview = function(results) {
 	result.df = results
-	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "combined"))
+	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "Combined"))
 	
 	# Overwrite the score column with the score type to make it categorical
 	# Combined scores are not plotted later
@@ -57,7 +57,7 @@ plotCategoryOverview = function(results) {
 	
 	#ggplot(subset(result.df, score.type != "combined" & gene %in% topgenes), aes(x=score.type, y=gene)) + 
 	ggplot(subset(result.df, score.type != "combined"), aes(x=score.type, y=gene)) + 
-  geom_tile(aes(fill=score), color="white", size=0.7) +
+	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
 		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA")) +
 	labs(x="", y="") +
@@ -80,72 +80,34 @@ plotCategoryOverview = function(results) {
 comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   if (sample == 'tumors'){
     if(score == 'og.score'){
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"combined")
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-      }
+      df = tcgaResultsHeatmapOG
     }else if(score == 'ts.score'){
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"combined")      
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-      }
+      df = tcgaResultsHeatmapTS
     }else{
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")      
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-      }
+      df = tcgaResultsHeatmapCombined
     }
   }else{
     if(score == 'og.score'){
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer, "combined")
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-        
-      }
+      df = ccleResultsHeatmapOG
     }else if(score == 'ts.score'){
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer, "combined")      
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-        
-      }
+      df = ccleResultsHeatmapTS
     }else{
-      ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer, "Combined")      
-      if (nrow(resultsSub) > 0){
-        ## call plot function
-        plotHeatmapPage1(resultsSub, score)        
-      }else{
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
-      }
+      df = ccleResultsHeatmapCombined
     }
   }
+  
+  ## subset data frame based on user input
+  resultsSub <- page1DataFrame(df, cutoff, cancer,"Combined")
+  if (nrow(resultsSub) > 0){
+    ## call plot function
+    plotHeatmapPage1(resultsSub, score)        
+  }else{
+    plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+    text(1,"Empty result set returned by filter. Nothing to plot.")
+  }  
+
 }
+
 ## for user file input
 comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
 {
