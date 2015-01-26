@@ -129,7 +129,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"combined")      
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")      
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -139,7 +139,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"combined")      
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined")      
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -177,7 +177,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   }else{
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"combined")      
+      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"Combined")      
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -187,7 +187,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"combined")      
+      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")      
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -255,7 +255,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
     if(score == 'og.score'){
       
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"combined")
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
       rgsog <- resultsSub[resultsSub[,4]== cancer,]
       rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
       clist <- NULL
@@ -268,8 +268,8 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgsog)>0){
         ## select others
-        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer,"combined")
-        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer,"Combined")
+        rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, -10, cancer, "Combined")
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -293,7 +293,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"combined")
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined")
       rgsts <- resultsSub[resultsSub[,4]== cancer,]
       rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
       clist <- NULL
@@ -306,8 +306,8 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgsts)>0){
         ## select others
-        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer,"combined")
-        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer,"Combined")
+        rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
         resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, -10, cancer, "Combined")
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -344,7 +344,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
-        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "Combined")
         rgsog <- resultsSub[resultsSub[,4]== cancer,]
         rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
         colnames(rgsog) <- c("Genes","OG","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr")
@@ -352,7 +352,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         #rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
 
-        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer, "Combined")
         rgsts <- resultsSub[resultsSub[,4]== cancer,]
         rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
         colnames(rgsts) <- c("Genes","TS","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr")
@@ -389,7 +389,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
     if(score == 'og.score'){
       
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer, "combined")
+      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer, "Combined")
       rgsog <- resultsSub[resultsSub[,4]== cancer,]
       rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
       clist <- NULL
@@ -402,8 +402,8 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgsog)>0){
         ## select others
-        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "combined")
-        rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "Combined")
+        rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
         resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, -10, cancer, "Combined")
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -428,7 +428,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
     }else if(score == 'ts.score'){
     
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"combined")
+      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
       rgsts <- resultsSub[resultsSub[,4]== cancer,]
       rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
       clist <- NULL
@@ -441,8 +441,8 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgsts)>0){
         ## select others
-        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "combined")
-        rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "Combined")
+        rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
         colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
         resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, -10, cancer, "Combined")
         rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -480,7 +480,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
-        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "Combined")
         rgsog <- resultsSub[resultsSub[,4]== cancer,]
         rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
         colnames(rgsog) <- c("Genes","OG","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr")
@@ -488,7 +488,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         #rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
         #colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
         
-        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "combined")
+        resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "Combined")
         rgsts <- resultsSub[resultsSub[,4]== cancer,]
         rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
         colnames(rgsts) <- c("Genes","TS","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr")
@@ -530,12 +530,12 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,inputdf,sample
     
     res <- NULL
     ## subset data frame based on user input
-    resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer,"combined")
-    rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+    resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer,"Combined")
+    rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
     colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
     ## select others
-    resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer,"combined")
-    rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+    resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer,"Combined")
+    rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
     colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
     resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, -10, cancer, "Combined")
     rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -571,12 +571,12 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,inputdf,sample
     
     res <- NULL
     ## subset data frame based on user input
-    resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer,"combined")
-    rgsog <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+    resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer,"Combined")
+    rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
     colnames(rgsog) <- c("Genes","Oncogene Score","Cancer")
     ## select others
-    resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer,"combined")
-    rgsts <- resultsSub[resultsSub[,3] == 'combined' & resultsSub[,4]== cancer,c(1,2,4)]
+    resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer,"Combined")
+    rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
     colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Cancer")
     resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, -10, cancer, "Combined")
     rgscom <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
