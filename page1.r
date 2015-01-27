@@ -283,7 +283,7 @@ comp1view2FilePlot = function(updateProgress = NULL,cancer,inputdf,sample){
 
 
 ##' main call to page1 gene data frame
-geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,sample){
+geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
   
   rgsog= NULL
   rgsts= NULL
@@ -304,6 +304,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgsog <- data.frame(rgsog,clist)
       colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgsog <- plyr::join(temp,rgsog,type="left")          
+      }
       ## handle empty result set
       if (nrow(rgsog)>0){
         ## select others
@@ -342,6 +349,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgsts <- data.frame(rgsts,clist)
       colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgsts <- plyr::join(temp,rgsts,type="left")          
+      }
       ## handle empty result set
       if (nrow(rgsts)>0){
         ## select others
@@ -380,6 +394,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgscom <- data.frame(rgscom,clist)
       colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("Genes")
+        rgscom <- plyr::join(temp,rgscom,type="left")            
+      }
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
@@ -438,6 +459,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgsog <- data.frame(rgsog,clist)
       colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("Genes")
+        rgsog <- plyr::join(temp,rgsog,type="left")            
+      }
       ## handle empty result set
       if (nrow(rgsog)>0){
         ## select others
@@ -477,6 +505,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgsts <- data.frame(rgsts,clist)
       colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("Genes")
+        rgsts <- plyr::join(temp,rgsts,type="left")            
+      }
       ## handle empty result set
       if (nrow(rgsts)>0){
         ## select others
@@ -516,6 +551,13 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }
       rgscom <- data.frame(rgscom,clist)
       colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("Genes")
+        rgscom <- plyr::join(temp,rgscom,type="left")            
+      }
       ## handle empty result set
       if (nrow(rgscom)>0){
         ## select others
@@ -563,7 +605,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
   }
 }
 
-geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,inputdf,sample){
+geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,score,inputdf,sample){
   
   if (sample == 'tumors'){
     

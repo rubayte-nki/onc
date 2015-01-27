@@ -208,9 +208,9 @@ shinyServer(function(input, output, session) {
     if (input$geneSelectionMethodC1Value == "type1")
     {
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-        geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+        geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
       }else{  
-        geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+        geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }        
     }else if (input$geneSelectionMethodC1Value == "type2"){
       userfile <- input$geneListUploadC1
@@ -218,10 +218,12 @@ shinyServer(function(input, output, session) {
       {
         userdata <- read.delim(userfile$datapath,sep="\t")
         
-        if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-          geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+        if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+          geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
+          #geneFileDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+          geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          #geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }                
       }else{
         return()
@@ -232,10 +234,12 @@ shinyServer(function(input, output, session) {
         genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-            geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+            geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
+            #geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+            geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            #geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
           return()
@@ -386,7 +390,7 @@ shinyServer(function(input, output, session) {
       
       if (input$geneSelectionMethodC1Value == "type1")
       {    
-        write.csv(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
+        write.csv(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
                  sep="\t",filename, row.names = FALSE, quote=FALSE) 
         
       }else if (input$geneSelectionMethodC1Value == "type2")
@@ -395,14 +399,14 @@ shinyServer(function(input, output, session) {
         if (!(is.null(userfile)))
         {
           userdata <- read.delim(userfile$datapath,sep="\t")
-          write.csv(geneFileDataFrameResultSet(NULL,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1),
+          write.csv(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
                     sep="\t",filename, row.names = FALSE,quote=FALSE)          
         }
       }else{
         genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          write.csv(geneFileDataFrameResultSet(NULL,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1), 
+          write.csv(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
                     sep="\t",filename, row.names = FALSE,quote=FALSE)                        
         }
       }
