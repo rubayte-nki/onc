@@ -37,7 +37,7 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
 	colorMid = list(combined.score="gray98")
 	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
-	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
+	getHeatmap(dataFrame=subset(result.df, score.type=="Combined"), yaxis.theme=theme(axis.text.y=element_blank()), 
 	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
 }
 
