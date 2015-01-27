@@ -56,7 +56,7 @@ plotCategoryOverview = function(results) {
 	result.df[which(is.na(result.df[, 2]) | result.df[, 2] == "0"), 2] = "NONE"
 	
 	#ggplot(subset(result.df, score.type != "combined" & gene %in% topgenes), aes(x=score.type, y=gene)) + 
-	ggplot(subset(result.df, score.type != "combined"), aes(x=score.type, y=gene)) + 
+	ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) + 
 	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
 		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA")) +
@@ -78,6 +78,7 @@ plotCategoryOverview = function(results) {
 ##' main call to comp1 plots
 ##' view 1
 comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
+  df = NULL
   if (sample == 'tumors'){
     if(score == 'og.score'){
       df = tcgaResultsHeatmapOG
@@ -111,15 +112,26 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
 ## for user file input
 comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
 {
-  if (sample == 'tumors'){    
+  if (sample == 'tumors'){
+    resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined,-10,cancer,"Combined")
+    resultsSub <- subset(resultsSub, cancer == cancer & gene %in% inputdf[,1])
+    if (nrow(resultsSub) > 0){
+      ## call plot function
+      plotHeatmapPage1(resultsSub, score)        
+    }else{
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-      text(1,"Nothing to plot.")
-    
+      text(1,"No genes match the app data. Nothing to plot.")
+    }  
   }else{
-    
+    resultsSub <- page1DataFrame(ccleResultsHeatmapCombined,-10,cancer,"Combined")
+    resultsSub <- subset(resultsSub, cancer == cancer & gene %in% inputdf[,1])
+    if (nrow(resultsSub) > 0){
+      ## call plot function
+      plotHeatmapPage1(resultsSub, score)        
+    }else{
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-      text(1,"Nothing to plot.")
-    
+      text(1,"No genes match the app data. Nothing to plot.")
+    }  
   }
   
 }
@@ -149,9 +161,11 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else{
       ## subset data frame based on user input
-      og <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"combined")
+      com <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")
+      genes <- unique(com$gene)
+      og <- subset(tcgaResultsHeatmapOG, cancer == cancer & gene %in% genes)
       colnames(og) <- c('genes','ogs','score.type','cancer')
-      ts <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"combined")
+      ts <- subset(tcgaResultsHeatmapTS, cancer == cancer & gene %in% genes)
       colnames(ts) <- c('genes','tss','score.type','cancer')
       temp <- plyr::join(og,ts,type="inner")
       if (nrow(temp)>0)
@@ -197,9 +211,11 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else{
       ## subset data frame based on user input
-      og <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"combined")
+      com <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")
+      genes <- unique(com$gene)
+      og <- subset(ccleResultsHeatmapOG, cancer == cancer & gene %in% genes)
       colnames(og) <- c('genes','ogs','score.type','cancer')
-      ts <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"combined")
+      ts <- subset(ccleResultsHeatmapTS, cancer == cancer & gene %in% genes)
       colnames(ts) <- c('genes','tss','score.type','cancer')
       temp <- plyr::join(og,ts,type="inner")
       if (nrow(temp)>0)
@@ -228,14 +244,37 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
 comp1view2FilePlot = function(updateProgress = NULL,cancer,inputdf,sample){
 
   if (sample == 'tumors'){    
+    og <- subset(tcgaResultsHeatmapOG, cancer == cancer & gene %in% inputdf[,1])
+    colnames(og) <- c('genes','ogs','score.type','cancer')
+    ts <- subset(tcgaResultsHeatmapTS, cancer == cancer & gene %in% inputdf[,1])
+    colnames(ts) <- c('genes','tss','score.type','cancer')
+    temp <- plyr::join(og,ts,type="inner")
+    if (nrow(temp)>0)
+    {
+      cs <- abs(temp[,2] - temp[,5])
+      res <- data.frame(temp[,1],cs,temp[,c(3,4)])
+      colnames(res) <- c('gene','score','score.type','cancer')
+      plotCategoryOverview(res)  
+    }else{
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-      text(1,"Nothing to plot.")
-    
+      text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+    }
   }else{
-
+    og <- subset(ccleResultsHeatmapOG, cancer == cancer & gene %in% inputdf[,1])
+    colnames(og) <- c('genes','ogs','score.type','cancer')
+    ts <- subset(ccleResultsHeatmapTS, cancer == cancer & gene %in% inputdf[,1])
+    colnames(ts) <- c('genes','tss','score.type','cancer')
+    temp <- plyr::join(og,ts,type="inner")
+    if (nrow(temp)>0)
+    {
+      cs <- abs(temp[,2] - temp[,5])
+      res <- data.frame(temp[,1],cs,temp[,c(3,4)])
+      colnames(res) <- c('gene','score','score.type','cancer')
+      plotCategoryOverview(res)  
+    }else{
       plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-      text(1,"Nothing to plot.")
-    
+      text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+    }
   }
 }
 
@@ -277,7 +316,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgsog,rgsts,type="left")
         rgs <- plyr::join(temp,rgscom,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste("<a href=\"http://www.genecards.org/cgi-bin/carddisp.pl?gene=",rgs[,1],"\">","Gene Card","</a>",sep="")
         temp <- data.frame(rgs[,c(1,2,9,10,3,4,5,6,7,8)],gc)
         temp <- temp[order(-temp$"Oncogene.Score"),] 
         dfgenes <- replace(temp, is.na(temp), "-")
@@ -558,7 +597,7 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,inputdf,sample
     res <- data.frame(res,inputdf)
     res <- replace(res, is.na(res), "-")
     rm(temp)
-    rm(rgs)
+    rm(rgs) 
     if (nrow(res)>0){
       res
     }else{

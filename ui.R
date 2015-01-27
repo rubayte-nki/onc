@@ -8,10 +8,13 @@
 library(shiny)
 library(shinysky)
 
-shinyUI(fluidPage(
+#shinyUI(
+  
+  #fluidPage(
 
   navbarPage("OncoScape",
              windowTitle ="OncoScape",
+             collapsible =TRUE,
 
              ## comp0
              tabPanel("What is OncoScape?",
@@ -34,7 +37,7 @@ shinyUI(fluidPage(
                                  HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
                                  HTML("<br/>"),
                                  HTML("<hr/>"),
-                                 HTML("<img src='NKIlogo.png'/>")
+                                 HTML("<img src='NKIlogo.png' class='img-responsive' />")
                                )
                         ),
                         mainPanel(
@@ -66,7 +69,7 @@ shinyUI(fluidPage(
              
              
              ## comp1
-             tabPanel("Top Genes in Cancer types",                      
+             tabPanel("Genes in Cancers",                      
                       sidebarLayout(
                         column(2,
                           wellPanel(
@@ -78,7 +81,25 @@ shinyUI(fluidPage(
                             ## gene selection criteria
                             HTML("<h4>Gene Selection</h4>"),
                             uiOutput("geneSelectionMethodC1"),
-                            uiOutput("geneSelectionPanelC1"),
+                            ## gene selection procedure
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type1'",
+                              selectInput("selectScoreTypeC1", label = "Select Score type", 
+                                          choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
+                                                         "Combined score" = "combined.score"), selected = "og.score"),
+                              selectInput("scoreCutoff", label = "Score cut-off", 
+                                          choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),
+                                          selected = 3)
+                            ),
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type2'",
+                              fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv"))
+                            ),
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type3'",
+                              shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
+                            ),
+                            #uiOutput("geneSelectionPanelC1"),
                             ## score type
                             #uiOutput("scoreSelectInputC1"),                                                    
                             ## number of cutoff genes
@@ -103,7 +124,7 @@ shinyUI(fluidPage(
                                    HTML("<h3> Result Gene(s)"),
                                    downloadButton('downloadData', 'Download Data', class='btn btn-primary'),
                                    HTML("</h3>"),
-                                   dataTableOutput('genesResTable')
+                                   shiny::dataTableOutput('genesResTable')
                             )
                           ),
                           fluidRow(
@@ -125,7 +146,7 @@ shinyUI(fluidPage(
              ),
              
              ## comp2
-             tabPanel("Single Gene in Cancer types",
+             tabPanel("Single Gene",
                       sidebarLayout(
                         column(2,
                                wellPanel(
@@ -246,30 +267,30 @@ shinyUI(fluidPage(
                           fluidRow(
                             column(10,
                                    shiny::tags$h3("Header?"),
-                                   HTML("<img src='sample_set_sizes.png'/>"),
+                                   HTML("<img src='sample_set_sizes.png' class='img-responsive' />"),
                                    shiny::tags$h3("Header?"),
-                                   HTML("<img src='oncogene_alterations.png'/>"),
+                                   HTML("<img src='oncogene_alterations.png' class='img-responsive' />"),
                                    shiny::tags$h3("Header?"),
-                                   HTML("<img src='tumor_suppressor_alterations.png'/>"),
+                                   HTML("<img src='tumor_suppressor_alterations.png' class='img-responsive' />"),
                                    shiny::tags$h3("Number of samples analyzed"),
                                    shiny::tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),
-                                   dataTableOutput('sampleOverviewC5'),
+                                   shiny::dataTableOutput('sampleOverviewC5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 1"),
                                    shiny::tags$p("Number of genes with scores greater of equal to 1. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                   dataTableOutput('genesCutoff1C5'),
+                                   shiny::dataTableOutput('genesCutoff1C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 2"),
                                    shiny::tags$p("Number of genes with scores greater of equal to 2. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                   dataTableOutput('genesCutoff2C5'),
+                                   shiny::dataTableOutput('genesCutoff2C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 3"),
                                    shiny::tags$p("Number of genes with scores greater of equal to 3. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                   dataTableOutput('genesCutoff3C5'),
+                                   shiny::dataTableOutput('genesCutoff3C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 4"),
                                    shiny::tags$p("Number of genes with scores greater of equal to 4. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
-                                   dataTableOutput('genesCutoff4C5'),
+                                   shiny::dataTableOutput('genesCutoff4C5'),
                                    shiny::tags$br()
                                    
                             )
@@ -281,4 +302,7 @@ shinyUI(fluidPage(
              
     )
   
-))
+#)
+
+
+#)

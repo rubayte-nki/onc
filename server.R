@@ -120,8 +120,6 @@ shinyServer(function(input, output, session) {
   
   ###################################################################################
   
-  
-
   ###################################################################################
   ## comp1: Genes over cancer type
   ###################################################################################
@@ -142,26 +140,26 @@ shinyServer(function(input, output, session) {
                 choices = c("Use Score Type and Cutoff" = "type1","Upload Your Gene list" = "type2",
                                                                         "Copy Paste Your Gene list" = "type3"))
   })
-  
+
+
   ## gene selection procedure
-  output$geneSelectionPanelC1 <- renderUI({
-    if(is.null(input$geneSelectionMethodC1Value))
-    {
-      return()
-    }
-    switch(input$geneSelectionMethodC1Value,
-           "type1" = c(selectInput("selectScoreTypeC1", label = "Select Score type", 
-                                 choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
-                                                "Combined score" = "combined.score"), selected = "og.score"),
-                              selectInput("scoreCutoff", label = "Score cut-off", 
-                                                             choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),
-                                                             selected = 3)
-                              ),
-           "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
-           "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
-           )
-  })
-  
+#   output$geneSelectionPanelC1 <- renderUI({
+#     if(is.null(input$geneSelectionMethodC1Value))
+#     {
+#       return()
+#     }
+#     switch(input$geneSelectionMethodC1Value,
+#            "type1" = c(selectInput("selectScoreTypeC1", label = "Select Score type", 
+#                                  choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
+#                                                 "Combined score" = "combined.score"), selected = "og.score"),
+#                           selectInput("scoreCutoff", label = "Score cut-off", 
+#                                                              choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),
+#                                                              selected = 3)),
+#            "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
+#            "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
+#            )
+#   })
+#   
 #   ## score cut off selector comp1
 #   if(input$geneSelectionMethodC1Value == "type1")
 #   {
@@ -180,10 +178,10 @@ shinyServer(function(input, output, session) {
   
   
   ## tables
-  output$genesResTable <- renderDataTable({
+  output$genesResTable <- shiny::renderDataTable({
 
     input$refreshPlot
-    input$input$geneSelectionMethodC1Value
+    #input$geneSelectionMethodC1Value
     
     ## create progress object
     progress <- shiny::Progress$new()
@@ -221,27 +219,32 @@ shinyServer(function(input, output, session) {
         return()
       }
     }else{
-      genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
-      colnames(genelist) <-c ("uploadedGenes")
-      if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-        if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-          geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+      if(length(isolate(input$geneListValuesC1))>0)
+      {
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+            geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          }else{
+            geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+          }                        
         }else{
-          geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
-        }                        
+          return()
+        }
       }else{
         return()
       }
     }
     
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
   
   ## plots
   ## view 1
   output$distPlot2 <- renderPlot({
     input$refreshPlot
-    input$input$geneSelectionMethodC1Value
+    input$geneSelectionMethodC1Value
     
     ## create progress object
     progress <- shiny::Progress$new()
@@ -272,31 +275,38 @@ shinyServer(function(input, output, session) {
       if (!(is.null(userfile)))
       {
         userdata <- read.delim(userfile$datapath,sep="\t")  
-        if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-          #showProgress()
-          comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+        if (length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$sampleSelectorC1))>0){
+          comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          #showProgress()
-          comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+          comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }      
       }else{
         return()
       }
     }else{
-      if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-        #showProgress()
-        comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+      if (length(isolate(input$geneListValuesC1))>0)
+      {
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+            comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          }else{
+            comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+          }                        
+        }else{
+          return()
+        }
       }else{
-        #showProgress()
-        comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-      }
+        return()
+      }      
     }
     
   })  
   ## view 2
   output$distPlot <- renderPlot({
     input$refreshPlot
-    input$input$geneSelectionMethodC1Value
+    input$geneSelectionMethodC1Value
     
     ## create progress object
     progress <- shiny::Progress$new()
@@ -337,13 +347,23 @@ shinyServer(function(input, output, session) {
       }
       
     }else{
-      if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-        #showProgress()
-        comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+      if (length(isolate(input$geneListValuesC1)) > 0)
+      {
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
+            comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          }else{
+            comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+          }                        
+        }else{
+          return()
+        } 
       }else{
-        #showProgress()
-        comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
-      }  
+        return()
+      }
+        
     }
     
     
@@ -357,9 +377,9 @@ shinyServer(function(input, output, session) {
     content <- function(filename){
       
       if (input$geneSelectionMethodC1Value == "type1")
-      {
+      {    
         write.csv(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
-                  sep="\t",filename, row.names = FALSE, quote=FALSE) 
+                 sep="\t",filename, row.names = FALSE, quote=FALSE) 
         
       }else if (input$geneSelectionMethodC1Value == "type2")
       {
@@ -407,9 +427,14 @@ shinyServer(function(input, output, session) {
           ggsave(file,plot = g, device = device)
         }
       }else{
-        g <- arrangeGrob(comp1view2Plot(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
-                         comp1view1Plot(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
-        ggsave(file, plot = g, device = device)
+        genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
+          g <- arrangeGrob(comp1view2FilePlot(NULL,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1), 
+                           comp1view1FilePlot(NULL,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1))
+          ggsave(file, plot = g, device = device)
+        }
+        
       }  
       
     }
@@ -650,23 +675,23 @@ shinyServer(function(input, output, session) {
   ###################################################################################
   
   ## tables
-  output$sampleOverviewC5 <- renderDataTable({
+  output$sampleOverviewC5 <- shiny::renderDataTable({
     sampleOverview
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
-  output$genesCutoff1C5 <- renderDataTable({
+  output$genesCutoff1C5 <- shiny::renderDataTable({
     genesCutoffOne
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
-  output$genesCutoff2C5 <- renderDataTable({
+  output$genesCutoff2C5 <- shiny::renderDataTable({
     genesCutoffTwo
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
-  output$genesCutoff3C5 <- renderDataTable({
+  output$genesCutoff3C5 <- shiny::renderDataTable({
     genesCutoffThree
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
-  output$genesCutoff4C5 <- renderDataTable({
+  output$genesCutoff4C5 <- shiny::renderDataTable({
     genesCutoffFour
   }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
   )
