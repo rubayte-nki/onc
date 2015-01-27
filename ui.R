@@ -76,19 +76,28 @@ library(shinysky)
                             ## cancer type select
                             HTML("<h4>Select Cancer type</h4>"),
                             uiOutput("cancerSelectorC1"),
+                            shiny::tags$hr(),   
+                            
+                            ## score type select
+                            HTML("<h4>Select Score type</h4>"),
+                            uiOutput("scoreTypeSelectorC1"),
                             shiny::tags$hr(),
-                          
+                            
                             ## gene selection criteria
                             HTML("<h4>Gene Selection</h4>"),
                             uiOutput("geneSelectionMethodC1"),
+                            
                             ## gene selection procedure
                             conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type1'",
-                              selectInput("selectScoreTypeC1", label = "Select Score type", 
-                                          choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
-                                                         "Combined score" = "combined.score"), selected = "og.score"),
+                              condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 == 'combined.score'",
                               selectInput("scoreCutoff", label = "Score cut-off", 
-                                          choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),
+                                          choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4, "=<-2" = -2, "=<-3" = -3, "=<-4" = -4),
+                                          selected = 3)
+                            ),
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 != 'combined.score'",
+                              selectInput("scoreCutoff", label = "Score cut-off", 
+                                          choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4),
                                           selected = 3)
                             ),
                             conditionalPanel(
@@ -99,13 +108,6 @@ library(shinysky)
                               condition = "input.geneSelectionMethodC1Value == 'type3'",
                               shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
                             ),
-                            #uiOutput("geneSelectionPanelC1"),
-                            ## score type
-                            #uiOutput("scoreSelectInputC1"),                                                    
-                            ## number of cutoff genes
-                            #uiOutput("scoreCutoffSelectorC1"),
-                            #shiny::tags$h6(" OR "),
-                            #fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines

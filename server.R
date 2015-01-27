@@ -128,6 +128,14 @@ shinyServer(function(input, output, session) {
   output$cancerSelectorC1 <- renderUI({
     selectInput("cancerSelectorChoiceC1", label = NULL, choices = apply(cancers, 1, function(r) r))
   })
+  
+  ## score type selector comp1
+  output$scoreTypeSelectorC1 <- renderUI({
+    selectInput("selectScoreTypeC1", label = NULL, 
+                choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
+                               "Combined score" = "combined.score"), selected = "og.score")
+  })
+  
   ## sample set selector comp1
   output$sampleSelectorC1 <- renderUI({
     radioButtons("sampleSelectorC1", label = NULL,
@@ -137,8 +145,8 @@ shinyServer(function(input, output, session) {
   ## gene selection criteria
   output$geneSelectionMethodC1 <- renderUI({
     selectInput("geneSelectionMethodC1Value", label = "Choose a method below for selecting genes", 
-                choices = c("Use Score Type and Cutoff" = "type1","Upload Your Gene list" = "type2",
-                                                                        "Copy Paste Your Gene list" = "type3"))
+                choices = c("Use cutoff score" = "type1","Upload gene list" = "type2",
+                                                                        "Copy-Paste genes" = "type3"))
   })
 
 
