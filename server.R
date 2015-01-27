@@ -276,10 +276,10 @@ shinyServer(function(input, output, session) {
     {
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
         #showProgress()
-        comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+        comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
       }else{
         #showProgress()
-        comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+        comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }
     }else if(input$geneSelectionMethodC1Value == "type2")
     {
@@ -287,10 +287,12 @@ shinyServer(function(input, output, session) {
       if (!(is.null(userfile)))
       {
         userdata <- read.delim(userfile$datapath,sep="\t")  
-        if (length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-          comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+        if (length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+          comp1view2Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
+          #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+          comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          #comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }      
       }else{
         return()
@@ -301,10 +303,12 @@ shinyServer(function(input, output, session) {
         genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-            comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+            comp1view2Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
+            #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+            comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            #comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
           return()
@@ -338,10 +342,10 @@ shinyServer(function(input, output, session) {
     {
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
         #showProgress()
-        comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1))
+        comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
       }else{
         #showProgress()
-        comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1)
+        comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }  
     }else if(input$geneSelectionMethodC1Value == "type2")
     {
@@ -349,10 +353,12 @@ shinyServer(function(input, output, session) {
       if (!(is.null(userfile)))
       {
         userdata <- read.delim(userfile$datapath,sep="\t")  
-        if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-          comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
+        if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+          comp1view1Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
+          #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
+          comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          #comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }  
       }else{
         return()
@@ -364,10 +370,12 @@ shinyServer(function(input, output, session) {
         genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0){
-            comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
+          if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
+            comp1view1Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
+            #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
+            comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            #comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
           return()
@@ -425,8 +433,8 @@ shinyServer(function(input, output, session) {
       
       if (input$geneSelectionMethodC1Value == "type1")
       {
-        g <- arrangeGrob(comp1view2Plot(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1), 
-                         comp1view1Plot(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1))
+        g <- arrangeGrob(comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
+                         comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL))
         ggsave(file, plot = g, device = device)
       }else if (input$geneSelectionMethodC1Value == "type2")
       {
@@ -434,16 +442,16 @@ shinyServer(function(input, output, session) {
         if (!(is.null(userfile)))
         {
           userdata <- read.delim(userfile$datapath,sep="\t")
-          g <- arrangeGrob(comp1view2FilePlot(NULL,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1),
-                           comp1view1FilePlot(NULL,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1))
+          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
+                           comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata))
           ggsave(file,plot = g, device = device)
         }
       }else{
         genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          g <- arrangeGrob(comp1view2FilePlot(NULL,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1), 
-                           comp1view1FilePlot(NULL,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1))
+          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
+                           comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist))
           ggsave(file, plot = g, device = device)
         }
         

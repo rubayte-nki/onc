@@ -77,7 +77,7 @@ plotCategoryOverview = function(results) {
 
 ##' main call to comp1 plots
 ##' view 1
-comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
+comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
   df = NULL
   if (sample == 'tumors'){
     if(score == 'og.score'){
@@ -99,6 +99,20 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
   
   ## subset data frame based on user input
   resultsSub <- page1DataFrame(df, cutoff, cancer,"Combined")
+  ## if input dataframe is not null then update the target dataframe with the inputdf genes
+  if (!(is.null(inputdf)))
+  {
+    temp <- as.data.frame(inputdf[,1])
+    colnames(temp) <- c("gene")
+    resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+  }
+  ## sort the dataframe to match with results table
+  if (cutoff > 0)
+  {
+    resultsSub <- resultsSub[order(-resultsSub$"score"),] 
+  }else{
+    resultsSub <- resultsSub[order(resultsSub$"score"),]     
+  }
   if (nrow(resultsSub) > 0){
     ## call plot function
     plotHeatmapPage1(resultsSub, score)        
@@ -137,11 +151,18 @@ comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
 }
 
 ##' view 2
-comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
+comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")      
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("gene")
+        resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+      }
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -151,7 +172,14 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined")      
+      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined") 
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("gene")
+        resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+      }
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -163,6 +191,12 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       ## subset data frame based on user input
       com <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")
       genes <- unique(com$gene)
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- inputdf[,1]
+        genes <- intersect(genes,temp)
+      }
       og <- subset(tcgaResultsHeatmapOG, cancer == cancer & gene %in% genes)
       colnames(og) <- c('genes','ogs','score.type','cancer')
       ts <- subset(tcgaResultsHeatmapTS, cancer == cancer & gene %in% genes)
@@ -179,19 +213,18 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
         text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
       
-#       resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")      
-#       if (nrow(resultsSub) > 0){
-#         ## call plot function
-#         plotCategoryOverview(resultsSub)             
-#       }else{
-#         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-#         text(1,"Empty result set returned by filter. Nothing to plot.")
-#       }      
     }
   }else{
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"Combined")      
+      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"Combined")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("gene")
+        resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+      }
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -201,7 +234,14 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")      
+      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- as.data.frame(inputdf[,1])
+        colnames(temp) <- c("gene")
+        resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+      }
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -213,6 +253,12 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
       ## subset data frame based on user input
       com <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")
       genes <- unique(com$gene)
+      ## if input dataframe is not null then update the target dataframe with the inputdf genes
+      if (!(is.null(inputdf)))
+      {
+        temp <- inputdf[,1]
+        genes <- intersect(genes,temp)
+      }
       og <- subset(ccleResultsHeatmapOG, cancer == cancer & gene %in% genes)
       colnames(og) <- c('genes','ogs','score.type','cancer')
       ts <- subset(ccleResultsHeatmapTS, cancer == cancer & gene %in% genes)
@@ -228,15 +274,6 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample){
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
-      
-#       resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")      
-#       if (nrow(resultsSub) > 0){
-#         ## call plot function
-#         plotCategoryOverview(resultsSub)             
-#       }else{
-#         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-#         text(1,"Empty result set returned by filter. Nothing to plot.")
-#       }      
     }
   }
 }
