@@ -676,17 +676,17 @@
 # ##' @param xaxis.theme optional ggplot2 theme for the x-axis; default: NULL
 # ##' @return a ggplot2 object
 # ##' @author Andreas Schlicker
-getHeatmap = function(dataFrame, yaxis.theme, 
+getHeatmap = function(dataFrame,yaxis.theme, 
                       labels=NULL, breaks=NULL, 
                       color.low="white", color.mid=NULL, color.high="black", 
                       title="", ylab="", xlab="",
                       xaxis.theme=NULL) {
   p = ggplot(dataFrame, aes(x=cancer, y=gene)) + 
     geom_tile(aes(fill=score), color = "white") + 
-    labs(title=title, x=xlab, y=ylab) +
+    labs(title=title, x=xlab, y=ylab) + coord_flip()  + 
     theme(panel.background=element_rect(color="white", fill="white"),
           axis.ticks=element_blank(), 
-          axis.text.x=element_text(color="gray30", face="bold", size=10),
+          axis.text.x=element_text(color="gray30", face="bold", size=10,angle = 90),
           axis.text.y=element_text(color="gray30", face="bold", size=10),
           legend.text=element_text(color="gray30", face="bold", size=10),
           legend.title=element_blank(),
