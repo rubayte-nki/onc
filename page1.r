@@ -35,11 +35,10 @@ page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
 plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "og.score")) {
 	result.df = results
 	result.df$gene <- factor(result.df$gene, levels=unique(as.character(result.df$gene)))
-	result.df$gene <- ordered(result.df$gene)
 	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
 	colorMid = list(combined.score="gray98")
 	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
-	getHeatmap(dataFrame=result.df,yaxis.theme=theme(axis.text.y=element_blank()), 
+	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
 	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
 }
 
@@ -101,6 +100,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   
   ## subset data frame based on user input
   resultsSub <- page1DataFrame(df, cutoff, cancer,"Combined")
+  resultsSub <- resultsSub[resultsSub$score.type == "Combined",]
   ## if input dataframe is not null then update the target dataframe with the inputdf genes
   if (!(is.null(inputdf)))
   {
@@ -109,12 +109,15 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     resultsSub <- plyr::join(temp,resultsSub,type="inner")          
   }
   ## sort the dataframe to match with results table
-  #if (cutoff > 0)
-  #{
-  #  resultsSub2 <- resultsSub[order(-resultsSub$"score"),] 
-  #}else{
-  #  resultsSub <- resultsSub[order(resultsSub$"score"),]     
-  #}
+  if (cutoff > 0)
+  {
+    resultsSub <- resultsSub[order(-resultsSub$"score"),]
+  }else{
+    resultsSub <- resultsSub[order(resultsSub$"score"),]
+  }
+  temp <- resultsSub[resultsSub$cancer == cancer,]
+  resultsSub <- resultsSub[resultsSub$cancer != cancer,]
+  resultsSub <- rbind(temp,resultsSub)
   if (nrow(resultsSub) > 0){
     ## call plot function
     plotHeatmapPage1(resultsSub, score)        
