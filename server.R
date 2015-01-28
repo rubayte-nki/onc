@@ -11,6 +11,7 @@ library(ggplot2)
 library(grid)
 library(gridExtra)
 library(plyr)
+library(dplyr)
 library(Gviz)
 library(GenomicRanges)
 library(biomaRt)
@@ -105,6 +106,7 @@ shinyServer(function(input, output, session) {
   ## laod
   initializeApp(updateProgress)
   load("starterWidgets.RData")
+  choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4)
   genes <- apply(geness, 1, function(r) r)
   chrms <- c("1","2","3","4","5","6","7","8","9","10","11","12",
              "13","14","15","16","17","18","19","20","21","22","23","24")
@@ -151,23 +153,24 @@ shinyServer(function(input, output, session) {
 
 
   ## gene selection procedure
-#   output$geneSelectionPanelC1 <- renderUI({
-#     if(is.null(input$geneSelectionMethodC1Value))
-#     {
-#       return()
-#     }
-#     switch(input$geneSelectionMethodC1Value,
-#            "type1" = c(selectInput("selectScoreTypeC1", label = "Select Score type", 
-#                                  choices = list("Oncogene score" = "og.score", "Tumor suppressor score" = "ts.score",
-#                                                 "Combined score" = "combined.score"), selected = "og.score"),
-#                           selectInput("scoreCutoff", label = "Score cut-off", 
-#                                                              choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),
-#                                                              selected = 3)),
-#            "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
-#            "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
-#            )
-#   })
-#   
+  output$geneSelectionPanelC1 <- renderUI({
+    if(is.null(input$geneSelectionMethodC1Value))
+    {
+      return()
+    }
+    if (input$selectScoreTypeC1 == "combined.score")
+    {
+      choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4, "=<-2" = -2, "=<-3" = -3, "=<-4" = -4)      
+    }
+    switch(input$geneSelectionMethodC1Value,
+           "type1" = selectInput("scoreCutoff", label = "Score cut-off", 
+                                                             choices = choicesToPass,
+                                                             selected = 3),
+           "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
+           "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
+           )
+  })
+  
 #   ## score cut off selector comp1
 #   if(input$geneSelectionMethodC1Value == "type1")
 #   {

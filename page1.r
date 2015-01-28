@@ -49,6 +49,7 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 plotCategoryOverview = function(results) {
 	result.df = results
 	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "Combined"))
+	result.df$gene <- factor(result.df$gene, levels=unique(as.character(result.df$gene)))
 	
 	# Overwrite the score column with the score type to make it categorical
 	# Combined scores are not plotted later
@@ -57,7 +58,7 @@ plotCategoryOverview = function(results) {
 	result.df[which(is.na(result.df[, 2]) | result.df[, 2] == "0"), 2] = "NONE"
 	
 	#ggplot(subset(result.df, score.type != "combined" & gene %in% topgenes), aes(x=score.type, y=gene)) + 
-	ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) + 
+	ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) +  #coord_flip()  +
 	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
 		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA")) +
@@ -168,6 +169,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         colnames(temp) <- c("gene")
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
+      ## sort the dataframe to match with results table
+      if (cutoff > 0)
+      {
+        resultsSub <- resultsSub[order(-resultsSub$"score"),]
+      }else{
+        resultsSub <- resultsSub[order(resultsSub$"score"),]
+      }
+      temp <- resultsSub[resultsSub$cancer == cancer,]
+      temp2 <- temp[temp$score.type == "Combined",]
+      temp <- temp[temp$score.type != "Combined",]
+      temp2 <- arrange(temp2,-row_number())
+      resultsSub <- resultsSub[resultsSub$cancer != cancer,]
+      resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -185,6 +199,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         colnames(temp) <- c("gene")
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
+      ## sort the dataframe to match with results table
+      if (cutoff > 0)
+      {
+        resultsSub <- resultsSub[order(-resultsSub$"score"),]
+      }else{
+        resultsSub <- resultsSub[order(resultsSub$"score"),]
+      }
+      temp <- resultsSub[resultsSub$cancer == cancer,]
+      temp2 <- temp[temp$score.type == "Combined",]
+      temp <- temp[temp$score.type != "Combined",]
+      temp2 <- arrange(temp2,-row_number())
+      resultsSub <- resultsSub[resultsSub$cancer != cancer,]
+      resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -212,6 +239,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         cs <- abs(temp[,2] - temp[,5])
         res <- data.frame(temp[,1],cs,temp[,c(3,4)])
         colnames(res) <- c('gene','score','score.type','cancer')
+        ## sort the dataframe to match with results table
+        if (cutoff > 0)
+        {
+          res <- res[order(-res$"score"),]
+        }else{
+          res <- res[order(res$"score"),]
+        }
+        temp <- res[res$cancer == cancer,]
+        temp2 <- temp[temp$score.type == "Combined",]
+        temp <- temp[temp$score.type != "Combined",]
+        temp2 <- arrange(temp2,-row_number())
+        res <- res[res$cancer != cancer,]
+        res <- rbind(temp2,temp,res)
         plotCategoryOverview(res)  
       }else{
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
@@ -230,6 +270,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         colnames(temp) <- c("gene")
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
+      ## sort the dataframe to match with results table
+      if (cutoff > 0)
+      {
+        resultsSub <- resultsSub[order(-resultsSub$"score"),]
+      }else{
+        resultsSub <- resultsSub[order(resultsSub$"score"),]
+      }
+      temp <- resultsSub[resultsSub$cancer == cancer,]
+      temp2 <- temp[temp$score.type == "Combined",]
+      temp <- temp[temp$score.type != "Combined",]
+      temp2 <- arrange(temp2,-row_number())
+      resultsSub <- resultsSub[resultsSub$cancer != cancer,]
+      resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -247,6 +300,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         colnames(temp) <- c("gene")
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
+      ## sort the dataframe to match with results table
+      if (cutoff > 0)
+      {
+        resultsSub <- resultsSub[order(-resultsSub$"score"),]
+      }else{
+        resultsSub <- resultsSub[order(resultsSub$"score"),]
+      }
+      temp <- resultsSub[resultsSub$cancer == cancer,]
+      temp2 <- temp[temp$score.type == "Combined",]
+      temp <- temp[temp$score.type != "Combined",]
+      temp2 <- arrange(temp2,-row_number())
+      resultsSub <- resultsSub[resultsSub$cancer != cancer,]
+      resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
         ## call plot function
         plotCategoryOverview(resultsSub)             
@@ -274,6 +340,19 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         cs <- abs(temp[,2] - temp[,5])
         res <- data.frame(temp[,1],cs,temp[,c(3,4)])
         colnames(res) <- c('gene','score','score.type','cancer')
+        ## sort the dataframe to match with results table
+        if (cutoff > 0)
+        {
+          res <- res[order(-res$"score"),]
+        }else{
+          res <- res[order(res$"score"),]
+        }
+        temp <- res[res$cancer == cancer,]
+        temp2 <- temp[temp$score.type == "Combined",]
+        temp <- temp[temp$score.type != "Combined",]
+        temp2 <- arrange(temp2,-row_number())
+        res <- res[res$cancer != cancer,]
+        res <- rbind(temp2,temp,res)
         plotCategoryOverview(res)  
       }else{
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")

@@ -86,28 +86,29 @@ library(shinysky)
                             ## gene selection criteria
                             HTML("<h4>Gene Selection</h4>"),
                             uiOutput("geneSelectionMethodC1"),
+                            uiOutput("geneSelectionPanelC1"),
                             
                             ## gene selection procedure
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 == 'combined.score'",
-                              selectInput("scoreCutoff", label = "Score cut-off", 
-                                          choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4, "=<-2" = -2, "=<-3" = -3, "=<-4" = -4),
-                                          selected = 3)
-                            ),
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 != 'combined.score'",
-                              selectInput("scoreCutoff", label = "Score cut-off", 
-                                          choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4),
-                                          selected = 3)
-                            ),
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type2'",
-                              fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv"))
-                            ),
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type3'",
-                              shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
-                            ),
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 == 'combined.score'",
+#                               selectInput("scoreCutoff", label = "Score cut-off", 
+#                                           choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4, "=<-2" = -2, "=<-3" = -3, "=<-4" = -4),
+#                                           selected = 3)
+#                             ),
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 != 'combined.score'",
+#                               selectInput("scoreCutoff", label = "Score cut-off", 
+#                                           choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4),
+#                                           selected = 3)
+#                             ),
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type2'",
+#                               fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv"))
+#                             ),
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type3'",
+#                               shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
+#                             ),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines
