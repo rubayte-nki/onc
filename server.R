@@ -92,7 +92,7 @@ shinyServer(function(input, output, session) {
   ################################################################################### 
   ## create a Progress object
   progress <- shiny::Progress$new()
-  progress$set(message = "Initializing App. Please wait ...", value = 0)
+  progress$set(message = "Initializing App. Please wait.", value = 0)
   on.exit(progress$close())
   
   ## create a closure to update progress
@@ -106,6 +106,7 @@ shinyServer(function(input, output, session) {
   ## laod
   initializeApp(updateProgress)
   load("starterWidgets.RData")
+  copyPastedGenes <- "Copy Paste your genes here separated by comma"
   choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4)
   genes <- apply(geness, 1, function(r) r)
   chrms <- c("1","2","3","4","5","6","7","8","9","10","11","12",
@@ -167,7 +168,7 @@ shinyServer(function(input, output, session) {
                                                              choices = choicesToPass,
                                                              selected = 3),
            "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
-           "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
+           "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, copyPastedGenes)
            )
   })
   
@@ -196,7 +197,7 @@ shinyServer(function(input, output, session) {
     
     ## create progress object
     progress <- shiny::Progress$new()
-    progress$set(message = "Working", value = 0)
+    progress$set(message = "Working ... ", value = 0)
     on.exit(progress$close())    
     # Create a closure to update progress.
     updateProgress <- function(value = NULL, detail = NULL) {
@@ -234,6 +235,7 @@ shinyServer(function(input, output, session) {
     }else{
       if(length(isolate(input$geneListValuesC1))>0)
       {
+        copyPastedGenes <<- input$geneListValuesC1
         genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
@@ -263,7 +265,7 @@ shinyServer(function(input, output, session) {
     
     ## create progress object
     progress <- shiny::Progress$new()
-    progress$set(message = "Working", value = 0)
+    progress$set(message = "Working ... ", value = 0)
     on.exit(progress$close())    
     # Create a closure to update progress.
     updateProgress <- function(value = NULL, detail = NULL) {
@@ -329,7 +331,7 @@ shinyServer(function(input, output, session) {
     
     ## create progress object
     progress <- shiny::Progress$new()
-    progress$set(message = "Working", value = 0)
+    progress$set(message = "Working ... ", value = 0)
     on.exit(progress$close())    
     # Create a closure to update progress.
     updateProgress <- function(value = NULL, detail = NULL) {
@@ -562,7 +564,7 @@ shinyServer(function(input, output, session) {
     
     ## create progress object
     progress <- shiny::Progress$new()
-    progress$set(message = "Working", value = 0)
+    progress$set(message = "Working ... ", value = 0)
     on.exit(progress$close())    
     # Create a closure to update progress.
     updateProgress <- function(value = NULL, detail = NULL) {
@@ -648,7 +650,7 @@ shinyServer(function(input, output, session) {
     
     ## create progress object
     progress <- shiny::Progress$new()
-    progress$set(message = "Working", value = 0)
+    progress$set(message = "Working ... ", value = 0)
     on.exit(progress$close())    
     # Create a closure to update progress.
     updateProgress <- function(value = NULL, detail = NULL) {

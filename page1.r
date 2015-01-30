@@ -110,7 +110,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     resultsSub <- plyr::join(temp,resultsSub,type="inner")          
   }
   ## sort the dataframe to match with results table
-  if (cutoff > 0)
+  if (cutoff > 0 || cutoff == -10)
   {
     resultsSub <- resultsSub[order(-resultsSub$"score"),]
   }else{
@@ -170,7 +170,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
       ## sort the dataframe to match with results table
-      if (cutoff > 0)
+      if (cutoff > 0 || cutoff == -10)
       {
         resultsSub <- resultsSub[order(-resultsSub$"score"),]
       }else{
@@ -200,7 +200,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
       ## sort the dataframe to match with results table
-      if (cutoff > 0)
+      if (cutoff > 0  || cutoff == -10)
       {
         resultsSub <- resultsSub[order(-resultsSub$"score"),]
       }else{
@@ -240,7 +240,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- data.frame(temp[,1],cs,temp[,c(3,4)])
         colnames(res) <- c('gene','score','score.type','cancer')
         ## sort the dataframe to match with results table
-        if (cutoff > 0)
+        if (cutoff > 0  || cutoff == -10)
         {
           res <- res[order(-res$"score"),]
         }else{
@@ -301,7 +301,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         resultsSub <- plyr::join(temp,resultsSub,type="inner")          
       }
       ## sort the dataframe to match with results table
-      if (cutoff > 0)
+      if (cutoff > 0  || cutoff == -10)
       {
         resultsSub <- resultsSub[order(-resultsSub$"score"),]
       }else{
@@ -341,7 +341,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- data.frame(temp[,1],cs,temp[,c(3,4)])
         colnames(res) <- c('gene','score','score.type','cancer')
         ## sort the dataframe to match with results table
-        if (cutoff > 0)
+        if (cutoff > 0  || cutoff == -10)
         {
           res <- res[order(-res$"score"),]
         }else{
@@ -545,7 +545,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rgs <- plyr::join(temp,rgsts,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
-        if (cutoff > 0)
+        if (cutoff > 0 || cutoff == -10)
         {
           temp <- temp[order(-temp$"Combined.Score"),]          
         }else{
@@ -702,7 +702,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rgs <- plyr::join(temp,rgsts,type="left")
         gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
         temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
-        if (cutoff > 0)
+        if (cutoff > 0 || cutoff == -10)
         {
           temp <- temp[order(-temp$"Combined.Score"),]          
         }else{

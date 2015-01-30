@@ -8,10 +8,10 @@
 library(shiny)
 library(shinysky)
 
-#shinyUI(
+shinyUI(
+  fluidPage(
+  includeCSS("www/styles.css"),
   
-  #fluidPage(
-
   navbarPage("OncoScape",
              windowTitle ="OncoScape",
              collapsible =TRUE,
@@ -109,6 +109,7 @@ library(shinysky)
 #                               condition = "input.geneSelectionMethodC1Value == 'type3'",
 #                               shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
 #                             ),
+                            textOutput("uFName"),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines
@@ -305,7 +306,7 @@ library(shinysky)
              
     )
   
-#)
+)
 
 
-#)
+)
