@@ -208,13 +208,18 @@ shinyServer(function(input, output, session) {
       progress$set(value = value, detail = detail)
     }
     
+    if (length(input$geneSelectionMethodC1Value) == 0)
+    {
+      return()
+    }
     
     if (input$geneSelectionMethodC1Value == "type1")
     {
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
         geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
-      }else{  
-        geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
+      }else{
+        return()
+        #geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }        
     }else if (input$geneSelectionMethodC1Value == "type2"){
       userfile <- input$geneListUploadC1
@@ -226,7 +231,8 @@ shinyServer(function(input, output, session) {
           geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
           #geneFileDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          return()
+          #geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
           #geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }                
       }else{
@@ -243,7 +249,8 @@ shinyServer(function(input, output, session) {
             geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
             #geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            return()
+            #geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
             #geneFileDataFrameResultSet(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
@@ -276,6 +283,10 @@ shinyServer(function(input, output, session) {
       progress$set(value = value, detail = detail)
     }
     
+    if (length(input$geneSelectionMethodC1Value) == 0)
+    {
+      return()
+    }
     
     if (input$geneSelectionMethodC1Value == "type1")
     {
@@ -284,7 +295,8 @@ shinyServer(function(input, output, session) {
         comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
       }else{
         #showProgress()
-        comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
+        return()
+        #comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }
     }else if(input$geneSelectionMethodC1Value == "type2")
     {
@@ -296,7 +308,8 @@ shinyServer(function(input, output, session) {
           comp1view2Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
           #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          return()
+          #comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
           #comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }      
       }else{
@@ -312,7 +325,8 @@ shinyServer(function(input, output, session) {
             comp1view2Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
             #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            return()
+            #comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
             #comp1view2FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
@@ -342,6 +356,10 @@ shinyServer(function(input, output, session) {
       progress$set(value = value, detail = detail)
     }
     
+    if (length(input$geneSelectionMethodC1Value) == 0)
+    {
+      return()
+    }
     
     if (input$geneSelectionMethodC1Value == "type1")
     {
@@ -350,7 +368,8 @@ shinyServer(function(input, output, session) {
         comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
       }else{
         #showProgress()
-        comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
+        return()
+        #comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
       }  
     }else if(input$geneSelectionMethodC1Value == "type2")
     {
@@ -362,7 +381,8 @@ shinyServer(function(input, output, session) {
           comp1view1Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
           #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
-          comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
+          return()
+          #comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata)
           #comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,userdata,input$sampleSelectorC1)
         }  
       }else{
@@ -379,7 +399,8 @@ shinyServer(function(input, output, session) {
             comp1view1Plot(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
             #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
-            comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
+            return()
+            #comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist)
             #comp1view1FilePlot(updateProgress,input$cancerSelectorChoiceC1,genelist,input$sampleSelectorC1)
           }                        
         }else{
@@ -579,7 +600,8 @@ shinyServer(function(input, output, session) {
     if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
       comp3view1Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
     }else{
-      comp3view1Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+      return()
+      #comp3view1Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
     }
   })
   ## view 2
@@ -588,7 +610,8 @@ shinyServer(function(input, output, session) {
     if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
       comp3view2Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
     }else{
-      comp3view2Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+      return()
+      #comp3view2Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
     }
   })
   
@@ -671,12 +694,13 @@ shinyServer(function(input, output, session) {
            height = 1000,
            alt = "This is alternate text")
     }else{
-      list(src = generatePathview2(updateProgress,input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
-                                   input$selectScoreTypeC4),
-           contentType = 'image/png',
-           width = 1000,
-           height = 1000,
-           alt = "This is alternate text")
+      return()
+      #list(src = generatePathview2(updateProgress,input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
+      #                             input$selectScoreTypeC4),
+      #     contentType = 'image/png',
+      #     width = 1000,
+      #     height = 1000,
+      #     alt = "This is alternate text")
       }
     }, deleteFile = TRUE)
   

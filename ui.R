@@ -118,7 +118,7 @@ shinyUI(
                             shiny::tags$hr(),
                           
                             ## action button
-                            shiny::actionButton("refreshPlot",label="Refresh Results",class='btn btn-primary')
+                            shiny::actionButton("refreshPlot",label="Display/Refresh Results",class='btn btn-primary')
                             )
                           ),
                         mainPanel(
@@ -165,7 +165,7 @@ shinyUI(
                                  shiny::tags$hr(),
                                
                                  ## action button
-                                 shiny::actionButton("refreshPlotC2",label="Refresh",class='btn btn-primary')
+                                 shiny::actionButton("refreshPlotC2",label="Display/Refresh Results",class='btn btn-primary')
                                )   
                         ),
                         mainPanel(
@@ -205,7 +205,7 @@ shinyUI(
                                    shiny::tags$hr(),
                                    
                                    ## action button
-                                   shiny::actionButton("refreshPlotC3",label="Refresh Results",class='btn btn-primary')                         
+                                   shiny::actionButton("refreshPlotC3",label="Display/Refresh Results",class='btn btn-primary')                         
                                  )     
                         ),
                         mainPanel(
@@ -247,7 +247,7 @@ shinyUI(
                                  shiny::tags$hr(),
                                  
                                  ## action button
-                                 shiny:: actionButton("refreshPlotC4",label="Refresh Results",class='btn btn-primary')                         
+                                 shiny:: actionButton("refreshPlotC4",label="Display/Refresh Results",class='btn btn-primary')                         
                                )
                       ),
                         mainPanel(
