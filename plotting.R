@@ -374,29 +374,29 @@
 # ##' @param main main title for the plot 
 # ##' @return the plot
 # ##' @author Andreas Schlicker
-# achillesBarplot = function(scores, upper.threshold=NULL, lower.threshold=NULL, main="") {
-#   require(ggplot2) || stop("Can't load required package \"ggplot2\"!")
-#   require(stringr) || stop("Can't load required package \"stringr\"!")
-#   
-#   plotting.df = data.frame(phenoscore=scores, 
-#                            cls=sapply(names(scores), function(x) { str_sub(x, start=1, end=str_locate(x, "_")[1, 1]-1) }))
-#   
-#   p = barplot(plotting.df, facet=NULL, x="cls", y="phenoscore", stat="identity", 
-#               title=main, xlab="Cell lines", ylab="Achilles phenotype score", fill="#767676") +
-#     geom_hline(yintercept=0, linetype=1) +
-#     labs(x="Cell lines", y="Phenoscore") + 
-#     theme(axis.text.x=element_text(face='bold', color="gray30", size=25, angle=45, vjust=0.5))
-#   
-#   if (!is.null(upper.threshold)) {
-#     p = p + geom_hline(yintercept=upper.threshold, linetype=2)
-#   }
-#   if (!is.null(lower.threshold)) {
-#     p = p + geom_hline(yintercept=lower.threshold, linetype=2)
-#   }
-#   
-#   p
-# }
-# 
+achillesBarplot = function(scores, upper.threshold=NULL, lower.threshold=NULL, main="") {
+  require(ggplot2) || stop("Can't load required package \"ggplot2\"!")
+  require(stringr) || stop("Can't load required package \"stringr\"!")
+  
+  plotting.df = data.frame(phenoscore=scores, 
+                           cls=sapply(names(scores), function(x) { str_sub(x, start=1, end=str_locate(x, "_")[1, 1]-1) }))
+  
+  p = barplot(plotting.df, facet=NULL, x="cls", y="phenoscore", stat="identity", 
+              title=main, xlab="Cell lines", ylab="Achilles phenotype score", fill="#767676") +
+    geom_hline(yintercept=0, linetype=1) +
+    labs(x="Cell lines", y="Phenoscore") + 
+    theme(axis.text.x=element_text(face='bold', color="gray30", size=25, angle=45, vjust=0.5))
+  
+  if (!is.null(upper.threshold)) {
+    p = p + geom_hline(yintercept=upper.threshold, linetype=2)
+  }
+  if (!is.null(lower.threshold)) {
+    p = p + geom_hline(yintercept=lower.threshold, linetype=2)
+  }
+  
+  p
+}
+
 # ##' Generates a scatterplot from methylation data.
 # ##' @param meth.group1 matrix of beta values, probes in columns, samples in rows
 # ##' @param meth.group2 matrix of beta values, probes in columns, samples in rows
@@ -491,40 +491,49 @@
 #                     lab.group1="Tumors", lab.group2="Normals", 
 #                     color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
 #                     size=4, width=0.2, pvalue=TRUE) {
-#   
-#   # Gene expression plot
-#   samp1 = colnames(exprs.group1)
-#   if (!is.null(samples)) {
-#     samp1 = intersect(samples, colnames(exprs.group1))
-#   }
-#   ge.box = boxplot(exprs.group1[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
-#                    exprs.group2[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
-#                    lab.group1, lab.group2, 
-#                    xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
-#                    pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
-#                    color.palette=color.palette, size=size)
-#   
-#   # Copy number plot
-#   samp1 = colnames(acgh.group1)
-#   samp2 = colnames(acgh.group2)
-#   if (!is.null(samples)) {
-#     samp1 = intersect(samples, colnames(acgh.group1))
-#     samp2 = intersect(samples, colnames(acgh.group2))
-#   }
-#   if (pvalue && length(intersect(colnames(prior.details), "cgh.diff.fdr")) == 1) {
-#     pvalue = prior.details[gene, "cgh.diff.fdr"]
-#   } else { 
-#     pvalue = NA
-#   }
-#   cn.box = boxplot(acgh.group1[gene, samp1], acgh.group2[gene, samp2], 
-#                    lab.group1, lab.group2, 
-#                    xlabel=NULL, ylabel=paste(gene, "copy number"), main=NULL, pvalue=pvalue,
-#                    color.palette, size=size)
-#   
-#   # Achilles plot
-#   achil = achillesBarplot(achilles, achilles.ut, achilles.lt, main="")
-#   
-#   # Methylation plot
+  
+plotGene = function(gene, prior.details, samples=NULL, 
+                      exprs.group1, exprs.group2, 
+                      acgh.group1, acgh.group2, 
+                      achilles, achilles.ut, achilles.lt, 
+                      lab.group1="Tumors", lab.group2="Normals", 
+                      color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
+                      size=4, width=0.2, pvalue=TRUE) {
+    
+  
+  # Gene expression plot
+  samp1 = colnames(exprs.group1)
+  if (!is.null(samples)) {
+    samp1 = intersect(samples, colnames(exprs.group1))
+  }
+  ge.box = boxplot(exprs.group1[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
+                   exprs.group2[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
+                   lab.group1, lab.group2, 
+                   xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
+                   pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
+                   color.palette=color.palette, size=size)
+  
+  # Copy number plot
+  samp1 = colnames(acgh.group1)
+  samp2 = colnames(acgh.group2)
+  if (!is.null(samples)) {
+    samp1 = intersect(samples, colnames(acgh.group1))
+    samp2 = intersect(samples, colnames(acgh.group2))
+  }
+  if (pvalue && length(intersect(colnames(prior.details), "cgh.diff.fdr")) == 1) {
+    pvalue = prior.details[gene, "cgh.diff.fdr"]
+  } else { 
+    pvalue = NA
+  }
+  cn.box = boxplot(acgh.group1[gene, samp1], acgh.group2[gene, samp2], 
+                   lab.group1, lab.group2, 
+                   xlabel=NULL, ylabel=paste(gene, "copy number"), main=NULL, pvalue=pvalue,
+                   color.palette, size=size)
+  
+  # Achilles plot
+  achil = achillesBarplot(achilles, achilles.ut, achilles.lt, main="")
+  
+  # Methylation plot
 #   samp1 = colnames(meth.group1)
 #   samp2 = colnames(meth.group2)
 #   if (!is.null(samples)) {
@@ -538,10 +547,11 @@
 #   meth = scatterplot(meth.group1[meth.probes, samp1], meth.group2[meth.probes, samp2], 
 #                      error.bar="se", lab.group1=lab.group1, lab.group2=lab.group2, main=NULL,
 #                      color.palette=color.palette, size=size, width=width)
-#   
-#   list(gene.expression=ge.box, acgh=cn.box, achilles=achil, methylation=meth)
-# }
-# 
+  
+  #list(gene.expression=ge.box, acgh=cn.box, achilles=achil, methylation=meth)
+  list(gene.expression=ge.box, acgh=cn.box, achilles=achil)
+}
+
 # ##' Generate the standard theme for all plots.
 # ##' @return the theme
 # ##' @author Andreas Schlicker

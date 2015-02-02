@@ -65,6 +65,7 @@ plotHeatmapPage1(tcgaOG, stype[3])
 
 ## page 2
 ## **********************************************************************************
+setwd("C:/Rubayte/Oncoscape/data")
 
 # Load the TCGA data
 # Copy number
@@ -76,18 +77,56 @@ load("tcga_pancancer4_exprs.rdata")
 load("tcga_pancancer4_exprs_ccle.rdata")
 rm(ccle.exprs)
 # DNA methylation
-load("tcga_pancancer4_meth.rdata")
+#load("tcga_pancancer4_meth.rdata")
 # Methylation annotation data
-load("illumina_infinium450_annotation.rdata")
+#load("illumina_infinium450_annotation.rdata")
 # Project Achilles data
 load("achilles.rdata")
 
+setwd("C:/Rubayte/Oncoscape/dev3")
+
+ 
 
 #############################################################################
 ## prepare data frames
 #############################################################################
-#achilles,ccle.cna.combat,ccle.exprs.combat,infinium450.probe.ann,tcga.cna,tcga.cna.combat,tcga.exprs,tcga.exprs.combat,tcga.meth,
-#tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,tcga.mn.meth
+ccleResultsPrioDetails = NULL
+tcgaResultsPrioDetails = NULL
+ccleResultsAT = NULL
+tcgaResultsAT = NULL
+
+for (n in names(ccleResults))
+{
+  ccleResultsPrioDetails[[n]] = ccleResults[[n]]$prioritize.details
+}
+
+for (n in names(ccleResults))
+{
+  ccleResultsAT[[n]] = ccleResults[[n]]$achilles.thresholds
+}
+
+for (n in names(tcgaResults))
+{
+  tcgaResultsPrioDetails[[n]] =  tcgaResults[[n]]$prioritize.details
+}
+
+for (n in names(tcgaResults))
+{
+  tcgaResultsAT[[n]] =  tcgaResults[[n]]$achilles.thresholds
+}
+
+
+#############################################################################
+## update started data frame
+#############################################################################
+load("starter.RData")
+
+save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
+     tcgaResultsPlotTrack,ccleResultsPlotTrack,tcgaScoreMat,ccleScoreMat,achilles,ccle.cna.combat,ccle.exprs.combat,tcga.cna,tcga.cna.combat,tcga.exprs,
+     tcga.exprs.combat,tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,ccleResultsPrioDetails,
+     tcgaResultsPrioDetails,ccleResultsAT, tcgaResultsAT, file="starter.RData")
+
+
 
 #############################################################################
 ## update started data frame

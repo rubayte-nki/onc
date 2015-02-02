@@ -9,41 +9,20 @@ library(shiny)
 library(shinysky)
 
 shinyUI(
-  fluidPage(
+  bootstrapPage(
   includeCSS("www/styles.css"),
   
   navbarPage("OncoScape",
              windowTitle ="OncoScape",
-             collapsible =TRUE,
 
              ## comp0
              tabPanel("What is OncoScape?",
-                      sidebarLayout(
-                        column(2,
-                               wellPanel(
-                                 # shiny::tags$h4("Publication"),
-                                 # shiny::tags$p("some text about about this header."),
-                                 # shiny::tags$br(),
-                                 # shiny::tags$h4("Github repository"),
-                                 # shiny::tags$p("some text about about this header."),
-                                 # shiny::tags$br(),
-                                 HTML("<h4>App version</h4>"),
-                                 HTML("<p>beta</p>"),
-                                 HTML("<br/>"),
-                                 HTML("<h4>License, terms of use, privacy</h4>"),
-                                 HTML("<p>needs to be defined</p>"),
-                                 HTML("<br/>"),
-                                 HTML("<h4>Contacts</h4>"),
-                                 HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
-                                 HTML("<br/>"),
-                                 HTML("<hr/>"),
-                                 HTML("<img src='NKIlogo.png' class='img-responsive' />")
-                               )
-                        ),
-                        mainPanel(
+                      #sidebarLayout(
+                        #mainPanel(
                           ## app about text
                           fluidRow(
-                            column(9,
+                            column(2),
+                            column(8,
                                    HTML("<h3>What is OncoScape?</h3>"),
                                    HTML("<p>OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:</p>"),
                                    shiny::tags$ul(shiny::tags$li("Gene Expression"),
@@ -60,17 +39,64 @@ shinyUI(
                                                   shiny::tags$li("different cancer subtypes")),
                                    shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
                                    shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary Statistics' tab of the app."))
-                            ))
+                            ),
+                            column(2)
+                            ),
+                        fluidRow(
+                          column(2),
+                          column(8,wellPanel(
+                                   column(3,
+                                          wellPanel(
+                                          HTML("<h4>App version</h4>"),
+                                          HTML("<br/>"),
+                                          HTML("<p>beta</p>")
+                                          )),
+                                   column(3,
+                                          wellPanel(
+                                          HTML("<h4>License, terms of use, privacy</h4>"),
+                                          HTML("<br/>"),
+                                          HTML("<p>needs to be defined</p>"))
+                                   ),
+                                   column(3,
+                                          wellPanel(
+                                          HTML("<h4>Contacts</h4>"),
+                                          HTML("<br/>"),
+                                          HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>")
+                                          )
+                                    ),
+                                   column(3,
+                                          wellPanel(
+                                          HTML("<img src='NKIlogo.png' class='img-responsive' />"))
+                                   )
+                                   # shiny::tags$h4("Publication"),
+                                   # shiny::tags$p("some text about about this header."),
+                                   # shiny::tags$br(),
+                                   # shiny::tags$h4("Github repository"),
+                                   # shiny::tags$p("some text about about this header."),
+                                   # shiny::tags$br(),
+                                   
+                          )),
+                          column(2)
+                          )
                             
-                          )  
-                        )
+                          #)  
+                        #)
              ),
              #),
              
              
              ## comp1
-             tabPanel("Genes in Cancers",                      
-                      sidebarLayout(
+             tabPanel("Top Genes in Cancers", 
+                      fluidRow(
+                        column(12,
+                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Display/Refresh Results' to populate table data and generate plots !</strong>
+                                    </div>
+                                    ")
+                               )
+                        ),
+                      fluidRow(
                         column(2,
                           wellPanel(
                             ## cancer type select
@@ -87,6 +113,24 @@ shinyUI(
                             HTML("<h4>Gene Selection</h4>"),
                             uiOutput("geneSelectionMethodC1"),
                             uiOutput("geneSelectionPanelC1"),
+                            
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type2'",
+                              HTML("<div align='left' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Notice !</strong> <p>Input file must be tab-separated with the first column having the HGNC gene symbols. 
+                                          Header line should also be provided.</p>
+                                        <strong>Another thing !</strong><p>Once you upload a file, the uploaded data remains active in your current session.
+                                        So uploading multiple times is not needed.</p>
+                                    </div>
+                                    ")
+                              ),
+                            
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type3'",
+                              shiny::actionButton("actionAutoFillGeneTextArea", label = "Click to load example !")
+                            ),
+                            
                             
                             ## gene selection procedure
 #                             conditionalPanel(
@@ -109,7 +153,6 @@ shinyUI(
 #                               condition = "input.geneSelectionMethodC1Value == 'type3'",
 #                               shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
 #                             ),
-                            textOutput("uFName"),
                             shiny::tags$hr(),
                             
                             ## tumors or cell-lines
@@ -121,7 +164,7 @@ shinyUI(
                             shiny::actionButton("refreshPlot",label="Display/Refresh Results",class='btn btn-primary')
                             )
                           ),
-                        mainPanel(
+                        column(10,
                           fluidRow(
                             ## result genes
                             column(10,
@@ -150,7 +193,7 @@ shinyUI(
              ),
              
              ## comp2
-             tabPanel("Single Gene",
+             tabPanel("Single Gene in Cancers",
                       sidebarLayout(
                         column(2,
                                wellPanel(
@@ -188,7 +231,16 @@ shinyUI(
              
              ## comp3
              tabPanel("Genes across Choromosomes",
-                      sidebarLayout(
+                      fluidRow(
+                        column(12,
+                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Display/Refresh Results' to generate plots !</strong>
+                                    </div>
+                                    ")
+                        )
+                      ),
+                      fluidRow(
                           column(2,
                                  wellPanel(
                                    ## cancer type select
@@ -208,7 +260,7 @@ shinyUI(
                                    shiny::actionButton("refreshPlotC3",label="Display/Refresh Results",class='btn btn-primary')                         
                                  )     
                         ),
-                        mainPanel(
+                        column(10,
                           ## plot window
                           fluidRow(
                             column (10, HTML("<h3>Score Plot"),
@@ -229,7 +281,16 @@ shinyUI(
              
              ## comp4
              tabPanel("Pathways",
-                      sidebarLayout(
+                      fluidRow(
+                        column(12,
+                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Display/Refresh Results' to generate plots !</strong>
+                                    </div>
+                                    ")
+                        )
+                      ),
+                      fluidRow(
                         column(2,
                                wellPanel(
                                  ## select cancer type
@@ -250,26 +311,24 @@ shinyUI(
                                  shiny:: actionButton("refreshPlotC4",label="Display/Refresh Results",class='btn btn-primary')                         
                                )
                       ),
-                        mainPanel(
+                      column(10,
+                             fluidRow(
                           ## plot window
-                          fluidRow(
-                            column (10, HTML("<h3>Pathway Plot"),
+                                    HTML("<h3>Pathway Plot"),
                                     downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-primary'),
                                     HTML("</h3>"),
-                                    imageOutput("pathwayPlot",height="1000"))
-                          )
+                                    imageOutput("pathwayPlot",height="1000")
+                            )
+                          
                         )
                       )
              ),
              
              ## comp5
              tabPanel("Summary statistics",
-                      sidebarLayout(
-                        column(2),
-                        mainPanel(
-                          ## app about text
-                          fluidRow(
-                            column(10,
+                      fluidRow(
+                          column(3),
+                            column(6,
                                    shiny::tags$h3("Header?"),
                                    HTML("<img src='sample_set_sizes.png' class='img-responsive' />"),
                                    shiny::tags$h3("Header?"),
@@ -297,16 +356,13 @@ shinyUI(
                                    shiny::dataTableOutput('genesCutoff4C5'),
                                    shiny::tags$br()
                                    
-                            )
+                            ),
+                          column(3)
                           )  
-                        )
                       )
                       
-             )
-             
-    )
+
+          )
   
-)
-
-
+    )
 )
