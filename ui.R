@@ -12,16 +12,23 @@ shinyUI(
   bootstrapPage(
   includeCSS("www/styles.css"),
   
-  navbarPage("OncoScape",
-             windowTitle ="OncoScape",
+  navbarPage("OncoScape", windowTitle ="OncoScape",
 
              ## comp0
              tabPanel("What is OncoScape?",
-                      #sidebarLayout(
-                        #mainPanel(
-                          ## app about text
                           fluidRow(
-                            column(2),
+                            column(2,wellPanel(
+                                   HTML("<h4>App version</h4>"),
+                                   HTML("<p>beta</p>"),
+                                   HTML("<br/>"),
+                                   HTML("<h4>License, terms of use, privacy</h4>"),
+                                   HTML("<p>needs to be defined</p>"),
+                                   HTML("<br/>"),
+                                   HTML("<h4>Contacts</h4>"),
+                                   HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
+                                   HTML("<br/>"),
+                                   HTML("<img src='NKIlogo.png' class='img-responsive' />")
+                                   )),
                             column(8,
                                    HTML("<h3>What is OncoScape?</h3>"),
                                    HTML("<p>OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:</p>"),
@@ -41,46 +48,7 @@ shinyUI(
                                    shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary Statistics' tab of the app."))
                             ),
                             column(2)
-                            ),
-                        fluidRow(
-                          column(2),
-                          column(8,wellPanel(
-                                   column(3,
-                                          wellPanel(
-                                          HTML("<h4>App version</h4>"),
-                                          HTML("<br/>"),
-                                          HTML("<p>beta</p>")
-                                          )),
-                                   column(3,
-                                          wellPanel(
-                                          HTML("<h4>License, terms of use, privacy</h4>"),
-                                          HTML("<br/>"),
-                                          HTML("<p>needs to be defined</p>"))
-                                   ),
-                                   column(3,
-                                          wellPanel(
-                                          HTML("<h4>Contacts</h4>"),
-                                          HTML("<br/>"),
-                                          HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>")
-                                          )
-                                    ),
-                                   column(3,
-                                          wellPanel(
-                                          HTML("<img src='NKIlogo.png' class='img-responsive' />"))
-                                   )
-                                   # shiny::tags$h4("Publication"),
-                                   # shiny::tags$p("some text about about this header."),
-                                   # shiny::tags$br(),
-                                   # shiny::tags$h4("Github repository"),
-                                   # shiny::tags$p("some text about about this header."),
-                                   # shiny::tags$br(),
-                                   
-                          )),
-                          column(2)
-                          )
-                            
-                          #)  
-                        #)
+                            )
              ),
              #),
              

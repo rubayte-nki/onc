@@ -573,13 +573,20 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer, "Combined")
       rgsog <- resultsSub[resultsSub[,4]== cancer,]
       rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgsog))
+      if (nrow(rgsog)>0)
       {
-        clist <- c(clist,cancer)
+        clist <- NULL
+        for (i in 1:nrow(rgsog))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgsog <- data.frame(rgsog,clist)
+        colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")        
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
       }
-      rgsog <- data.frame(rgsog,clist)
-      colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -619,13 +626,21 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
       rgsts <- resultsSub[resultsSub[,4]== cancer,]
       rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgsts))
+      if (nrow(rgsts)>0)
       {
-        clist <- c(clist,cancer)
+        clist <- NULL
+        for (i in 1:nrow(rgsts))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgsts <- data.frame(rgsts,clist)
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
       }
-      rgsts <- data.frame(rgsts,clist)
-      colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+      
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -665,13 +680,20 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer, "Combined")
       rgscom <- resultsSub[resultsSub[,4]== cancer,]
       rgscom <- reshape(rgscom[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgscom))
+      if (nrow(rgscom)>0)
       {
-        clist <- c(clist,cancer)
-      }
-      rgscom <- data.frame(rgscom,clist)
-      colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+        clist <- NULL
+        for (i in 1:nrow(rgscom))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgscom <- data.frame(rgscom,clist)
+        colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+      }else{
+        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+        colnames(dfgenes) <- c("Empty result set")
+        dfgenes
+      }      
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
