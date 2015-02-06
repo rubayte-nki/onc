@@ -233,12 +233,12 @@
 # # ##' Generate the standard theme for all plots.
 # # ##' @return the theme
 # # ##' @author Andreas Schlicker
-# # generateTheme = function() {
-# #   theme(title=element_text(face='bold', color="gray30", size=25),
-# #         text=element_text(face='bold', color="gray30", size=25),
-# #         panel.background = element_rect(fill='gray95', color="gray95"))
-# # }
-# # 
+generateTheme = function() {
+  theme(title=element_text(face='bold', color="gray30", size=15),
+        text=element_text(face='bold', color="gray30", size=15),
+        panel.background = element_rect(fill='gray95', color="gray95"))
+}
+# 
 # # ## Taken from: http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
 # # ##
 # # ## Summarizes data.
@@ -329,44 +329,44 @@
 # ##' @param size point size; default=3
 # ##' @return the boxplot
 # ##' @author Andreas Schlicker
-# boxplot = function(group1, group2, 
-#                    lab.group1="group1", lab.group2="group2", 
-#                    xlabel="", ylabel="", main=NULL, pvalue=NULL,
-#                    color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
-#                    size=3) {
-#   if (!require(ggplot2)) {
-#     stop("Can't load required package \"ggplot2\"!")
-#   }
-#   
-#   temp = data.frame(values=c(group1, group2), 
-#                     group=c(rep(lab.group1, times=length(group1)),
-#                             rep(lab.group2, times=length(group2))))
-#   
-#   p = ggplot(temp, aes(x=group, y=values, fill=group)) +
-#     geom_boxplot(outlier.size=0, aes(alpha=0.3)) +
-#     geom_jitter(size=size) +
-#     guides(fill=FALSE, alpha=FALSE) +
-#     scale_fill_manual(values=color.palette) +
-#     geom_hline(yintercept=0, linetype=1) +
-#     xlab(xlabel) + 
-#     ylab(ylabel) + 
-#     generateTheme() +
-#     theme(axis.text.y=element_text(face='bold', color="gray30", size=25, hjust=0))
-#   
-#   if (!is.null(main)) {
-#     p = p + ggtitle(main)
-#   }
-#   if (!is.null(pvalue) && !is.na(pvalue)) {
-#     xpos = 1
-#     if (max(subset(temp, group==lab.group2)$values, na.rm=TRUE) > max(subset(temp, group==lab.group1)$values, na.rm=TRUE)) {
-#       xpos = 2
-#     }
-#     p = p + geom_text(x=xpos, y=max(temp$values, na.rm=TRUE), label=paste("FDR = ", signif(pvalue, digits=2), sep=""), size=8, fontface="bold")
-#   }
-#   
-#   p
-# }
-# 
+boxplot = function(group1, group2, 
+                   lab.group1="group1", lab.group2="group2", 
+                   xlabel="", ylabel="", main=NULL, pvalue=NULL,
+                   color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
+                   size=3) {
+  if (!require(ggplot2)) {
+    stop("Can't load required package \"ggplot2\"!")
+  }
+  
+  temp = data.frame(values=c(group1, group2), 
+                    group=c(rep(lab.group1, times=length(group1)),
+                            rep(lab.group2, times=length(group2))))
+  
+  p = ggplot(temp, aes(x=group, y=values, fill=group)) +
+    geom_boxplot(outlier.size=0, aes(alpha=0.3)) +
+    geom_jitter(size=size) +
+    guides(fill=FALSE, alpha=FALSE) +
+    scale_fill_manual(values=color.palette) +
+    geom_hline(yintercept=0, linetype=1) +
+    xlab(xlabel) + 
+    ylab(ylabel) + 
+    generateTheme() +
+    theme(axis.text.y=element_text(face='bold', color="gray30", size=10, hjust=0))
+  
+  if (!is.null(main)) {
+    p = p + ggtitle(main)
+  }
+  if (!is.null(pvalue) && !is.na(pvalue)) {
+    xpos = 1
+    if (max(subset(temp, group==lab.group2)$values, na.rm=TRUE) > max(subset(temp, group==lab.group1)$values, na.rm=TRUE)) {
+      xpos = 2
+    }
+    p = p + geom_text(x=xpos, y=max(temp$values, na.rm=TRUE), label=paste("FDR = ", signif(pvalue, digits=2), sep=""), size=6, fontface="bold")
+  }
+  
+  p
+}
+
 # ##' Generates a barplot from Project Achilles data. 
 # ##' @param scores vector of phenotype scores from Project Achilles
 # ##' @param upper.threshold threshold above which phenotype scores are considered to be significant
@@ -385,7 +385,7 @@ achillesBarplot = function(scores, upper.threshold=NULL, lower.threshold=NULL, m
               title=main, xlab="Cell lines", ylab="Achilles phenotype score", fill="#767676") +
     geom_hline(yintercept=0, linetype=1) +
     labs(x="Cell lines", y="Phenoscore") + 
-    theme(axis.text.x=element_text(face='bold', color="gray30", size=25, angle=45, vjust=0.5))
+    theme(axis.text.x=element_text(color="gray30", size=10, angle=45, vjust=0.5))
   
   if (!is.null(upper.threshold)) {
     p = p + geom_hline(yintercept=upper.threshold, linetype=2)
@@ -693,14 +693,14 @@ getHeatmap = function(dataFrame,yaxis.theme,
                       xaxis.theme=NULL) {
   p = ggplot(dataFrame, aes(x=cancer, y=gene)) + 
     geom_tile(aes(fill=score), color = "white") + 
-    labs(title=title, x=xlab, y=ylab) + coord_flip()  + 
+    labs(title=title, x=xlab, y=ylab) + # coord_flip()  + 
     theme(panel.background=element_rect(color="white", fill="white"),
           axis.ticks=element_blank(), 
-          axis.text.x=element_text(color="gray30", face="bold", size=10,angle = 90),
+          axis.text.x=element_text(color="gray30", face="bold", size=10),
           axis.text.y=element_text(color="gray30", face="bold", size=10),
           legend.text=element_text(color="gray30", face="bold", size=10),
           legend.title=element_blank(),
-          legend.position="top",
+          legend.position="bottom",
           legend.key.width=unit(1.5, "cm")) #+
     #yaxis.theme
   
@@ -1377,36 +1377,36 @@ getHeatmap = function(dataFrame,yaxis.theme,
 # ##' @param ylab y-axis title; default: ""
 # ##' @param fill bar color; default: gray30 
 # ##' @author Andreas Schlicker
-# barplot = function(dataframe, facet="cancer", ncol=3, 
-#                    x="score.diff", y=NULL, stat="bin",			   
-#                    title="", xlab="", ylab="", fill="gray30") {
-#   require(ggplot2) || stop("Can't load required package \"ggplot2\"!")
-#   
-#   dataframe[, x] = as.factor(dataframe[, x])
-#   
-#   if (is.null(y)) {
-#     p = ggplot(dataframe, aes_string(x=x), fill=fill)
-#   } else {
-#     p = ggplot(dataframe, aes_string(x=x, y=y), fill=fill)
-#   }
-#   
-#   p = p + geom_bar(binwidth=0.25, stat=stat) + 
-#     guides(fill=FALSE) +
-#     labs(title=title, xlab=xlab, ylab=ylab) +
-#     theme(title=element_text(color="black", size=20, face="bold"),
-#           axis.text=element_text(color="gray30", size=20, face="bold"),
-#           axis.title=element_text(color="gray30", size=20, face="bold"),
-#           legend.text=element_text(color="gray30", size=20, face="bold"),
-#           legend.title=element_text(color="gray30", size=20, face="bold"),
-#           strip.text=element_text(color="black", size=20, face="bold"))
-#   
-#   if (!is.null(facet)) {
-#     p = p + facet_wrap(formula(paste(" ~ ", facet, sep="")), ncol=ncol)
-#   }
-#   
-#   p
-# }
-# 
+barplot = function(dataframe, facet="cancer", ncol=3, 
+                   x="score.diff", y=NULL, stat="bin",			   
+                   title="", xlab="", ylab="", fill="gray30") {
+  require(ggplot2) || stop("Can't load required package \"ggplot2\"!")
+  
+  dataframe[, x] = as.factor(dataframe[, x])
+  
+  if (is.null(y)) {
+    p = ggplot(dataframe, aes_string(x=x), fill=fill)
+  } else {
+    p = ggplot(dataframe, aes_string(x=x, y=y), fill=fill)
+  }
+  
+  p = p + geom_bar(binwidth=0.25, stat=stat) + 
+    guides(fill=FALSE) +
+    labs(title=title, xlab=xlab, ylab=ylab) +
+    theme(title=element_text(color="black", size=20, face="bold"),
+          axis.text=element_text(color="gray30", size=10, face="bold"),
+          axis.title=element_text(color="gray30", size=10, face="bold"),
+          legend.text=element_text(color="gray30", size=10, face="bold"),
+          legend.title=element_text(color="gray30", size=10, face="bold"),
+          strip.text=element_text(color="black", size=20, face="bold"))
+  
+  if (!is.null(facet)) {
+    p = p + facet_wrap(formula(paste(" ~ ", facet, sep="")), ncol=ncol)
+  }
+  
+  p
+}
+
 # ##' Creates a data.frame that is suitable for plotting with confusionHeatmap.
 # ##' @param dataframe a data.frame that contains the scores to be compared (column names
 # ##' score and score2) and a cancer column

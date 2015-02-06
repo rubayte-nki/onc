@@ -84,14 +84,19 @@ shinyUI(
                             
                             conditionalPanel(
                               condition = "input.geneSelectionMethodC1Value == 'type2'",
-                              HTML("<div align='left' class='alert alert-info alert-dismissible' role='alert'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Notice !</strong> <p>Input file must be tab-separated with the first column having the HGNC gene symbols. 
+                              HTML("
+                                    <a class='btn btn-primary' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+                                   Show help on Input File !
+                                   </a>
+                                    <div class='collapse' id='collapseExample'>
+                                      <div class='well'>
+                                          <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
                                           Header line should also be provided.</p>
-                                        <strong>Another thing !</strong><p>Once you upload a file, the uploaded data remains active in your current session.
-                                        So uploading multiple times is not needed.</p>
+                                          <p><strong>Another thing!</strong>Once you upload a file, the uploaded data remains active in your current session.
+                                          So uploading multiple times is not needed.</p>
+                                      </div>
                                     </div>
-                                    ")
+                                   ")
                               ),
                             
                             conditionalPanel(
@@ -161,41 +166,39 @@ shinyUI(
              ),
              
              ## comp2
-             tabPanel("Single Gene in Cancers",
-                      sidebarLayout(
-                        column(2,
-                               wellPanel(
-                                 ## cancer type select
-                                 uiOutput("cancerSelectorC2"),
-                                 
-                                 ## gene select
-                                 selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Select Gene")),
-                                 
-                                 ## select sample set
-                                 uiOutput("sampleSelectorC2"),
-                                 shiny::tags$hr(),
-                               
-                                 ## action button
-                                 shiny::actionButton("refreshPlotC2",label="Display/Refresh Results",class='btn btn-primary')
-                               )   
-                        ),
-                        mainPanel(
-                          ## plot window
-                          fluidRow(
-                            column (5, HTML("<h3>Gene Expression</h3>"),
-                                    plotOutput("geneExpressionPlot")),
-                            column (5, HTML("<h3>Copy Numbers</h3>"),
-                                    plotOutput("cnvPlot"))
-                            ),
-                          fluidRow(
-                            column (5, HTML("<h3>DNA Methylation</h3>"),
-                                    plotOutput("dnaMethPlot")),
-                            column (5, HTML("<h3>Achilles</h3>"),
-                                    plotOutput("achillesPlot"))
-                          )
-                        )
-                      )
-             ),
+#              tabPanel("Single Gene in Cancers",
+#                       sidebarLayout(
+#                         column(2,
+#                                wellPanel(
+#                                  ## cancer type select
+#                                  uiOutput("cancerSelectorC2"),
+#                                  
+#                                  ## gene select
+#                                  selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Select Gene")),
+#                                  
+#                                  ## select sample set
+#                                  uiOutput("sampleSelectorC2"),
+#                                  shiny::tags$hr(),
+#                                
+#                                  ## action button
+#                                  shiny::actionButton("refreshPlotC2",label="Display/Refresh Results",class='btn btn-primary')
+#                                )   
+#                         ),
+#                         mainPanel(
+#                           ## plot window
+#                           fluidRow(
+#                             column (5, HTML("<h3>Gene Expression</h3>"),
+#                                     plotOutput("geneExpressionPlot")),
+#                             column (5, HTML("<h3>Copy Numbers</h3>"),
+#                                     plotOutput("cnvPlot"))
+#                             ),
+#                           fluidRow(
+#                             column (5, HTML("<h3>Achilles</h3>"),
+#                                     plotOutput("achillesPlot"))
+#                           )
+#                         )
+#                       )
+#              ),
              
              ## comp3
              tabPanel("Genes across Choromosomes",
@@ -268,8 +271,8 @@ shinyUI(
                                  uiOutput("scoreSelectInputC4"),
                                  
                                  
-                                 ## multilpe gene select
-                                 selectizeInput('pathwaySelectorChoiceC4', label = "Select Pathway",  choices = NULL, options = list(maxItems = 1,placeholder="Selected Genes")),
+                                 ## pathway select
+                                 selectizeInput('pathwaySelectorChoiceC4', label = "Select Pathway",  choices = NULL, options = list(maxItems = 1,placeholder="Type and Select a Pathway")),
                                  
                                  ## tumors or cell lines
                                  uiOutput("sampleSelectorC4"),
@@ -285,7 +288,7 @@ shinyUI(
                                     HTML("<h3>Pathway Plot"),
                                     downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-primary'),
                                     HTML("</h3>"),
-                                    imageOutput("pathwayPlot",height="1000")
+                                    imageOutput("pathwayPlot")
                             )
                           
                         )
@@ -297,11 +300,11 @@ shinyUI(
                       fluidRow(
                           column(3),
                             column(6,
-                                   shiny::tags$h3("Header?"),
+                                   shiny::tags$h3("Number of cell-lines, tumors and normal samples across cancer types"),
                                    HTML("<img src='sample_set_sizes.png' class='img-responsive' />"),
-                                   shiny::tags$h3("Header?"),
+                                   shiny::tags$h3("Oncogene alterations across cancers"),
                                    HTML("<img src='oncogene_alterations.png' class='img-responsive' />"),
-                                   shiny::tags$h3("Header?"),
+                                   shiny::tags$h3("Tumor suppressor alterations across cancers"),
                                    HTML("<img src='tumor_suppressor_alterations.png' class='img-responsive' />"),
                                    shiny::tags$h3("Number of samples analyzed"),
                                    shiny::tags$p("The following table gives an overview of the number of samples analyzed for each cancer type. Each row contains the number of samples available for the specified data type. Rows 5 and 6 contain the number of samples with available mRNA expression data and copy-number data or DNA methylation data, respectively. The last row contains the number of cell lines available in CCLE for each cancer type."),

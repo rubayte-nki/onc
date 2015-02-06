@@ -5,20 +5,22 @@
 # http://shiny.rstudio.com
 #
 
-library(shiny)
-library(shinysky)
-library(ggplot2)
-library(grid)
-library(gridExtra)
-library(plyr)
-library(dplyr)
-library(Gviz)
-library(GenomicRanges)
-library(biomaRt)
-library(pathview)
+
 
 initializeApp <- function(updateProgress=NULL)
 {
+  
+  library(shiny)
+  library(shinysky)
+  library(ggplot2)
+  library(grid)
+  library(gridExtra)
+  library(plyr)
+  library(dplyr)
+  library(Gviz)
+  library(GenomicRanges)
+  library(biomaRt)
+  library(pathview)
   ## source plot functions
   source("plotting.R")
   source("page1.r")
@@ -92,7 +94,7 @@ shinyServer(function(input, output, session) {
   ################################################################################### 
   ## create a Progress object
   progress <- shiny::Progress$new()
-  progress$set(message = "Initializing App. Please wait.", value = 0)
+  progress$set(message = "Initializing ...", value = 0)
   on.exit(progress$close())
   
   ## create a closure to update progress
@@ -442,7 +444,7 @@ shinyServer(function(input, output, session) {
       
       if (input$geneSelectionMethodC1Value == "type1")
       {    
-        write.csv(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
+        write.table(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
                  sep="\t",filename, row.names = FALSE, quote=FALSE) 
         
       }else if (input$geneSelectionMethodC1Value == "type2")
@@ -451,14 +453,14 @@ shinyServer(function(input, output, session) {
         if (!(is.null(userfile)))
         {
           userdata <- read.delim(userfile$datapath,sep="\t")
-          write.csv(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
+          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
                     sep="\t",filename, row.names = FALSE,quote=FALSE)          
         }
       }else{
         genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          write.csv(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
+          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
                     sep="\t",filename, row.names = FALSE,quote=FALSE)                        
         }
       }
@@ -712,7 +714,7 @@ shinyServer(function(input, output, session) {
                                "Combined score" = "combined.score"), selected = "og.score")
   })  
   ## pathway selector comp4
-  updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = pathways[1], server = TRUE)
+  updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = NULL, server = TRUE)
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
     radioButtons("sampleSelectorC4", "Select Sample type",
@@ -722,40 +724,42 @@ shinyServer(function(input, output, session) {
   
   ## plots
   output$pathwayPlot <- renderImage({
+    
     input$refreshPlotC4
     
-    ## create progress object
-    progress <- shiny::Progress$new()
-    progress$set(message = "Working ... ", value = 0)
-    on.exit(progress$close())    
-    # Create a closure to update progress.
-    updateProgress <- function(value = NULL, detail = NULL) {
-      if (is.null(value)) {
-        value <- progress$getValue()
-        value <- value + (progress$getMax() - value) / 5
+    isolate({
+      ## create progress object
+      progress <- shiny::Progress$new()
+      progress$set(message = "Working ... ", value = 0)
+      on.exit(progress$close())    
+      # Create a closure to update progress.
+      updateProgress <- function(value = NULL, detail = NULL) {
+        if (is.null(value)) {
+          value <- progress$getValue()
+          value <- value + (progress$getMax() - value) / 5
+        }
+        progress$set(value = value, detail = detail)
       }
-      progress$set(value = value, detail = detail)
-    }
-    
-    
-    if (length(isolate(input$pathwaySelectorChoiceC4))>0 && length(input$cancerSelectorChoiceC4)>0 && length(input$selectScoreTypeC4)>0 && length(input$sampleSelectorC4)>0)
-    {
-      list(src = generatePathview2(updateProgress,isolate(input$pathwaySelectorChoiceC4), isolate(input$cancerSelectorChoiceC4),isolate(input$sampleSelectorC4),
-                                   isolate(input$selectScoreTypeC4)),
-           contentType = 'image/png',
-           width = 1000,
-           height = 1000,
-           alt = "This is alternate text")
-    }else{
-      return()
-      #list(src = generatePathview2(updateProgress,input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
-      #                             input$selectScoreTypeC4),
-      #     contentType = 'image/png',
-      #     width = 1000,
-      #     height = 1000,
-      #     alt = "This is alternate text")
-      }
-    }, deleteFile = TRUE)
+      
+      
+      if (length(isolate(input$pathwaySelectorChoiceC4))>0 && length(input$cancerSelectorChoiceC4)>0 && length(input$selectScoreTypeC4)>0 && length(input$sampleSelectorC4)>0)
+      {
+        list(src = generatePathview2(updateProgress,isolate(input$pathwaySelectorChoiceC4), isolate(input$cancerSelectorChoiceC4),isolate(input$sampleSelectorC4),
+                                     isolate(input$selectScoreTypeC4)),
+             contentType = 'image/png',
+             #width = 800,
+             #height = 500,
+             alt = "Empty")
+      }else{
+        list(src = generatePathview2(updateProgress,isolate(input$pathwaySelectorChoiceC4), isolate(input$cancerSelectorChoiceC4),isolate(input$sampleSelectorC4),
+                                     isolate(input$selectScoreTypeC4)),
+             contentType = 'image/png',
+             #width = 800,
+             #height = 500,
+             alt = "Empty")      }
+      
+    })    
+    })#)
   
   
   ## downloads
@@ -769,6 +773,7 @@ shinyServer(function(input, output, session) {
     }
   )
   
+
 
   ###################################################################################
   

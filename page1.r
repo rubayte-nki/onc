@@ -117,6 +117,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     resultsSub <- resultsSub[order(resultsSub$"score"),]
   }
   temp <- resultsSub[resultsSub$cancer == cancer,]
+  temp <- arrange(temp,-row_number())
   resultsSub <- resultsSub[resultsSub$cancer != cancer,]
   resultsSub <- rbind(temp,resultsSub)
   if (nrow(resultsSub) > 0){

@@ -124,7 +124,7 @@ load("starter.RData")
 save(tcgaResultsHeatmapOG,tcgaResultsHeatmapTS,tcgaResultsHeatmapCombined,ccleResultsHeatmapOG,ccleResultsHeatmapTS,ccleResultsHeatmapCombined,
      tcgaResultsPlotTrack,ccleResultsPlotTrack,tcgaScoreMat,ccleScoreMat,achilles,ccle.cna.combat,ccle.exprs.combat,tcga.cna,tcga.cna.combat,tcga.exprs,
      tcga.exprs.combat,tcga.mn.cna,tcga.mn.cna.combat,tcga.mn.exprs,tcga.mn.exprs.combat,ccleResultsPrioDetails,
-     tcgaResultsPrioDetails,ccleResultsAT, tcgaResultsAT, file="starter.RData")
+     tcgaResultsPrioDetails,ccleResultsAT, tcgaResultsAT, file="C:/Rubayte/Oncoscape/data/starterv2.RData")
 
 
 

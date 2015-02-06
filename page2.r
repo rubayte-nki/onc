@@ -45,12 +45,14 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		pvalue=FALSE
 	}
 	#meth.anno = infinium450.probe.ann
-	achilles = achilles
+	achls = achilles[gene,]
+	#achls = achilles
+	
 	plots = plotGene(gene, priorDetails, samples=NULL, 
 		 	 exprs.group1, exprs.group2, 
 		 	 #meth.group1, meth.group2, meth.anno, 
 		 	 acgh.group1, acgh.group2, 
-		 	 achilles, achilles.ut, achilles.lt, 
+		 	 achls, achilles.ut, achilles.lt, 
 		 	 lab.group1=lab.group1, lab.group2=lab.group2, 
 		 	 color.palette=color.palette,
 		 	 size=4, width=0.2, pvalue=pvalue)
@@ -63,4 +65,3 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 	
 	plots
 }
-
