@@ -1,4 +1,14 @@
 getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
+  
+  if (gene == "")
+  {
+    return()
+  }
+  if (is.null(gene))
+  {
+    return()
+  }
+  
 	if (sampleSelection == 1) {
 		#priorDetails = tcgaResults[[cancer]]$prioritize.details
 		priorDetails = tcgaResultsPrioDetails[[cancer]]
@@ -45,7 +55,12 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		pvalue=FALSE
 	}
 	#meth.anno = infinium450.probe.ann
-	achls = achilles[gene,]
+  if (is.element(gene,rownames(achilles)))
+  {
+    achls = achilles[gene,]    
+  }else{
+    achls = NULL
+  }
 	#achls = achilles
 	
 	plots = plotGene(gene, priorDetails, samples=NULL, 

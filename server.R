@@ -524,8 +524,9 @@ shinyServer(function(input, output, session) {
   ## sample set selector comp2
   output$sampleSelectorC2 <- renderUI({
     radioButtons("sampleSelectorC2", label = "Select Sample type",
-                 choices = list("Tumors" = 1, "Cell-lines" = 2, "Tumors vs Cell lines" = 3),
+                 choices = list("Tumors" = 1, "Tumors vs Cell lines" = 3),
                  selected = 1)
+    ## "Cell-lines" = 2
   })
   
   ## gene expression
@@ -603,6 +604,52 @@ shinyServer(function(input, output, session) {
       }      
     })
   })
+
+  ## downloads
+  output$downloadPlotC2GE <- downloadHandler(
+  filename = function() {
+    paste('plot-', Sys.Date(), '.jpeg', sep="")
+  },
+  content <- function(file){
+    device <- function(..., width, height) {
+      grDevices::png(..., width = 1000, height = 800,
+                     res = 100, units = "px")
+    }
+    g <- getPage2Plots(updateProgress,isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["gene.expression"]]
+    ggsave(file, plot = g, device = device)  
+    
+  }
+  )
+  output$downloadPlotC2CNA <- downloadHandler(
+  filename = function() {
+    paste('plot-', Sys.Date(), '.jpeg', sep="")
+  },
+  content <- function(file){
+    device <- function(..., width, height) {
+      grDevices::png(..., width = 1000, height = 800,
+                     res = 100, units = "px")
+    }
+    g <- getPage2Plots(updateProgress,isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["acgh"]]
+    ggsave(file, plot = g, device = device)  
+    
+  }
+  )
+  output$downloadPlotC2A <- downloadHandler(
+  filename = function() {
+    paste('plot-', Sys.Date(), '.jpeg', sep="")
+  },
+  content <- function(file){
+    device <- function(..., width, height) {
+      grDevices::png(..., width = 1000, height = 800,
+                     res = 100, units = "px")
+    }
+    g <- getPage2Plots(updateProgress,isolate(input$cancerSelectorChoiceC2), isolate(input$geneSelectorChoiceC2), isolate(input$sampleSelectorC2))[["achilles"]]
+    ggsave(file, plot = g, device = device)  
+    
+  }
+  )
+
+
   ###################################################################################
   
   
@@ -717,8 +764,13 @@ shinyServer(function(input, output, session) {
   updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = NULL, server = TRUE)
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
+    choicesToPassC4 = list("Tumors" = "tcga", "Cell lines" = "ccle", "Tumors vs Cell lines" = "both")
+    if (input$cancerSelectorChoiceC4 == "All")
+    {
+      choicesToPassC4 = list("Tumors" = "tcga", "Cell lines" = "ccle")  
+    }
     radioButtons("sampleSelectorC4", "Select Sample type",
-                 choices = list("Tumors" = "tcga", "Cell lines" = "ccle", "Tumors vs Cell lines" = "both"),
+                 choices = choicesToPassC4,
                  selected = "tcga")
   })
   
@@ -770,6 +822,7 @@ shinyServer(function(input, output, session) {
     content <- function(file){
       file.copy(generatePathview2(NULL,input$pathwaySelectorChoiceC4, input$cancerSelectorChoiceC4,input$sampleSelectorC4,
                                   input$selectScoreTypeC4),file)
+      #file.remove(file)
     }
   )
   

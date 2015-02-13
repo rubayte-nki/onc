@@ -531,7 +531,12 @@ plotGene = function(gene, prior.details, samples=NULL,
                    color.palette, size=size)
   
   # Achilles plot
-  achil = achillesBarplot(achilles, achilles.ut, achilles.lt, main="")
+  if (!is.null(achilles))
+  {
+    achil = achillesBarplot(achilles, achilles.ut, achilles.lt, main="")    
+  }else{
+    achil = NULL
+  }
   
   # Methylation plot
 #   samp1 = colnames(meth.group1)

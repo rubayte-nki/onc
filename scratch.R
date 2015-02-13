@@ -227,3 +227,16 @@ res <- generatePathview(tcgaResults, ccleResults, '04910', cancers="all",
                             what="tcga",
                             out.dir=".", out.suffix="", kegg.dir=".", 
                             scores="combined.score")
+
+
+
+
+##############################################################################
+## update RData object
+##############################################################################
+load("starterv2.RData")
+
+
+
+
+
