@@ -1,5 +1,3 @@
-load("starter.RData")
-
 ##' Filtering of result frame according to user criteria
 ##' @param results data.frame with all results
 ##' @param scoreCutoff threshold that was selected by the user

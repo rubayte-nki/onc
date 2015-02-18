@@ -29,7 +29,6 @@ initializeApp <- function(updateProgress=NULL)
   source("page4.r") 
 }
 
-
 # Get the chromosomal location for all genes
 #sortedGeneLoc = sortGenesByLocation(tcgaResults, ccleResults)
 
@@ -87,6 +86,12 @@ initializeApp <- function(updateProgress=NULL)
 #ccleResultsHeatmapCombined = heatmapDataframe(ccleResults)
 
 
+## Initialization that needs to be done only once
+load("starter.RData")
+initializeApp(updateProgress)
+
+
+
 shinyServer(function(input, output, session) {
   
   ###################################################################################
@@ -106,7 +111,6 @@ shinyServer(function(input, output, session) {
     progress$set(value = value, detail = detail)
   }
   ## laod
-  initializeApp(updateProgress)
   load("starterWidgets.RData")
   copyPastedGenes <- "Copy Paste your genes here separated by comma"
   choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4)
