@@ -17,16 +17,17 @@ initializeApp <- function(updateProgress=NULL)
   library(gridExtra)
   library(plyr)
   library(dplyr)
-  library(Gviz)
   library(GenomicRanges)
   library(biomaRt)
   library(pathview)
+  library(NMF)
   ## source plot functions
   source("plotting.R")
   source("page1.r")
   source("page2.r")
   source("page3.r")
-  source("page4.r") 
+  source("page4.r")
+  #source("plot_score_heatmaps.r")
 }
 
 # Get the chromosomal location for all genes
@@ -87,8 +88,6 @@ initializeApp <- function(updateProgress=NULL)
 
 
 ## Initialization that needs to be done only once
-load("starter.RData")
-initializeApp(updateProgress)
 
 
 
@@ -111,6 +110,7 @@ shinyServer(function(input, output, session) {
     progress$set(value = value, detail = detail)
   }
   ## laod
+  initializeApp(updateProgress)
   load("starterWidgets.RData")
   copyPastedGenes <- "Copy Paste your genes here separated by comma"
   choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4)
@@ -668,10 +668,16 @@ shinyServer(function(input, output, session) {
   })    
   ## score type selector comp3
   output$scoreSelectInputC3 <- renderUI({
-    selectInput("selectScoreTypeC3", label = "Score type", 
+    selectInput("selectScoreTypeC3", label = "Select Score type", 
                 choices = list("Oncogene Score" = "OG", "Tumor Suppressor Score" = "TS",
                                  "Combined score" = "CO"), selected = "TS")
   })
+  ## score type selector comp3
+  output$sampleSelectInputC3 <- renderUI({
+    selectInput("selectSampleTypeC3", label = "Select Sample type", 
+              choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
+  })
+
   ## chr selector comp3
   output$chrSelector <- renderUI({
     selectInput("selectChrType", "Select Chromosome", chrms)
@@ -685,10 +691,10 @@ shinyServer(function(input, output, session) {
   #})
   
   ## plots
-  ## view 1
-  output$selectedScorePlot <- renderPlot({
+  ## view new
+  output$selectedScorePlotNew <- renderPlot({
     input$refreshPlotC3
-    
+  
     ## create progress object
     progress <- shiny::Progress$new()
     progress$set(message = "Working ... ", value = 0)
@@ -701,49 +707,84 @@ shinyServer(function(input, output, session) {
       }
       progress$set(value = value, detail = detail)
     }
-    
-    
-    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
-      comp3view1Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
+  
+    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(input$selectSampleTypeC3)>0){
+      comp3view1PlotNew(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectSampleTypeC3))
     }else{
       return()
-      #comp3view1Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
     }
   })
-  ## view 2
-  output$perctAffectedSamplesPlot <- renderPlot({
-    input$refreshPlotC3
-    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
-      comp3view2Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
-    }else{
-      return()
-      #comp3view2Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
-    }
-  })
+
+  ## view 1
+#   output$selectedScorePlot <- renderPlot({
+#     input$refreshPlotC3
+#     
+#     ## create progress object
+#     progress <- shiny::Progress$new()
+#     progress$set(message = "Working ... ", value = 0)
+#     on.exit(progress$close())    
+#     # Create a closure to update progress.
+#     updateProgress <- function(value = NULL, detail = NULL) {
+#       if (is.null(value)) {
+#         value <- progress$getValue()
+#         value <- value + (progress$getMax() - value) / 5
+#       }
+#       progress$set(value = value, detail = detail)
+#     }
+#     
+#     
+#     if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
+#       comp3view1Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
+#     }else{
+#       return()
+#       #comp3view1Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+#     }
+#   })
+#   ## view 2
+#   output$perctAffectedSamplesPlot <- renderPlot({
+#     input$refreshPlotC3
+#     if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectChrType))>0 ){
+#       comp3view2Plot(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectChrType))
+#     }else{
+#       return()
+#       #comp3view2Plot(updateProgress,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+#     }
+#   })
   
   ## downloads
-  ## view 1
   output$downloadDataView1C3 <- downloadHandler(
     filename = function() {
       paste('plot-', Sys.Date(), '.jpeg', sep="")
     },
     content <- function(file){
       jpeg(filename=file,width=1000,height=500,units="px")
-      comp3view1Plot(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+      comp3view1PlotNew(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectSampleTypeC3)
       dev.off()
     }
   )
-  ## view 2
-  output$downloadDataView2C3 <- downloadHandler(
-    filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
-    },
-    content <- function(file){
-      jpeg(filename=file,width=1000,height=500,units="px")
-      comp3view2Plot(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
-      dev.off()
-    }
-  )
+
+#   ## view 1
+#   output$downloadDataView1C3 <- downloadHandler(
+#     filename = function() {
+#       paste('plot-', Sys.Date(), '.jpeg', sep="")
+#     },
+#     content <- function(file){
+#       jpeg(filename=file,width=1000,height=500,units="px")
+#       comp3view1Plot(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+#       dev.off()
+#     }
+#   )
+#   ## view 2
+#   output$downloadDataView2C3 <- downloadHandler(
+#     filename = function() {
+#       paste('plot-', Sys.Date(), '.jpeg', sep="")
+#     },
+#     content <- function(file){
+#       jpeg(filename=file,width=1000,height=500,units="px")
+#       comp3view2Plot(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectChrType)
+#       dev.off()
+#     }
+#   )
   
   
   ###################################################################################

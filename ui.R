@@ -242,8 +242,11 @@ shinyUI(
                                    ## score type select
                                    uiOutput("scoreSelectInputC3"),
                                  
+                                   ## sample type select
+                                   uiOutput("sampleSelectInputC3"),
+                                   
                                    ## chr select
-                                   uiOutput("chrSelector"),
+                                   #uiOutput("chrSelector"),
                                    
                                    ## tumors or cell-lines
                                    #uiOutput("sampleSelectorC3"),
@@ -256,18 +259,19 @@ shinyUI(
                         column(10,
                           ## plot window
                           fluidRow(
-                            column (10, HTML("<h3>Score Plot"),
-                                    downloadButton('downloadDataView1C3', 'Download Plot', class='btn btn-primary'),
+                            #column (10, 
+                                    HTML("<h3>Result Plot"),
+                                    downloadButton('downloadDataView1C3', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
-                                    plotOutput("selectedScorePlot"))
-                          ),
-                          shiny::tags$hr(),
-                          fluidRow(
-                            column (10, HTML("<h3>Affected Samples Plot"),
-                                    downloadButton('downloadDataView2C3', 'Download Plot', class='btn btn-primary'),
-                                    HTML("</h3>"),
-                                    plotOutput("perctAffectedSamplesPlot"))
-                          )
+                                    plotOutput("selectedScorePlotNew")#)
+                          )#,
+                          #shiny::tags$hr(),
+                          #fluidRow(
+                          #  column (10, HTML("<h3>Affected Samples Plot"),
+                          #          downloadButton('downloadDataView2C3', 'Download Plot', class='btn btn-primary'),
+                          #          HTML("</h3>"),
+                          #          plotOutput("perctAffectedSamplesPlot"))
+                          #)
                         )
                       )
              ),
