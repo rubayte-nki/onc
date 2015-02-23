@@ -24,6 +24,7 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		lab.group1="Tumors" 
 		lab.group2="Normals"
 		pvalue=TRUE
+		cls = tcgaResults[[cancer]]$cls
 	} else if (sampleSelection == 2) {
 	  #priorDetails = ccleResults[[cancer]]$prioritize.details
 		priorDetails = ccleResultsPrioDetails[[cancer]]
@@ -39,6 +40,7 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		lab.group1="Cell lines" 
 		lab.group2="Normals"
 		pvalue=TRUE
+		cls = ccleResults[[cancer]]$cls
 	} else {
 		priorDetails = tcgaResultsPrioDetails[[cancer]]
 		exprs.group1 = tcga.exprs.combat[[cancer]][[1]]
@@ -53,11 +55,12 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		lab.group1="Tumors" 
 		lab.group2="Cell lines"
 		pvalue=FALSE
+		cls = tcgaResults[[cancer]]$cls
 	}
 	#meth.anno = infinium450.probe.ann
   if (is.element(gene,rownames(achilles)))
   {
-    achls = achilles[gene,]    
+   achls = achilles[gene, cls]    
   }else{
     achls = NULL
   }
