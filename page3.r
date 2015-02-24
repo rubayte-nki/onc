@@ -172,12 +172,17 @@ getScoreHeatmap2 = function(geneLocs, results, cancType, scoreType) {
   matDim = ceiling(sqrt(length(score)))
   sortedScores = matrix(c(score, rep(0, times=(matDim^2)-length(score))), nrow=matDim, byrow=FALSE)[, 1:(matDim-1)]
   
+  outputImage = "temp.png"
   aheatmap(sortedScores,
            color=cols,
            breaks=brks,
            scale="none",
-           Rowv=NA, Colv=NA, 
-           cexRow=0, cexCol=0)
+           Rowv=NA, Colv=NA,width=13.35,height=10, 
+           cexRow=0, cexCol=0,filename=outputImage)
+
+  system('composite "temp.png" -compose Multiply "chrom_contours.png"  "temp.png" ')
+  #system('composite -compose Multiply "chrom_contours.png" "temp.png" "temp.png" ')
+  outputImage
   
 }
 

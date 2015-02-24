@@ -19,7 +19,8 @@ getScoreHeatmap = function(geneLocs, results, cancType, scoreType) {
 		cols = colorpanel(29, low="white", high="#880000")
 		brks=seq(0, max(sortedScores, na.rm=TRUE), length.out=30)
 	} else {
-		score = results[[cancType]]$prioritize.combined[geneLocs[, "hgnc_symbol"], "combined.score"]
+		score = results[[cancType]]$prioritize.combined[geneLocs[, "hgnc_symbol"], "combined.score"] 
+    
 		cols = colorpanel(29, low="#034b87", mid="white", high="#880000")
 		ext = max(abs(min(sortedScores, na.rm=TRUE)), max(sortedScores, na.rm=TRUE))
 		#brks=seq(-1*ext, ext, length.out=30)
@@ -70,7 +71,7 @@ getScoreHeatmap2 = function(geneLocs, results, cancType, scoreType) {
            breaks=brks,
            scale="none",
            Rowv=NA, Colv=NA, 
-           cexRow=0, cexCol=0)
+           cexRow=0, cexCol=0,filename="chrdemo.png")
   
   #system(paste("composite ", paste(n, "_", sc, "_heatmap.png", sep=""), " -compose Multiply chrom_contours.png ", paste(n, "_", sc, "_heatmap.png", sep=""), sep=""))
 }

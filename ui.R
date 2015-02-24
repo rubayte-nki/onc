@@ -263,7 +263,7 @@ shinyUI(
                                     HTML("<h3>Result Plot"),
                                     downloadButton('downloadDataView1C3', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
-                                    plotOutput("selectedScorePlotNew")#)
+                                    imageOutput("selectedScorePlotNew")#)
                           )#,
                           #shiny::tags$hr(),
                           #fluidRow(

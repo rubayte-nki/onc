@@ -21,6 +21,9 @@ initializeApp <- function(updateProgress=NULL)
   library(biomaRt)
   library(pathview)
   library(NMF)
+  library(gplots)
+  # library(installr)
+  # install.ImageMagick()
   ## source plot functions
   source("plotting.R")
   source("page1.r")
@@ -692,27 +695,35 @@ shinyServer(function(input, output, session) {
   
   ## plots
   ## view new
-  output$selectedScorePlotNew <- renderPlot({
+  output$selectedScorePlotNew <- renderImage({
     input$refreshPlotC3
   
-    ## create progress object
-    progress <- shiny::Progress$new()
-    progress$set(message = "Working ... ", value = 0)
-    on.exit(progress$close())    
-    # Create a closure to update progress.
-    updateProgress <- function(value = NULL, detail = NULL) {
-      if (is.null(value)) {
-        value <- progress$getValue()
-        value <- value + (progress$getMax() - value) / 5
+    isolate({
+      ## create progress object
+      progress <- shiny::Progress$new()
+      progress$set(message = "Working ... ", value = 0)
+      on.exit(progress$close())    
+      # Create a closure to update progress.
+      updateProgress <- function(value = NULL, detail = NULL) {
+        if (is.null(value)) {
+          value <- progress$getValue()
+          value <- value + (progress$getMax() - value) / 5
+        }
+        progress$set(value = value, detail = detail)
       }
-      progress$set(value = value, detail = detail)
-    }
-  
-    if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(input$selectSampleTypeC3)>0){
-      comp3view1PlotNew(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectSampleTypeC3))
-    }else{
-      return()
-    }
+      
+      if (length(isolate(input$cancerSelectorChoiceC3))>0 && length(isolate(input$selectScoreTypeC3))>0 && length(isolate(input$selectSampleTypeC3))>0){
+        
+        list(src = comp3view1PlotNew(updateProgress,isolate(input$cancerSelectorChoiceC3),isolate(input$selectScoreTypeC3),isolate(input$selectSampleTypeC3)),
+             contentType = 'image/png',
+             width=1000,height=800,
+             alt = "Empty")
+      }else{
+        list(src = paste(getwd(),"pathwaydefault.png",sep=""),
+             contentType = 'image/png',
+             alt = "Empty")
+        }      
+    })
   })
 
   ## view 1
@@ -757,9 +768,7 @@ shinyServer(function(input, output, session) {
       paste('plot-', Sys.Date(), '.jpeg', sep="")
     },
     content <- function(file){
-      jpeg(filename=file,width=1000,height=500,units="px")
-      comp3view1PlotNew(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectSampleTypeC3)
-      dev.off()
+      file.copy(comp3view1PlotNew(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectSampleTypeC3),file)
     }
   )
 
