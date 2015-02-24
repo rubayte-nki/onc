@@ -33,7 +33,7 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		#meth.group1 = tcga.meth[[cancer]]
 		#meth.group2 = tcga.mn.meth[[cancer]]
 		acgh.group1 = ccle.cna.combat[[cancer]][[1]]
-		acgh.group2 = ccle.mn.cna.combat[[cancer]][[1]]
+		acgh.group2 = tcga.mn.cna.combat[[cancer]][[1]]
 		achilles.ut = ccleResultsAT[[cancer]][2]
 		achilles.lt = ccleResultsAT[[cancer]][1]
 		color.palette=c("#009E73", "#56B4E9")
