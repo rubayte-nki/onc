@@ -66,7 +66,7 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
   }
 	#achls = achilles
 	
-	plots = plotGene(gene, priorDetails, samples=NULL, 
+	plots = plotGene(gene, priorDetails, samples=NULL, sampleSelection,
 		 	 exprs.group1, exprs.group2, 
 		 	 #meth.group1, meth.group2, meth.anno, 
 		 	 acgh.group1, acgh.group2, 

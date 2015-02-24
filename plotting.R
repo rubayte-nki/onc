@@ -492,22 +492,33 @@ achillesBarplot = function(scores, upper.threshold=NULL, lower.threshold=NULL, m
 #                     color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
 #                     size=4, width=0.2, pvalue=TRUE) {
   
-plotGene = function(gene, prior.details, samples=NULL, 
-                      exprs.group1, exprs.group2, 
-                      acgh.group1, acgh.group2, 
-                      achilles, achilles.ut, achilles.lt, 
-                      lab.group1="Tumors", lab.group2="Normals", 
-                      color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
-                      size=4, width=0.2, pvalue=TRUE) {
+plotGene = function(gene, prior.details, samples=NULL, sampleSelection, 
+                    exprs.group1, exprs.group2, 
+                    acgh.group1, acgh.group2, 
+                    achilles, achilles.ut, achilles.lt, 
+                    lab.group1="Tumors", lab.group2="Normals", 
+                    color.palette=c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),
+                    size=4, width=0.2, pvalue=TRUE) {
     
   
   # Gene expression plot
-  samp1 = colnames(exprs.group1)
   if (!is.null(samples)) {
     samp1 = intersect(samples, colnames(exprs.group1))
+    samp2 = intersect(samples, colnames(exprs.group2))
+  } else {
+  	samp1 = colnames(exprs.group1)
+    samp2 = colnames(exprs.group2)
   }
-  ge.box = boxplot(exprs.group1[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
-                   exprs.group2[gene, intersect(samp1, intersect(colnames(exprs.group1), colnames(exprs.group2)))], 
+  
+  # The TCGA analysis was done in a pairwise fashion.
+  # So plot only tumor-normal pairs
+  if (sampleSelection == 1) {
+  	samp1 = intersect(samp1, samp2)
+  	samp2 = samp1
+  }
+  
+  ge.box = boxplot(exprs.group1[gene, samp1], 
+                   exprs.group2[gene, samp2], 
                    lab.group1, lab.group2, 
                    xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
                    pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
