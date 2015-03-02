@@ -8,7 +8,11 @@ load("starter.RData")
 ##' @author Andreas Schlicker
 page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
 	# Filter the genes according to user's criteria
-	genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
+	if (scoreCutoff > 0) {
+		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
+	} else {
+		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score <= as.integer(scoreCutoff))$gene)
+	}
 	
 	# Sort the genes according to highest sum across all cancer types
 	# Get the subset with the selected genes and drop unused levels
