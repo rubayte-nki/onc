@@ -19,7 +19,7 @@ shinyUI(
                           fluidRow(
                             column(2,wellPanel(
                                    HTML("<h4>App version</h4>"),
-                                   HTML("<p>v0.9_beta</p>"),
+                                   HTML("<p>v1.0</p>"),
                                    HTML("<br/>"),
                                    HTML("<h4>License, terms of use, privacy</h4>"),
                                    HTML("<p><a href='http://www.r-project.org/Licenses/GPL-3' target='_blank'> GNU General Public License version 3</a></p>"),

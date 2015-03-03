@@ -8,7 +8,7 @@ load("starter.RData")
 ##' @author Andreas Schlicker
 page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
 	# Filter the genes according to user's criteria
-	if (scoreCutoff > 0) {
+	if (scoreCutoff > 0 || scoreCutoff == -10) {
 		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
 	} else {
 		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score <= as.integer(scoreCutoff))$gene)

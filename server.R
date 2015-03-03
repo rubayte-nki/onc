@@ -684,12 +684,6 @@ shinyServer(function(input, output, session) {
   output$sampleSelectInputC3 <- renderUI({
     radioButtons("selectSampleTypeC3", label = "Select Sample type",
                  choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
-#    selectInput("selectSampleTypeC3", label = "Select Sample type", 
-#              choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
-  })
-  ## sample set selector comp1
-  output$sampleSelectorC1 <- renderUI({
-  
   })
 
 
