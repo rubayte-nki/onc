@@ -116,6 +116,23 @@ for (n in names(tcgaResults))
 }
 
 
+ccleResultsCLS = NULL
+tcgaResultsCLS = NULL
+
+for (n in names(tcgaResults))
+{
+  tcgaResultsCLS[[n]]$cls =  tcgaResults[[n]]$cls
+}
+
+for (n in names(ccleResults))
+{
+  ccleResultsCLS[[n]]$cls = ccleResults[[n]]$cls
+}
+
+save(ccleResultsCLS,tcgaResultsCLS, file="C:/Rubayte/Oncoscape/data/clsdata.RData")
+
+
+
 #############################################################################
 ## update started data frame
 #############################################################################

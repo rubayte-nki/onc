@@ -12,7 +12,7 @@ shinyUI(
   bootstrapPage(
   includeCSS("www/styles.css"),
   
-  navbarPage("OncoScape", windowTitle ="OncoScape",
+  navbarPage(title="OncoScape", windowTitle ="OncoScape",header="",
 
              ## comp0
              tabPanel("What is OncoScape?",
@@ -149,7 +149,7 @@ shinyUI(
                             ## result genes
                             column(10,
                                    HTML("<h3> Result Gene(s)"),
-                                   downloadButton('downloadData', 'Download Data', class='btn btn-primary'),
+                                   downloadButton('downloadData', 'Download Data', class='btn btn-link'),
                                    HTML("</h3>"),
                                    shiny::dataTableOutput('genesResTable')
                             )
@@ -158,7 +158,7 @@ shinyUI(
                             ## plot window 
                             column(10,                            
                                    HTML("<hr><h3> Result Gene(s) plot"),
-                                   downloadButton('downloadPlot', 'Download Plot', class='btn btn-primary'),
+                                   downloadButton('downloadPlot', 'Download Plot', class='btn btn-link'),
                                    HTML("</h3>"),
                                    tabsetPanel(
                                      ## view type 1
@@ -204,17 +204,17 @@ shinyUI(
                           ## plot window
                           fluidRow(
                             column (5, HTML("<h3>Gene Expression"),
-                                    downloadButton('downloadPlotC2GE', 'Download Plot', class='btn btn-primary'),
+                                    downloadButton('downloadPlotC2GE', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
                                     plotOutput("geneExpressionPlot")),
                             column (5, HTML("<h3>Copy Numbers"),
-                                    downloadButton('downloadPlotC2CNA', 'Download Plot', class='btn btn-primary'),
+                                    downloadButton('downloadPlotC2CNA', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
                                     plotOutput("cnvPlot"))
                             ),
                           fluidRow(
                             column (5, HTML("<h3>Achilles"),
-                                    downloadButton('downloadPlotC2A', 'Download Plot', class='btn btn-primary'),
+                                    downloadButton('downloadPlotC2A', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
                                     plotOutput("achillesPlot"))
                           )
@@ -312,7 +312,7 @@ shinyUI(
                              fluidRow(
                           ## plot window
                                     HTML("<h3>Pathway Plot"),
-                                    downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-primary'),
+                                    downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
                                     imageOutput("pathwayPlot")
                             )

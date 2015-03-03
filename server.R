@@ -22,8 +22,8 @@ initializeApp <- function(updateProgress=NULL)
   library(pathview)
   library(NMF)
   library(gplots)
-  # library(installr)
-  # install.ImageMagick()
+  #library(installr)
+  #install.ImageMagick()
   ## source plot functions
   source("plotting.R")
   source("page1.r")
@@ -32,6 +32,8 @@ initializeApp <- function(updateProgress=NULL)
   source("page4.r")
   #source("plot_score_heatmaps.r")
 }
+
+
 
 # Get the chromosomal location for all genes
 #sortedGeneLoc = sortGenesByLocation(tcgaResults, ccleResults)
@@ -94,6 +96,7 @@ initializeApp <- function(updateProgress=NULL)
 
 
 
+
 shinyServer(function(input, output, session) {
   
   ###################################################################################
@@ -116,6 +119,7 @@ shinyServer(function(input, output, session) {
   initializeApp(updateProgress)
   load("starterWidgets.RData")
   copyPastedGenes <- "Copy Paste your genes here separated by comma"
+
   choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4)
   genes <- apply(geness, 1, function(r) r)
   chrms <- c("1","2","3","4","5","6","7","8","9","10","11","12",
@@ -123,6 +127,7 @@ shinyServer(function(input, output, session) {
   ## read pathways file
   pathtemp <- read.delim("kegg_pathways.tsv",sep="\t",header=FALSE)
   pathways <- paste(pathtemp$V2,':',pathtemp$V3, sep= "")
+
   
 
 
@@ -211,12 +216,12 @@ shinyServer(function(input, output, session) {
 #       
 #     })    
 #   }
-  
-  
+
   ## tables
   output$genesResTable <- shiny::renderDataTable({
 
     input$refreshPlot
+    
     isolate({
       ## create progress object
       progress <- shiny::Progress$new()
@@ -525,15 +530,15 @@ shinyServer(function(input, output, session) {
   ## cancer selector comp2
   output$cancerSelectorC2 <- renderUI({
     selectInput("cancerSelectorChoiceC2", "Select a Cancer type", apply(cancers, 1, function(r) r))
-  })
+  })    
+  
   ## gene selector comp2
   updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE, selected=genes[100])
   ## sample set selector comp2
   output$sampleSelectorC2 <- renderUI({
     radioButtons("sampleSelectorC2", label = "Select Sample type",
-                 choices = list("Tumors" = 1, "Tumors vs Cell lines" = 3),
+                 choices = list("Tumors" = 1, "Cell lines" = 2, "Tumors vs Cell lines" = 3),
                  selected = 1)
-    ## "Cell-lines" = 2
   })
   
   ## gene expression
@@ -675,11 +680,18 @@ shinyServer(function(input, output, session) {
                 choices = list("Oncogene Score" = "OG", "Tumor Suppressor Score" = "TS",
                                  "Combined score" = "CO"), selected = "TS")
   })
-  ## score type selector comp3
+  ## sample type selector comp3
   output$sampleSelectInputC3 <- renderUI({
-    selectInput("selectSampleTypeC3", label = "Select Sample type", 
-              choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
+    radioButtons("selectSampleTypeC3", label = "Select Sample type",
+                 choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
+#    selectInput("selectSampleTypeC3", label = "Select Sample type", 
+#              choices = list("Tumors" = "tcga", "Cell-lines" = "ccle"), selected = "tcga")
   })
+  ## sample set selector comp1
+  output$sampleSelectorC1 <- renderUI({
+  
+  })
+
 
   ## chr selector comp3
   output$chrSelector <- renderUI({

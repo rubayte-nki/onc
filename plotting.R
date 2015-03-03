@@ -516,13 +516,18 @@ plotGene = function(gene, prior.details, samples=NULL, sampleSelection,
   	samp1 = intersect(samp1, samp2)
   	samp2 = samp1
   }
-  
-  ge.box = boxplot(exprs.group1[gene, samp1], 
-                   exprs.group2[gene, samp2], 
-                   lab.group1, lab.group2, 
-                   xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
-                   pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
-                   color.palette=color.palette, size=size)
+
+  if (is.element(gene,rownames(exprs.group1)) && is.element(gene,rownames(exprs.group2)) && length(samp1)>0 && length(samp2)>0)
+  {
+    ge.box = boxplot(exprs.group1[gene, samp1], 
+                     exprs.group2[gene, samp2], 
+                     lab.group1, lab.group2, 
+                     xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
+                     pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
+                     color.palette=color.palette, size=size)
+  }else{
+    ge.box = NULL
+  }
   
   # Copy number plot
   samp1 = colnames(acgh.group1)
@@ -531,15 +536,20 @@ plotGene = function(gene, prior.details, samples=NULL, sampleSelection,
     samp1 = intersect(samples, colnames(acgh.group1))
     samp2 = intersect(samples, colnames(acgh.group2))
   }
-  if (pvalue && length(intersect(colnames(prior.details), "cgh.diff.fdr")) == 1) {
+  if (pvalue && length(intersect(colnames(prior.details), "cgh.diff.fdr")) == 1 && is.element(gene,rownames(prior.details))) {
     pvalue = prior.details[gene, "cgh.diff.fdr"]
   } else { 
     pvalue = NA
   }
-  cn.box = boxplot(acgh.group1[gene, samp1], acgh.group2[gene, samp2], 
+  if (is.element(gene,rownames(acgh.group1)) && is.element(gene,rownames(acgh.group2)))
+  {
+    cn.box = boxplot(acgh.group1[gene, samp1], acgh.group2[gene, samp2], 
                    lab.group1, lab.group2, 
                    xlabel=NULL, ylabel=paste(gene, "copy number"), main=NULL, pvalue=pvalue,
                    color.palette, size=size)
+  }else{
+    cn.box = NULL
+  }
   
   # Achilles plot
   if (!is.null(achilles))
