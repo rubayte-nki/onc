@@ -83,5 +83,14 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		plots[["achilles"]] = NULL
 	}
 	
+  rm(priorDetails)
+  rm(exprs.group1)
+  rm(exprs.group2)
+  rm(acgh.group1)
+  rm(acgh.group2)
+  rm(achilles.ut)
+  rm(achilles.lt)
+  rm(cls)
+  rm(achls)
 	plots
 }

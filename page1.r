@@ -126,8 +126,12 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   resultsSub <- rbind(temp,resultsSub)
   if (nrow(resultsSub) > 0){
     ## call plot function
+    rm(df)
+    rm(temp)
     plotHeatmapPage1(resultsSub, score)        
   }else{
+    rm(df)
+    rm(temp)
     plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
     text(1,"Empty result set returned by filter. Nothing to plot.")
   }  
@@ -188,9 +192,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       resultsSub <- resultsSub[resultsSub$cancer != cancer,]
       resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
+        rm(temp)
+        rm(temp2)
         ## call plot function
         plotCategoryOverview(resultsSub)             
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -218,9 +226,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       resultsSub <- resultsSub[resultsSub$cancer != cancer,]
       resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
+        rm(temp)
+        rm(temp2)
         ## call plot function
         plotCategoryOverview(resultsSub)             
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -257,8 +269,12 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         temp2 <- arrange(temp2,-row_number())
         res <- res[res$cancer != cancer,]
         res <- rbind(temp2,temp,res)
+        rm(temp)
+        rm(temp2)
         plotCategoryOverview(res)  
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
@@ -289,9 +305,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       resultsSub <- resultsSub[resultsSub$cancer != cancer,]
       resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
+        rm(temp)
+        rm(temp2)
         ## call plot function
         plotCategoryOverview(resultsSub)             
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -319,9 +339,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       resultsSub <- resultsSub[resultsSub$cancer != cancer,]
       resultsSub <- rbind(temp2,temp,resultsSub)
       if (nrow(resultsSub) > 0){
+        rm(temp)
+        rm(temp2)
         ## call plot function
         plotCategoryOverview(resultsSub)             
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -358,14 +382,20 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         temp2 <- arrange(temp2,-row_number())
         res <- res[res$cancer != cancer,]
         res <- rbind(temp2,temp,res)
+        rm(temp)
+        rm(temp2)
         plotCategoryOverview(res)  
       }else{
+        rm(temp)
+        rm(temp2)
         plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
     }
-  }
+  }  
+  
 }
+
 ## for user file input
 comp1view2FilePlot = function(updateProgress = NULL,cancer,inputdf,sample){
 
@@ -456,11 +486,11 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }      
       
     }else if(score == 'ts.score'){
@@ -501,11 +531,11 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       
     }else{
@@ -558,15 +588,15 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         }
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
-        rm(rgscom)
+        rm(rgs)
         colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
                                "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
                                "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       
     }
@@ -590,7 +620,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
@@ -618,11 +648,11 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }      
       
     }else if(score == 'ts.score'){
@@ -643,7 +673,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
@@ -672,11 +702,11 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       
     }else{
@@ -697,7 +727,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }      
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
@@ -737,20 +767,26 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         }
         dfgenes <- replace(temp, is.na(temp), "-")
         rm(temp)
-        rm(rgscom)
+        rm(rgs)
         colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
                                "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
                                "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
-        dfgenes
+        #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
         colnames(dfgenes) <- c("Empty result set")
-        dfgenes
+        #dfgenes
       }
       
     }
     
   }
+  rm(rgsog)
+  rm(rgsts)
+  rm(rgscom)
+  rm(resultsSub)
+  rm(clist)
+  dfgenes
 }
 
 geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,score,inputdf,sample){
@@ -787,7 +823,11 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,score,inputdf,
     res <- data.frame(res,inputdf)
     res <- replace(res, is.na(res), "-")
     rm(temp)
-    rm(rgs) 
+    rm(rgs)
+    rm(rgsog)
+    rm(rgsts)
+    rm(rgscom)
+    rm(cnc)
     if (nrow(res)>0){
       res
     }else{
@@ -829,6 +869,10 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,score,inputdf,
     res <- replace(res, is.na(res), "-")
     rm(temp)
     rm(rgs)
+    rm(rgsog)
+    rm(rgsts)
+    rm(rgscom)
+    rm(cnc)
     if (nrow(res)>0){
       res
     }else{

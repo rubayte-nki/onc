@@ -6,33 +6,34 @@
 #
 
 
-
-initializeApp <- function(updateProgress=NULL)
-{
+#initializeApp <- function(updateProgress=NULL)
+#{
   
-  library(shiny)
-  library(shinysky)
-  library(ggplot2)
-  library(grid)
-  library(gridExtra)
-  library(plyr)
-  library(dplyr)
-  library(GenomicRanges)
-  library(biomaRt)
-  library(pathview)
-  library(NMF)
-  library(gplots)
-  #library(installr)
-  #install.ImageMagick()
-  ## source plot functions
-  source("plotting.R")
-  source("page1.r")
-  source("page2.r")
-  source("page3.r")
-  source("page4.r")
-  #source("plot_score_heatmaps.r")
-}
+library(shiny)
+library(shinysky)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(plyr)
+library(dplyr)
+library(GenomicRanges)
+library(biomaRt)
+library(pathview)
+library(NMF)
+library(gplots)
+#library(installr)
+#install.ImageMagick()
+## source plot functions
+source("plotting.R")
+source("page1.r")
+source("page2.r")
+source("page3.r")
+source("page4.r")
+#source("plot_score_heatmaps.r")
+#}
 
+## laod
+#initializeApp(updateProgress)
 
 
 # Get the chromosomal location for all genes
@@ -116,7 +117,7 @@ shinyServer(function(input, output, session) {
     progress$set(value = value, detail = detail)
   }
   ## laod
-  initializeApp(updateProgress)
+  #initializeApp(updateProgress)
   load("starterWidgets.RData")
   copyPastedGenes <- "Copy Paste your genes here separated by comma"
 
@@ -271,6 +272,8 @@ shinyServer(function(input, output, session) {
         {
           copyPastedGenes <<- input$geneListValuesC1
           genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+          genelist <- gsub("[\r\n]","",genelist[,1])
+          genelist <- as.data.frame(genelist)
           colnames(genelist) <-c ("uploadedGenes")
           if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
             if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
@@ -349,6 +352,8 @@ shinyServer(function(input, output, session) {
         if (length(isolate(input$geneListValuesC1))>0)
         {
           genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+          genelist <- gsub("[\r\n]","",genelist[,1])
+          genelist <- as.data.frame(genelist)
           colnames(genelist) <-c ("uploadedGenes")
           if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
             if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
@@ -424,6 +429,8 @@ shinyServer(function(input, output, session) {
         if (length(isolate(input$geneListValuesC1)) > 0)
         {
           genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC1),',')[[1]])
+          genelist <- gsub("[\r\n]","",genelist[,1])
+          genelist <- as.data.frame(genelist)
           colnames(genelist) <-c ("uploadedGenes")
           if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
             if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
@@ -470,6 +477,8 @@ shinyServer(function(input, output, session) {
         }
       }else{
         genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
+        genelist <- gsub("[\r\n]","",genelist[,1])
+        genelist <- as.data.frame(genelist)
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
           write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
@@ -506,6 +515,8 @@ shinyServer(function(input, output, session) {
         }
       }else{
         genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
+        genelist <- gsub("[\r\n]","",genelist[,1])
+        genelist <- as.data.frame(genelist)
         colnames(genelist) <-c ("uploadedGenes")
         if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
           g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
