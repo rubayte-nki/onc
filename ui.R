@@ -87,12 +87,16 @@ shinyUI(
                             ## gene selection criteria
                             HTML("<h4>Gene Selection</h4>"),
                             uiOutput("geneSelectionMethodC1"),
-                            uiOutput("geneSelectionPanelC1"),
+                            
+                            conditionalPanel(
+                              condition = "input.geneSelectionMethodC1Value == 'type3'",
+                              shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
+                            ),
                             
                             conditionalPanel(
                               condition = "input.geneSelectionMethodC1Value == 'type2'",
                               HTML("
-                                    <a class='btn btn-primary' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+                                    <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
                                    Show help on Input File !
                                    </a>
                                     <div class='collapse' id='collapseExample'>
@@ -104,12 +108,10 @@ shinyUI(
                                       </div>
                                     </div>
                                    ")
-                              ),
-                            
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type3'",
-                              shiny::actionButton("actionAutoFillGeneTextArea", label = "Click to load example !")
                             ),
+                            
+                            uiOutput("geneSelectionPanelC1"),                            
+                            
                             
                             
                             ## gene selection procedure
@@ -145,27 +147,30 @@ shinyUI(
                             )
                           ),
                         column(10,
+                              fluidRow(
+                                 ## plot window 
+                                 column(10,                            
+                                        HTML("<h3> Pan-Cancer Overview Plots"),
+                                        downloadButton('downloadPlot', 'Download', class='btn btn-link'),
+                                        HTML("</h3>"),
+                                        tabsetPanel(
+                                          ## view type 1
+                                          tabPanel("Detailed Aberration Profiles",plotOutput("distPlot2")),
+                                          ## view type 2
+                                          tabPanel("Summary Heat-Map",plotOutput("distPlot"))
+                                          ## tabPanel("Summary Heat-Map",plotOutput("distPlot",height="700px"))
+
+                                        )
+                                 )
+                              ),
                           fluidRow(
                             ## result genes
                             column(10,
-                                   HTML("<h3> Result Gene(s)"),
-                                   downloadButton('downloadData', 'Download Data', class='btn btn-link'),
+                                   HTML("<hr><h3> View Cancer Specific Details"),
+                                   downloadButton('downloadData', 'Download', class='btn btn-link'),
+                                   uiOutput("cancerSelectorC1Sub"),
                                    HTML("</h3>"),
                                    shiny::dataTableOutput('genesResTable')
-                            )
-                          ),
-                          fluidRow(
-                            ## plot window 
-                            column(10,                            
-                                   HTML("<hr><h3> Result Gene(s) plot"),
-                                   downloadButton('downloadPlot', 'Download Plot', class='btn btn-link'),
-                                   HTML("</h3>"),
-                                   tabsetPanel(
-                                     ## view type 1
-                                     tabPanel("Detailed Aberration Profiles",plotOutput("distPlot2")),
-                                     ## view type 2
-                                     tabPanel("Summary Heat-Map",plotOutput("distPlot"))
-                                   )
                             )
                           )
                       )
@@ -213,7 +218,7 @@ shinyUI(
                                     plotOutput("cnvPlot"))
                             ),
                           fluidRow(
-                            column (5, HTML("<h3>Achilles"),
+                            column (10, HTML("<h3>Achilles"),
                                     downloadButton('downloadPlotC2A', 'Download Plot', class='btn btn-link'),
                                     HTML("</h3>"),
                                     plotOutput("achillesPlot"))

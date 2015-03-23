@@ -42,8 +42,17 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 	colorLow = list(combined.score="#034b87", ts.score="gray98", og.score="gray98") 
 	colorMid = list(combined.score="gray98")
 	colorHigh = list(combined.score="#880000", ts.score="#034b87", og.score="#880000")
+  if (scoreType == "combined.score")
+  {
+    legendtext = "Combined Score"
+  }else if(scoreType == "ts.score")
+  {
+    legendtext = "Tumor Suppressor Score"
+  }else{
+    legendtext = "Oncogene Score"
+  }
 	getHeatmap(dataFrame=result.df, yaxis.theme=theme(axis.text.y=element_blank()), 
-	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]])
+	   	   color.low=colorLow[[scoreType]], color.mid=colorMid[[scoreType]], color.high=colorHigh[[scoreType]],lgtext = legendtext)
 }
 
 ##' Plots view 2 of page 1
@@ -65,7 +74,7 @@ plotCategoryOverview = function(results) {
 	ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) +  #coord_flip()  +
 	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
-		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA")) +
+		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA"), labels = c("CNA","Expr","Meth","Mut","Achilles (shRNA)")) +
 	labs(x="", y="") +
 	facet_grid(.~cancer) + 
 	theme(panel.background=element_rect(color="white", fill="white"),

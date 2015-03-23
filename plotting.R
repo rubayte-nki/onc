@@ -385,7 +385,7 @@ achillesBarplot = function(scores, upper.threshold=NULL, lower.threshold=NULL, m
               title=main, xlab="Cell lines", ylab="Achilles phenotype score", fill="#767676") +
     geom_hline(yintercept=0, linetype=1) +
     labs(x="Cell lines", y="Phenoscore") + 
-    theme(axis.text.x=element_text(color="gray30", size=10, angle=45, vjust=0.5))
+    theme(axis.text.x=element_text(color="gray30", size=10, angle=90, vjust=0.5))
   
   if (!is.null(upper.threshold)) {
     p = p + geom_hline(yintercept=upper.threshold, linetype=2)
@@ -522,7 +522,7 @@ plotGene = function(gene, prior.details, samples=NULL, sampleSelection,
     ge.box = boxplot(exprs.group1[gene, samp1], 
                      exprs.group2[gene, samp2], 
                      lab.group1, lab.group2, 
-                     xlabel=NULL, ylabel=paste(gene, "expression"), main=NULL, 
+                     xlabel=NULL, ylabel=paste(gene, "expression (log2 fold-change)"), main=NULL, 
                      pvalue=ifelse(pvalue, prior.details[gene, "exprs.diff.fdr"], NA),
                      color.palette=color.palette, size=size)
   }else{
@@ -545,7 +545,7 @@ plotGene = function(gene, prior.details, samples=NULL, sampleSelection,
   {
     cn.box = boxplot(acgh.group1[gene, samp1], acgh.group2[gene, samp2], 
                    lab.group1, lab.group2, 
-                   xlabel=NULL, ylabel=paste(gene, "copy number"), main=NULL, pvalue=pvalue,
+                   xlabel=NULL, ylabel=paste(gene, "copy number (log2 fold-change)"), main=NULL, pvalue=pvalue,
                    color.palette, size=size)
   }else{
     cn.box = NULL
@@ -714,26 +714,26 @@ plotGene = function(gene, prior.details, samples=NULL, sampleSelection,
 # ##' @author Andreas Schlicker
 getHeatmap = function(dataFrame,yaxis.theme, 
                       labels=NULL, breaks=NULL, 
-                      color.low="white", color.mid=NULL, color.high="black", 
+                      color.low="white", color.mid=NULL, color.high="black",lgtext, 
                       title="", ylab="", xlab="",
                       xaxis.theme=NULL) {
   p = ggplot(dataFrame, aes(x=cancer, y=gene)) + 
     geom_tile(aes(fill=score), color = "white") + 
-    labs(title=title, x=xlab, y=ylab) + # coord_flip()  + 
+    labs(title=title, x=xlab, y=ylab) + #legend.title= lgtext + # coord_flip()  + 
     theme(panel.background=element_rect(color="white", fill="white"),
           axis.ticks=element_blank(), 
           axis.text.x=element_text(color="gray30", face="bold", size=10),
           axis.text.y=element_text(color="gray30", face="bold", size=10),
           legend.text=element_text(color="gray30", face="bold", size=10),
-          legend.title=element_blank(),
+          # legend.title= lgtext, ##element_blank(),
           legend.position="bottom",
           legend.key.width=unit(1.5, "cm")) #+
     #yaxis.theme
   
   if (!is.null(color.mid)) {
-    p = p + scale_fill_gradient2(low=color.low, mid=color.mid, high=color.high)
+    p = p + scale_fill_gradient2(low=color.low, mid=color.mid, high=color.high,guide = guide_legend(title = lgtext))
   } else {
-    p = p + scale_fill_gradient(low=color.low, high=color.high)
+    p = p + scale_fill_gradient(low=color.low, high=color.high,guide = guide_legend(title = lgtext))
   }
   if (!is.null(labels)) {
     p = p + scale_y_discrete(breaks=breaks, labels=labels)

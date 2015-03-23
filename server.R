@@ -146,6 +146,18 @@ shinyServer(function(input, output, session) {
   output$cancerSelectorC1 <- renderUI({
     selectInput("cancerSelectorChoiceC1", label = NULL, choices = apply(cancers, 1, function(r) r))
   })
+
+  canSelectSubSelected <- reactive({
+    vars <- input$cancerSelectorChoiceC1
+    return(vars)
+  })
+  
+  
+  ## cancer selector comp1
+  output$cancerSelectorC1Sub <- renderUI({
+    selectInput("cancerSelectorChoiceC1Sub", label = NULL, choices = apply(cancers, 1, function(r) r),canSelectSubSelected())
+  })
+  
   
   ## score type selector comp1
   output$scoreTypeSelectorC1 <- renderUI({
@@ -222,6 +234,7 @@ shinyServer(function(input, output, session) {
   output$genesResTable <- shiny::renderDataTable({
 
     input$refreshPlot
+    input$cancerSelectorChoiceC1Sub
     
     isolate({
       ## create progress object
@@ -241,11 +254,18 @@ shinyServer(function(input, output, session) {
       {
         return()
       }
+      genesResTableToShow = data.frame()
       
       if (input$geneSelectionMethodC1Value == "type1")
       {
         if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
-          geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
+          if (isolate(input$cancerSelectorChoiceC1) == isolate(input$cancerSelectorChoiceC1Sub))
+          {
+            genesResTableToShow = geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)            
+          }else{
+            tempgset = geneDataFrameResultSet(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
+            genesResTableToShow = geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1Sub),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),tempgset)
+          }
         }else{
           return()
           #geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
@@ -257,7 +277,7 @@ shinyServer(function(input, output, session) {
           userdata <- read.delim(userfile$datapath,sep="\t")
           
           if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
-            geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
+            genesResTableToShow = geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$cancerSelectorChoiceC1Sub),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),userdata)
             #geneFileDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
           }else{
             return()
@@ -277,7 +297,7 @@ shinyServer(function(input, output, session) {
           colnames(genelist) <-c ("uploadedGenes")
           if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
             if (length(isolate(input$cancerSelectorChoiceC1))>0  && length(isolate(input$sampleSelectorC1))>0 && length(isolate(input$selectScoreTypeC1))>0){
-              geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
+              genesResTableToShow = geneDataFrameResultSet(updateProgress,-10,isolate(input$cancerSelectorChoiceC1),isolate(input$cancerSelectorChoiceC1Sub),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),genelist)
               #geneFileDataFrameResultSet(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
             }else{
               return()
@@ -295,6 +315,7 @@ shinyServer(function(input, output, session) {
 
     
   }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+    ##                               columnDefs = list(list(targets = seq(from = 1, to = ncol(genesResTableToShow), by = 1) - 1, searchable = FALSE)))
   )
   
   ## plots
@@ -544,7 +565,7 @@ shinyServer(function(input, output, session) {
   })    
   
   ## gene selector comp2
-  updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE, selected=genes[100])
+  updateSelectizeInput(session, 'geneSelectorChoiceC2', choices = genes, server = TRUE)
   ## sample set selector comp2
   output$sampleSelectorC2 <- renderUI({
     radioButtons("sampleSelectorC2", label = "Select Sample type",
@@ -908,23 +929,27 @@ shinyServer(function(input, output, session) {
   ## tables
   output$sampleOverviewC5 <- shiny::renderDataTable({
     sampleOverview
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,columnDefs = list(list(targets = seq(from = 1, to = ncol(sampleOverview), by = 1) - 1, searchable = FALSE)))
   )
   output$genesCutoff1C5 <- shiny::renderDataTable({
     genesCutoffOne
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
+                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffOne), by = 1) - 1, searchable = FALSE)))
   )
   output$genesCutoff2C5 <- shiny::renderDataTable({
     genesCutoffTwo
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
+                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffTwo), by = 1) - 1, searchable = FALSE)))
   )
   output$genesCutoff3C5 <- shiny::renderDataTable({
     genesCutoffThree
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
+                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffThree), by = 1) - 1, searchable = FALSE)))
   )
   output$genesCutoff4C5 <- shiny::renderDataTable({
     genesCutoffFour
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5)
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
+                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffFour), by = 1) - 1, searchable = FALSE)))
   )
   
   
