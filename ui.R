@@ -12,7 +12,7 @@ shinyUI(
   bootstrapPage(
   includeCSS("www/styles.css"),
   
-  navbarPage(title="OncoScape", windowTitle ="OncoScape",header="",
+  shinyUI(navbarPage(title="OncoScape", windowTitle ="OncoScape",header="",
 
              ## comp0
              tabPanel("What is OncoScape?",
@@ -22,7 +22,7 @@ shinyUI(
                                    HTML("<p>v1.0</p>"),
                                    HTML("<br/>"),
                                    HTML("<h4>License, terms of use, privacy</h4>"),
-                                   HTML("<p><a href='http://www.r-project.org/Licenses/GPL-3' target='_blank'> GNU General Public License version 3</a></p>"),
+                                   HTML("<p><a href='http://www.r-project.org/Licenses/GPL-2' target='_blank'> GNU General Public License version 2</a></p>"),
                                    HTML("<br/>"),
                                    HTML("<h4>Contacts</h4>"),
                                    HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
@@ -158,8 +158,7 @@ shinyUI(
                                           tabPanel("Detailed Aberration Profiles",plotOutput("distPlot2")),
                                           ## view type 2
                                           tabPanel("Summary Heat-Map",plotOutput("distPlot"))
-                                          ## tabPanel("Summary Heat-Map",plotOutput("distPlot",height="700px"))
-
+                                          #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
                                         )
                                  )
                               ),
@@ -376,5 +375,5 @@ shinyUI(
 
           )
   
-    )
+    ))
 )

@@ -128,7 +128,17 @@ shinyServer(function(input, output, session) {
   ## read pathways file
   pathtemp <- read.delim("kegg_pathways.tsv",sep="\t",header=FALSE)
   pathways <- paste(pathtemp$V2,':',pathtemp$V3, sep= "")
-
+  cancerChoicesToPass <- c("Bladder Urothelial Carcinoma BLCA" = "BLCA",
+                           "Breast invasive carcinoma BRCA" = "BRCA",
+                           "Colon adenocarcinoma COAD" = "COAD",
+                           "Glioblastoma multiforme GBM" = "GBM",
+                           "Head and Neck squamous cell carcinoma HNSC" = "HNSC",
+                           "Kidney renal clear cell carcinoma KIRC" = "KIRC",
+                           "Lung adenocarcinoma LUAD" = "LUAD",
+                           "Lung squamous cell carcinoma LUSC" = "LUSC",
+                           "Ovarian serous cystadenocarcinoma OV" = "OV",
+                           "Rectum adenocarcinoma READ" = "READ",
+                           "Uterine Corpus Endometrial Carcinoma UCEC" = "UCEC")
   
 
 
@@ -144,7 +154,7 @@ shinyServer(function(input, output, session) {
   ## widgets
   ## cancer selector comp1
   output$cancerSelectorC1 <- renderUI({
-    selectInput("cancerSelectorChoiceC1", label = NULL, choices = apply(cancers, 1, function(r) r))
+    selectInput("cancerSelectorChoiceC1", label = NULL, choices = cancerChoicesToPass) #choices = apply(cancers, 1, function(r) r))
   })
 
   canSelectSubSelected <- reactive({
@@ -155,7 +165,7 @@ shinyServer(function(input, output, session) {
   
   ## cancer selector comp1
   output$cancerSelectorC1Sub <- renderUI({
-    selectInput("cancerSelectorChoiceC1Sub", label = NULL, choices = apply(cancers, 1, function(r) r),canSelectSubSelected())
+    selectInput("cancerSelectorChoiceC1Sub", label = NULL, choices = cancerChoicesToPass,canSelectSubSelected())
   })
   
   
@@ -561,7 +571,7 @@ shinyServer(function(input, output, session) {
   ## widgets
   ## cancer selector comp2
   output$cancerSelectorC2 <- renderUI({
-    selectInput("cancerSelectorChoiceC2", "Select a Cancer type", apply(cancers, 1, function(r) r))
+    selectInput("cancerSelectorChoiceC2", "Select a Cancer type", cancerChoicesToPass)
   })    
   
   ## gene selector comp2
@@ -704,7 +714,7 @@ shinyServer(function(input, output, session) {
   ## widgets
   ## cancer selector comp3
   output$cancerSelectorC3 <- renderUI({
-    selectInput("cancerSelectorChoiceC3", "Select a Cancer type", apply(cancers, 1, function(r) r))
+    selectInput("cancerSelectorChoiceC3", "Select a Cancer type", cancerChoicesToPass)
   })    
   ## score type selector comp3
   output$scoreSelectInputC3 <- renderUI({
@@ -844,7 +854,7 @@ shinyServer(function(input, output, session) {
   ## widgets
   ## cancer selector comp4
   output$cancerSelectorC4 <- renderUI({
-    selectInput("cancerSelectorChoiceC4", "Select a Cancer type" , choices = c('All',apply(cancers, 1, function(r) r)), selected ="All")
+    selectInput("cancerSelectorChoiceC4", "Select a Cancer type" , choices = c('All',cancerChoicesToPass, selected ="All"))
   })
   ## score type selector comp4
   output$scoreSelectInputC4 <- renderUI({

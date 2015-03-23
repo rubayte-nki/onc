@@ -495,6 +495,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -540,6 +541,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -601,6 +603,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
                                "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
                                "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -657,6 +660,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","OG Score","TS Score","Combined Score","OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -711,6 +715,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         rm(temp)
         rm(rgs)
         colnames(dfgenes) <- c("Genes","TS Score","OG Score","Combined Score","TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -780,6 +785,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         colnames(dfgenes) <- c("Genes","Combined Score","OG Score","TS Score","OG Score Affected","TS Score Affected","Combined Score Affected",
                                "OG.Meth","OG.CNA","OG.Mut","OG.shRNA","OG.Expr",
                                "TS.Meth","TS.CNA","TS.Mut","TS.shRNA","TS.Expr","Cancer","External links")
+        dfgenes$Cancer <- mapCancerTextToCode(cancer)
         #dfgenes
       }else{
         dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
@@ -892,4 +898,46 @@ geneFileDataFrameResultSet = function(updateProgress= NULL,cancer,score,inputdf,
     
   }
   
+}
+
+mapCancerTextToCode <- function(cancer){
+  
+  clink <- NULL
+  if (cancer == "BLCA"){
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Bladder%20Urothelial%20Carcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "BRCA")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Breast%20invasive%20carcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "COAD")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Colon%20adenocarcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "GBM")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Glioblastoma%20multiforme">',cancer,'</a>',sep="")
+  }else if (cancer == "HNSC")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Head%20and%20Neck%20squamous%20cell%20carcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "KIRC")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Kidney%20renal%20clear%20cell%20carcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "LUAD")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20adenocarcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "LUSC")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20squamous%20cell%20carcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "OV")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Ovarian%20serous%20cystadenocarcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "READ")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Rectum%20adenocarcinoma">',cancer,'</a>',sep="")
+  }else if (cancer == "UCEC")
+  {
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Uterine%20Corpus%20Endometrial%20Carcinoma">',cancer,'</a>',sep="")
+  }else{
+    clink = cancer
+  }
+  
+  clink  
 }
