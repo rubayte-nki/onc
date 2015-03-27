@@ -17,46 +17,123 @@ shinyUI(
              ## comp0
              tabPanel("OncoScape",
                           fluidRow(
-                            column(2,wellPanel(
-                                   #HTML("<h4>App version</h4>"),
-                                   #HTML("<p>v1.0</p>"),
-                                   #HTML("<br/>"),
-                                   HTML("<h4>Publication</h4>"),
-                                   HTML("<p>If you use this web application for data analysis in a publication, 
-                                        please cite (<something>)</p>"),
-                                   HTML("<br/>"),
-                                   HTML("<h4>Contacts</h4>"),
-                                   HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
-                                   HTML("<br/>"),
-                                   HTML("<h4>Shiny WebApp</h4>"),
-                                   HTML("<p>This shiny web app is developed & hosted by Research - IT department (contact: r.rahman@nki.nl) at the  <a href='http://www.nki.nl/' target='_blank'>Netherlands Cancer Institute - NKI</a>."),
-                                   HTML("<br/>"),
-                                   HTML("<br/>"),
-                                   HTML("<h4>License</h4>"),
-                                   HTML("<p><a href='http://www.r-project.org/Licenses/GPL-2' target='_blank'> GNU General Public License version 2</a></p>"),
-                                   HTML("<br/>"),
-                                   shiny::tags$hr(),
-                                   HTML("<img src='NKIlogo.png' class='img-responsive' />")
-                                   )),
+                            column(2),
                             column(8,
-                                   HTML("<h3>What is OncoScape?</h3>"),
-                                   HTML("<hr>"),
-                                   HTML("<p>OncoScape is a package for cancer gene prioritization for the R statistical programming environment. It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences between these groups. Currently, OncoScape performs an analysis of the following five data types:</p>"),
-                                   shiny::tags$ul(shiny::tags$li("Gene Expression"),
-                                                  shiny::tags$li("DNA Copy Number"),
-                                                  shiny::tags$li("DNA Methylation"),
-                                                  shiny::tags$li("mutation"),
-                                                  shiny::tags$li("shRNA knock-down data")),
-                                   shiny::tags$p("Aberrations in each gene are called for each data type separately and scored as 0 (no significant difference found) or 1 (significant difference found). These scores are summed across all data types giving the final score. OncoScape differentiates between activating (oncogene-like) and inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as oncogene score minus tumor suppressor score."),
-                                   shiny::tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
-                                   shiny::tags$ul(shiny::tags$li("tumors vs. normals"),
-                                                  shiny::tags$li("cell lines vs. normals"),
-                                                  shiny::tags$li("samples sensitive to treatment vs resistant ones"),
-                                                  shiny::tags$li("samples with mutations in gene X vs wild type ones"),
-                                                  shiny::tags$li("different cancer subtypes")),
-                                   shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
-                                   shiny::tags$hr(),
-                                   shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary' tab of the app."))
+                                   fluidRow(class="frontPageBottom1Panel",
+                                     HTML("<h3 class=\"frontPageHeader\" ><font color=\"#FFFFFF\">OncoScape</font></h3>"),
+                                     HTML("<hr>"),
+                                     HTML("<p class='frontPage'><font color=\"#FFFFFF\">OncoScape is a package for cancer gene prioritization for the R statistical programming environment. 
+                                          It compares molecular profiling data of two groups of samples in order to identify genes that show significant differences 
+                                          between these groups. Currently, OncoScape performs an analysis of the five data types: (A) Gene Expression 
+                                          (B) DNA Copy Number (C) DNA Methylation (D) Mutation (E) shRNA knock-down data.</font></p>"),
+                                     #shiny::tags$ul(shiny::tags$li("Gene Expression"),
+                                      #              shiny::tags$li("DNA Copy Number"),
+                                      #              shiny::tags$li("DNA Methylation"),
+                                      #              shiny::tags$li("mutation"),
+                                      #              shiny::tags$li("shRNA knock-down data")),
+                                     HTML("<p class='frontPage'><font color=\"#FFFFFF\">Aberrations in each gene are called for each data type separately and scored as 0 
+                                                   (no significant difference found) or 1 (significant difference found). These scores are summed across all 
+                                                   data types giving the final score. OncoScape differentiates between activating (oncogene-like) and 
+                                                   inactivating (tumor suppressor-like) aberrations and calculates independent scores for both directions, 
+                                                   the oncogene score and tumor suppressor score, respectively. Furthermore, a combined score is calculated as 
+                                                   oncogene score minus tumor suppressor score. OncoScape can be applied to the comparison of any arbitrary 
+                                                   groups of samples, such as: (A) Tumors vs. Normals (B) Cell-lines vs. Normals (C) Samples sensitive
+                                                   to treatment vs. resistant ones (D) Samples with mutations in gene X vs. wild type ones 
+                                                   (E) Diferent cancer subtypes</font></p>"),
+                                     #shiny::tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
+                                     #shiny::tags$ul(shiny::tags$li("tumors vs. normals"),
+                                    #                shiny::tags$li("cell lines vs. normals"),
+                                     #               shiny::tags$li("samples sensitive to treatment vs resistant ones"),
+                                    #                shiny::tags$li("samples with mutations in gene X vs wild type ones"),
+                                    #                shiny::tags$li("different cancer subtypes")),
+                                     ## shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
+                                     HTML("<p class='frontPage' ><font color=\"#FFFFFF\">This web page provides access to the results of our comprehensive analysis of 
+                                          tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer 
+                                          Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE). The analyses are presented in the 
+                                          following publication: <I>Exploring the cancer aberration landscape by genomic data fusion, Andreas Schlicker, 
+                                          Magali Michaut, Rubayte Rahman and  Lodewyk FA Wessels (submitted)</I></font></p>"),
+                                     
+                                     #shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary' tab of the app."))
+                                    tags$head(tags$style("
+                                                .frontPageBottom1Panel{background-color: #6E6E6E; border-radius: 10px;}"
+                                          )   
+                                      )
+                                     ),
+                                   fluidRow(
+                                     column(12,
+                                            shiny::tags$br()
+                                     )
+                                   ),
+                                   
+                                   # fluidRow(shiny::tags$hr()),
+                                   fluidRow(class="frontPageBottomPanel",
+                                                 column(3, class="frontPageBottomPanelColumn",
+                                                            fluidRow(
+                                                              HTML("<h4>Publication</h4>"),
+                                                              HTML("<p>If you use this web application for data analysis in a publication, 
+                                                              please cite ... </p>"),
+                                                              tags$head(tags$style("
+                                                                .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
+                                                                )   
+                                                              )
+                                                            )),
+                                                  #column(1),
+                                                     column(3,class="frontPageBottomPanelColumn",
+                                                            fluidRow(
+                                                              HTML("<h4>Contacts</h4>"),
+                                                              HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
+                                                              tags$head(tags$style("
+                                                                .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
+                                                              )   
+                                                              )
+                                                            )),
+                                                    #column(1),
+                                                     column(3,class="frontPageBottomPanelColumn",
+                                                            fluidRow(
+                                                              HTML("<h4>Shiny WebApp</h4>"),
+                                                              HTML("<p>This shiny web app is developed & hosted by Research - IT department (contact: r.rahman@nki.nl) at the  <a href='http://www.nki.nl/' target='_blank'>Netherlands Cancer Institute - NKI</a>."),
+                                                              tags$head(tags$style("
+                                                                .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
+                                                              )   
+                                                              )
+                                                            )),
+                                                     #column(3,
+                                                    #      )),
+                                                tags$head(tags$style("
+                                                .frontPageBottomPanel{background-color: #FAFAFA; border-radius: 10px;}"
+                                                  )   
+                                                ) 
+                                                     
+                                       #)    
+                                    ),
+                                   fluidRow(
+                                     column(12,
+                                            shiny::tags$br()
+                                            )
+                                     ),
+                                   fluidRow(class="frontPageBottomPanel",
+                                     column(9,class="frontPageBottomPanelColumn",
+                                            fluidRow(
+                                              HTML("<h4>License</h4>"),
+                                              HTML("<p>Copyright &copy; 2015 Netherlands Cancer Institute</br>
+                                                    Licensed under the MIT License.</p>"),
+                                                   #<a href='http://www.r-project.org/Licenses/GPL-2' target='_blank'> GNU General Public License version 2</a></p>"),
+                                              tags$head(tags$style("
+                                                                .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
+                                              )   
+                                              )
+                                            )
+                                          ),
+                                     column(2,
+                                            fluidRow(
+                                              HTML("<img src='NKIlogo.png' class='img-responsive' />")
+                                              
+                                            )),
+                                     tags$head(tags$style("
+                                                .frontPageBottomPanel{background-color: #FAFAFA;border-radius: 10px;}"
+                                              )   
+                                      )
+                                     )
                             ),
                             column(2)
                             )
@@ -65,16 +142,8 @@ shinyUI(
              
              
              ## comp1
-             tabPanel("Top Candidate Genes", 
-                      fluidRow(
-                        column(12,
-                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
-                                    </div>
-                                    ")
-                               )
-                        ),
+             tabPanel("Top Candidate Genes",
+                      
                       fluidRow(
                         column(2,
                           wellPanel(
@@ -157,6 +226,15 @@ shinyUI(
                           ),
                         column(10,
                               fluidRow(
+                                fluidRow(
+                                  column(12,
+                                         HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
+                                    </div>
+                                    ")
+                                  )
+                                ),
                                  ## plot window 
                                  column(10,                            
 
@@ -189,15 +267,7 @@ shinyUI(
              
         ## comp6
         tabPanel("User Genes", 
-         fluidRow(
-           column(12,
-                  HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
-                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                       <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
-                       </div>
-                       ")
-                  )
-                  ),
+         
          fluidRow(
            column(2,
                   wellPanel(                    
@@ -251,8 +321,18 @@ shinyUI(
                     ),
            column(10,
                   fluidRow(
+                    fluidRow(
+                      column(12,
+                             HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                       <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
+                       </div>
+                       ")
+                      )
+                    ),
+                    
                     ## plot window 
-                    column(10,                 
+                    column(10,         
                            tabsetPanel(
                              ## view type 1
                              tabPanel("Detailed Aberration Profiles",
@@ -289,15 +369,7 @@ shinyUI(
 
              ## comp2
              tabPanel("Single Gene Boxplots",
-                      fluidRow(
-                        column(12,
-                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
-                                    </div>
-                                    ")
-                        )
-                      ),
+                      
                       fluidRow(
                         column(2,
                                wellPanel(
@@ -317,6 +389,27 @@ shinyUI(
                         ),
                         column(10,
                           ## plot window
+                          fluidRow(
+                            fluidRow(
+                              column(12,
+                                     HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                    </div>
+                                    ")
+                              )
+                            ),
+                            column(10,
+                                   HTML("<div align='left'>
+                                      <p><I>The box plots show the log fold change of the gene expression (resp. copy number data) 
+                                        of the tumor and normal samples. Differences were assessed with a Wilcoxon test and p-values were corrected 
+                                        with the Benjamin-Hochberg procedure to control the false discovery rate (FDR). 
+                                        Differences are considered significant when the adjusted p-value is less than 0.05.
+                                      </I></p>
+                                    </div>
+                                    ")
+                            )
+                            ),
                           fluidRow(
                             column (5, HTML("<h3>Gene Expression"),
                                     downloadButton('downloadPlotC2GE', 'Download Plot', class='btn btn-link'),
@@ -339,15 +432,6 @@ shinyUI(
              
              ## comp3
              tabPanel("Genomic Regions",
-                      fluidRow(
-                        column(12,
-                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
-                                    </div>
-                                    ")
-                        )
-                      ),
                       fluidRow(
                           column(2,
                                  wellPanel(
@@ -372,6 +456,27 @@ shinyUI(
                                  )     
                         ),
                         column(10,
+                               fluidRow(
+                                 column(12,
+                                        HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                    </div>
+                                    ")
+                                 )
+                               ),
+                               
+                               fluidRow(
+                                 column(10,
+                                        HTML("<div align='left'>
+                                      <p><I>Two-dimensional overview of the prioritization scores. Genes are plotted column-wise sorted according to 
+                                        chromosomal location, starting with the telomere of chromosome 1p in the upper left corner. Lines delineate the 
+                                        different chromosomes and numbers indicate chromosome names.
+                                      </I></p>
+                                    </div>
+                                    ")
+                                 )
+                               ),
                           ## plot window
                           fluidRow(
                             #column (10, 
@@ -393,15 +498,6 @@ shinyUI(
              
              ## comp4
              tabPanel("Pathways",
-                      fluidRow(
-                        column(12,
-                               HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
-                                    </div>
-                                    ")
-                        )
-                      ),
                       fluidRow(
                         column(2,
                                wellPanel(
@@ -425,6 +521,16 @@ shinyUI(
                       ),
                       column(10,
                              fluidRow(
+                               fluidRow(
+                                 column(12,
+                                        HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                    </div>
+                                    ")
+                                 )
+                               ),
+                               
                           ## plot window
                                     HTML("<h3>Pathway Plot"),
                                     downloadButton('downloadPlotC4', 'Download Plot', class='btn btn-link'),
@@ -481,7 +587,49 @@ shinyUI(
                             ),
                           column(3)
                           )  
-                      )
+                      ),
+
+            ## comp7
+            tabPanel("FAQ",
+                     fluidRow(
+                       column(3),
+                       column(6,
+                              shiny::tags$h3("How are the scores computed / what do the scores mean?"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("Tumor samples are compared with normal samples to identify differences. If a gene is found to be altered, this gene receives a score of 1 for this data type and else a score of 0. Details on the scoring for each data type are given below. Activating and inactivating alterations are both scored independently for each gene, and the sums of the activating and inactivating aberrations yielded an oncogene score and a tumor suppressor gene score, respectively. Additionally, we calculated the difference between oncogene score and tumor suppressor gene score, referred to as overall score, and the sum between oncogene and tumor suppressor scores, referred to as aberration score. Genes were then ranked based on one of these scores to be classified as potential new oncogene or tumor suppressor gene. Pathway alteration scores were calculated by averaging scores for all genes assigned to the same pathway. Aberrations in cancer cell lines were assessed by comparing the cell lines with normal samples available from TCGA using the same approach as for tumor samples."),
+                              shiny::tags$br(),
+                              
+                              shiny::tags$h3("Gene expression analysis"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("Normalized gene expression data for tumor and normal samples, either from an Illumina sequencing platform or Agilent arrays depending on availability for each cancer type, was obtained from TCGA. We compared expression levels for each gene between tumors and matched normal samples using paired Wilcoxon tests and corrected nominal p-values using the Benjamini-Hochberg procedure. If a gene was significantly (FDR < 0.05) expressed (lower or higher) in tumor samples, it received a +1 towards tumor suppressor or oncogene score, respectively."),
+                              shiny::tags$br(),
+                              
+                              shiny::tags$h3("Copy-number analysis"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("Segmented DNA copy-number data for tumor and normal samples were obtained using Affymetrix SNP6 arrays by TCGA. We compared log-ratio copy number values between tumor samples and matched normal samples using paired Wilcoxon tests and corrected p-values using Benjamini-Hochberg’s procedure. For genes with a significant difference in copy-number (FDR < 0.05), we calculated the Spearman correlation between copy-number and gene expression. A gene was scored as potential tumor suppressor or oncogene if 1) its copy-number value in tumor samples was significantly lower or higher than in normal samples and 2) the copy-number was significantly (FDR < 0.05) positively correlated with gene expression across the tumor samples."),
+                              shiny::tags$br(),
+                              
+                              shiny::tags$h3("DNA methylation analysis"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("We analyzed DNA methylation data in a probe-wise fashion. For each probe, we compared methylation values in tumor and normal samples using unpaired Wilcoxon tests and corrected p-values using the Benjamini-Hochberg procedure. For each probe with a significant (FDR < 0.05) difference between methylation in tumor and normal samples, we computed the Spearman correlation between methylation level and expression of the genes annotated to that probe according to the Illumina annotation across all tumor samples. Correlations with FDR < 0.05 were regarded as significant. A gene was scored as tumor suppressor gene if 1) at least one associated methylation probe in the gene body exhibited significantly lower methylation in tumors and 2) the methylation was positively correlated with gene expression, or if at least one other associated methylation probe showed gain of methylation in tumors and gene expression was negatively correlated. In contrast, a gene was scored as oncogene if 1) at least one probe in the gene body showed gain of methylation and 2) was positively correlated with expression or any other associated probe exhibited lower methylation in tumors and methylation was negatively correlated with gene expression."),
+                              shiny::tags$br(),
+                              
+                              
+                              shiny::tags$h3("Mutation analysis"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("Mutations were scored according to the 20/20 rule published by Vogelstein and colleagues. We divided mutations according to their classification into oncogene mutations (missense mutations and in frame deletion/insertions) and tumor suppressor mutations (frame-shift deletions/insertions, nonsense mutations and splice site mutations). Then, we calculated an oncogene mutation rate (OGMR) and a tumor suppressor mutation rate (TSMR) for each gene. The OGMR was defined as one minus the number of distinct oncogene mutations divided by the total number of mutations. The TSMR was defined as distinct tumor suppressor mutations divided by the number of total mutations. Genes with an OGMR > 0.2 and TSMR < 0.05 were scored as oncogene. A gene was scored as tumor suppressor if its TSMR > 0.2 or if the OGMR > 0.2 and the TSMR > 0.05. We required a minimum of five oncogene or tumor suppressor mutations in order to score a gene as oncogene or tumor suppressor, respectively."),
+                              shiny::tags$br(),
+                              
+                              
+                              shiny::tags$h3("Analysis of shRNA knock-down screens"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("Project Achilles assessed cell viability after knocking down genes using different shRNA hairpins. In order to minimize off-target effects, Project Achilles integrated knock-down results of several hairpins targeting the same gene into so called “gene solutions”, providing a cell viability score for each gene and cell line combination. We used only genes for which only a single gene solution was provided. For each gene, we derived a distribution of viability values across all cell lines. A gene was scored as potential oncogene for one cancer type if at least 25% of the cell lines for this cancer type had a knock-down viability score that was lower than the 25th percentile across all cell lines. If at least 25% of the cell lines had a knock-down viability score greater than the 75th percentile for that gene, it was scored as potential tumor suppressor gene."),
+                              shiny::tags$br()
+
+                              ),
+                       column(3)
+                       )
+              )
                       
 
           )

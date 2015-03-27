@@ -234,6 +234,10 @@ shinyServer(function(input, output, session) {
   })
   
   scoreCutoffSelectSelected <- reactive({
+    if (is.null(input$selectScoreTypeC1))
+    {
+      return()
+    }
     score <- input$selectScoreTypeC1
     if (score == "combined.score")
     {
@@ -361,7 +365,7 @@ shinyServer(function(input, output, session) {
           #geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
         }
     })    
-  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15)
+  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15,searching=FALSE)
     ##                               columnDefs = list(list(targets = ncol(restable) -1 , searchable = FALSE)))
   )
   
@@ -816,7 +820,7 @@ shinyServer(function(input, output, session) {
   })    
   
   
-  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15)
+  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15, searching=FALSE)
   )
 
 
@@ -1127,6 +1131,10 @@ shinyServer(function(input, output, session) {
   updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = NULL, server = TRUE)
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
+    if (is.null(input$cancerSelectorChoiceC4))
+    {
+      return()
+    }
     choicesToPassC4 = list("Tumors" = "tcga", "Cell lines" = "ccle", "Tumors vs Cell lines" = "both")
     if (input$cancerSelectorChoiceC4 == "All")
     {
@@ -1200,27 +1208,24 @@ shinyServer(function(input, output, session) {
   ## tables
   output$sampleOverviewC5 <- shiny::renderDataTable({
     sampleOverview
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,columnDefs = list(list(targets = seq(from = 1, to = ncol(sampleOverview), by = 1) - 1, searchable = FALSE)))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), paging = FALSE,searching=FALSE)
   )
   output$genesCutoff1C5 <- shiny::renderDataTable({
     genesCutoffOne
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
-                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffOne), by = 1) - 1, searchable = FALSE)))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), paging = FALSE,searching=FALSE)
   )
+
   output$genesCutoff2C5 <- shiny::renderDataTable({
     genesCutoffTwo
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
-                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffTwo), by = 1) - 1, searchable = FALSE)))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), paging = FALSE,searching=FALSE)
   )
   output$genesCutoff3C5 <- shiny::renderDataTable({
     genesCutoffThree
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
-                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffThree), by = 1) - 1, searchable = FALSE)))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), paging = FALSE,searching=FALSE)
   )
   output$genesCutoff4C5 <- shiny::renderDataTable({
     genesCutoffFour
-  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 5,
-                    columnDefs = list(list(targets = seq(from = 1, to = ncol(genesCutoffFour), by = 1) - 1, searchable = FALSE)))
+  }, options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), paging = FALSE,searching=FALSE)
   )
   
   
