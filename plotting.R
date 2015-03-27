@@ -726,7 +726,7 @@ getHeatmap = function(dataFrame,yaxis.theme,
           axis.text.y=element_text(color="gray30", face="bold", size=10),
           legend.text=element_text(color="gray30", face="bold", size=10),
           # legend.title= lgtext, ##element_blank(),
-          legend.position="bottom",
+          legend.position="top",
           legend.key.width=unit(1.5, "cm")) #+
     #yaxis.theme
   
@@ -744,6 +744,25 @@ getHeatmap = function(dataFrame,yaxis.theme,
   
   p
 }
+
+# addHauxDataLine =function(dataframe)
+# {
+#   temp <- c()
+#   hauxFrame <- NULL
+#   hauxScore <- max(dataframe$score)
+#   haxGene <- "Cancers"
+#   for (cancer in unique(dataframe$cancer))
+#   {
+#     hauxFrame <- rbind.data.frame(hauxFrame,c(haxGene,as.numeric(0),'Combined'))
+#     temp <- c(temp, cancer)
+#   }
+#   hauxFrame <- cbind.data.frame(hauxFrame,temp)
+#   colnames(hauxFrame) <- c(colnames(resultsSub))
+#   res <- rbind.data.frame(dataframe,hauxFrame)
+#   res
+#   #hauxFrame
+# }
+
 
 # # ##' Generate a distribution plot for prioritization results. 
 # # ##' @param dataFrame approprately formatted data.frame

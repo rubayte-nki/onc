@@ -7,6 +7,11 @@ load("starter.RData")
 ##' @return a subset of the data.frame that fits the user's selection
 ##' @author Andreas Schlicker
 page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
+  
+  if (is.null(scoreCutoff))
+  {
+    return()
+  }
 	# Filter the genes according to user's criteria
 	if (scoreCutoff > 0 || scoreCutoff == -10) {
 		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
@@ -86,14 +91,23 @@ plotCategoryOverview = function(results) {
 	      strip.text.x=element_text(color="gray30", size=10, face="bold"),
 	      legend.text=element_text(color="gray30", size=10, face="bold"),
 	      legend.title=element_blank(),
-	      legend.position="bottom")
+	      legend.position="top")
 	#)
 }
 
 ##' main call to comp1 plots
 ##' view 1
+##' summary heatmap plot
 comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
+  
+  if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
+  {
+    return(list(genecounts="auto"))
+  }
+  
   df = NULL
+  genecounts = 0
+  
   if (sample == 'tumors'){
     if(score == 'og.score'){
       df = tcgaResultsHeatmapOG
@@ -137,14 +151,16 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     ## call plot function
     rm(df)
     rm(temp)
-    plotHeatmapPage1(resultsSub, score)        
+    hplot <- plotHeatmapPage1(resultsSub, score)
+    genecounts <- length(unique(resultsSub$gene))
   }else{
     rm(df)
     rm(temp)
-    plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-    text(1,"Empty result set returned by filter. Nothing to plot.")
+    hplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+    hplot <- hplot + text(1,"Empty result set returned by filter. Nothing to plot.")
   }  
 
+  list(hplot=hplot, genecounts=(genecounts*20))
 }
 
 ## for user file input
@@ -175,7 +191,16 @@ comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
 }
 
 ##' view 2
+##' detailed abberation plot
 comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
+  
+  if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
+  {
+    return(list(genecounts="auto"))
+  }
+  genecounts = 0
+  
+  
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
@@ -204,12 +229,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        plotCategoryOverview(resultsSub)             
+        daplot <- plotCategoryOverview(resultsSub)
+        genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
@@ -238,12 +264,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        plotCategoryOverview(resultsSub)             
+        daplot <- plotCategoryOverview(resultsSub)
+        genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        dapolot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else{
       ## subset data frame based on user input
@@ -280,12 +307,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- rbind(temp2,temp,res)
         rm(temp)
         rm(temp2)
-        plotCategoryOverview(res)  
+        daplot <- plotCategoryOverview(res)
+        genecounts <- length(unique(res$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
       
     }
@@ -317,12 +345,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        plotCategoryOverview(resultsSub)             
+        daplot <- plotCategoryOverview(resultsSub)
+        genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
@@ -351,12 +380,13 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        plotCategoryOverview(resultsSub)             
+        daplot <- plotCategoryOverview(resultsSub)
+        genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else{
       ## subset data frame based on user input
@@ -393,16 +423,18 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- rbind(temp2,temp,res)
         rm(temp)
         rm(temp2)
-        plotCategoryOverview(res)  
+        daplot <- plotCategoryOverview(res)
+        genecounts <- length(unique(res$gene))
       }else{
         rm(temp)
         rm(temp2)
-        plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
     }
   }  
   
+  list(daplot=daplot, genecounts=(genecounts*20))
 }
 
 ## for user file input
@@ -450,6 +482,11 @@ comp1view2FilePlot = function(updateProgress = NULL,cancer,inputdf,sample){
 ##' main call to page1 gene data frame
 geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
   
+  if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
+  {
+    return()
+  }
+  
   rgsog= NULL
   rgsts= NULL
   rgscom= NULL
@@ -488,7 +525,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgsog,rgsts,type="left")
         rgs <- plyr::join(temp,rgscom,type="left")
-        gc <- paste("<a href=\"http://www.genecards.org/cgi-bin/carddisp.pl?gene=",rgs[,1],"\">","Gene Card","</a>",sep="")
+        gc <- paste("<a href=\"http://www.genecards.org/cgi-bin/carddisp.pl?gene=",rgs[,1],"\" target=\"_blank\" >","GeneCards","</a>",sep="")
         temp <- data.frame(rgs[,c(1,2,9,10,3,4,5,6,7,8)],gc)
         temp <- temp[order(-temp$"Oncogene.Score"),] 
         dfgenes <- replace(temp, is.na(temp), "-")
@@ -534,7 +571,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgsts,rgsog,type="left")
         rgs <- plyr::join(temp,rgscom,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'" target=\"_blank\" >','GeneCards','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,9,10,3,4,5,6,7,8)],gc)
         temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
         dfgenes <- replace(temp, is.na(temp), "-")
@@ -589,7 +626,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgscom,rgsog,type="left")
         rgs <- plyr::join(temp,rgsts,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'" target=\"_blank\" >','GeneCards','</a>',sep='')
         temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
         if (cutoff > 0 || cutoff == -10)
         {
@@ -653,7 +690,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgsog,rgsts,type="left")
         rgs <- plyr::join(temp,rgscom,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'" target=\"_blank\" >','GeneCards','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,9,10,3,4,5,6,7,8)],gc)
         temp <- temp[order(-temp$"Oncogene.Score"),]
         dfgenes <- replace(temp, is.na(temp), "-")
@@ -708,7 +745,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgsts,rgsog,type="left")
         rgs <- plyr::join(temp,rgscom,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'" target=\"_blank\" >','GeneCards','</a>',sep='')
         temp <- data.frame(rgs[,c(1,2,9,10,3,4,5,6,7,8)],gc)
         temp <- temp[order(-temp$"Tumor.Suppressor.Score"),]
         dfgenes <- replace(temp, is.na(temp), "-")
@@ -771,7 +808,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
         ## make final data frame
         temp <- plyr::join(rgscom,rgsog,type="left")
         rgs <- plyr::join(temp,rgsts,type="left")
-        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'">','Gene Card','</a>',sep='')
+        gc <- paste('<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=',rgs[,1],'" target=\"_blank\" >','GeneCards','</a>',sep='')
         temp <- data.frame(rgs[,c(1,4,2,3,5,6,7,10,11,12,13,14,15,17,18,19,20,8)],gc)
         if (cutoff > 0 || cutoff == -10)
         {
@@ -904,37 +941,37 @@ mapCancerTextToCode <- function(cancer){
   
   clink <- NULL
   if (cancer == "BLCA"){
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Bladder%20Urothelial%20Carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Bladder%20Urothelial%20Carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "BRCA")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Breast%20invasive%20carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Breast%20invasive%20carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "COAD")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Colon%20adenocarcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Colon%20adenocarcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "GBM")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Glioblastoma%20multiforme">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Glioblastoma%20multiforme" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "HNSC")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Head%20and%20Neck%20squamous%20cell%20carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Head%20and%20Neck%20squamous%20cell%20carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "KIRC")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Kidney%20renal%20clear%20cell%20carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Kidney%20renal%20clear%20cell%20carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "LUAD")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20adenocarcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20adenocarcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "LUSC")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20squamous%20cell%20carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Lung%20squamous%20cell%20carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "OV")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Ovarian%20serous%20cystadenocarcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Ovarian%20serous%20cystadenocarcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "READ")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Rectum%20adenocarcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Rectum%20adenocarcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else if (cancer == "UCEC")
   {
-    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Uterine%20Corpus%20Endometrial%20Carcinoma">',cancer,'</a>',sep="")
+    clink <- paste('<a href="https://tcga-data.nci.nih.gov/tcga/tcgaCancerDetails.jsp?diseaseType=',cancer,'&diseaseName=Uterine%20Corpus%20Endometrial%20Carcinoma" target="_blank" >',cancer,'</a>',sep="")
   }else{
     clink = cancer
   }

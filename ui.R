@@ -12,17 +12,18 @@ shinyUI(
   bootstrapPage(
   includeCSS("www/styles.css"),
   
-  shinyUI(navbarPage(title="OncoScape", windowTitle ="OncoScape",header="",
+  shinyUI(navbarPage(title="", windowTitle ="OncoScape",header="",
 
              ## comp0
-             tabPanel("What is OncoScape?",
+             tabPanel("OncoScape",
                           fluidRow(
                             column(2,wellPanel(
-                                   HTML("<h4>App version</h4>"),
-                                   HTML("<p>v1.0</p>"),
-                                   HTML("<br/>"),
-                                   HTML("<h4>License, terms of use, privacy</h4>"),
-                                   HTML("<p><a href='http://www.r-project.org/Licenses/GPL-2' target='_blank'> GNU General Public License version 2</a></p>"),
+                                   #HTML("<h4>App version</h4>"),
+                                   #HTML("<p>v1.0</p>"),
+                                   #HTML("<br/>"),
+                                   HTML("<h4>Publication</h4>"),
+                                   HTML("<p>If you use this web application for data analysis in a publication, 
+                                        please cite (<something>)</p>"),
                                    HTML("<br/>"),
                                    HTML("<h4>Contacts</h4>"),
                                    HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
@@ -30,6 +31,9 @@ shinyUI(
                                    HTML("<h4>Shiny WebApp</h4>"),
                                    HTML("<p>This shiny web app is developed & hosted by Research - IT department (contact: r.rahman@nki.nl) at the  <a href='http://www.nki.nl/' target='_blank'>Netherlands Cancer Institute - NKI</a>."),
                                    HTML("<br/>"),
+                                   HTML("<br/>"),
+                                   HTML("<h4>License</h4>"),
+                                   HTML("<p><a href='http://www.r-project.org/Licenses/GPL-2' target='_blank'> GNU General Public License version 2</a></p>"),
                                    HTML("<br/>"),
                                    shiny::tags$hr(),
                                    HTML("<img src='NKIlogo.png' class='img-responsive' />")
@@ -52,7 +56,7 @@ shinyUI(
                                                   shiny::tags$li("different cancer subtypes")),
                                    shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
                                    shiny::tags$hr(),
-                                   shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary Statistics' tab of the app."))
+                                   shiny::tags$p(shiny::tags$span(style="color:blue", "Summary statistics about OncoScape can be found in the 'Summary' tab of the app."))
                             ),
                             column(2)
                             )
@@ -61,12 +65,12 @@ shinyUI(
              
              
              ## comp1
-             tabPanel("Top Genes in Cancers", 
+             tabPanel("Top Candidate Genes", 
                       fluidRow(
                         column(12,
                                HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Display/Refresh Results' to populate table data and generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
                                     </div>
                                     ")
                                )
@@ -84,33 +88,38 @@ shinyUI(
                             uiOutput("scoreTypeSelectorC1"),
                             shiny::tags$hr(),
                             
-                            ## gene selection criteria
-                            HTML("<h4>Gene Selection</h4>"),
-                            uiOutput("geneSelectionMethodC1"),
+                            ## score cutoff criteria
+                            HTML("<h4>Select Cut-off Score</h4>"),
+                            uiOutput("scoreCutoffSelectorC1"),
+                            shiny::tags$hr(),
                             
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type3'",
-                              shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
-                            ),
-                            
-                            conditionalPanel(
-                              condition = "input.geneSelectionMethodC1Value == 'type2'",
-                              HTML("
-                                    <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
-                                   Show help on Input File !
-                                   </a>
-                                    <div class='collapse' id='collapseExample'>
-                                      <div class='well'>
-                                          <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
-                                          Header line should also be provided.</p>
-                                          <p><strong>Another thing!</strong>Once you upload a file, the uploaded data remains active in your current session.
-                                          So uploading multiple times is not needed.</p>
-                                      </div>
-                                    </div>
-                                   ")
-                            ),
-                            
-                            uiOutput("geneSelectionPanelC1"),                            
+#                             ## gene selection criteria
+#                             HTML("<h4>Gene Selection</h4>"),
+#                             uiOutput("geneSelectionMethodC1"),
+#                             
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type3'",
+#                               shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
+#                             ),
+#                             
+#                             conditionalPanel(
+#                               condition = "input.geneSelectionMethodC1Value == 'type2'",
+#                               HTML("
+#                                     <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+#                                    Show help on Input File !
+#                                    </a>
+#                                     <div class='collapse' id='collapseExample'>
+#                                       <div class='well'>
+#                                           <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
+#                                           Header line should also be provided.</p>
+#                                           <p><strong>Another thing!</strong>Once you upload a file, the uploaded data remains active in your current session.
+#                                           So uploading multiple times is not needed.</p>
+#                                       </div>
+#                                     </div>
+#                                    ")
+#                             ),
+#                             
+#                             uiOutput("geneSelectionPanelC1"),                            
                             
                             
                             
@@ -135,7 +144,7 @@ shinyUI(
 #                               condition = "input.geneSelectionMethodC1Value == 'type3'",
 #                               shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=10, "Copy Paste your genes here separated by comma")
 #                             ),
-                            shiny::tags$hr(),
+                            #shiny::tags$hr(),
                             
                             ## tumors or cell-lines
                             HTML("<h4>Select Sample type</h4>"),
@@ -143,46 +152,148 @@ shinyUI(
                             shiny::tags$hr(),
                           
                             ## action button
-                            shiny::actionButton("refreshPlot",label="Display/Refresh Results",class='btn btn-primary')
+                            shiny::actionButton("refreshPlot",label="Refresh Results",class='btn btn-primary')
                             )
                           ),
                         column(10,
                               fluidRow(
                                  ## plot window 
                                  column(10,                            
-                                        HTML("<h3> Pan-Cancer Overview Plots"),
-                                        downloadButton('downloadPlot', 'Download', class='btn btn-link'),
-                                        HTML("</h3>"),
+
                                         tabsetPanel(
                                           ## view type 1
-                                          tabPanel("Detailed Aberration Profiles",plotOutput("distPlot2")),
+                                          tabPanel("Detailed Aberration Profiles",
+                                                   HTML("<h4>Detailed abberation profile of top candidate genes acoss Pan-Cancers"),
+                                                   downloadButton('downloadPlotDAPlot', 'Download', class='btn btn-link'),
+                                                   HTML("</h4>"),
+                                                   plotOutput("distPlot2")),
                                           ## view type 2
-                                          tabPanel("Summary Heat-Map",plotOutput("distPlot"))
+                                          tabPanel("Summary Heat-Map",
+                                                   HTML("<h4>Summary heatmap of top candidate genes acoss Pan-Cancers"),
+                                                   downloadButton('downloadPlotHPlot', 'Download', class='btn btn-link'),
+                                                   HTML("</h4>"),
+                                                   plotOutput("distPlot")),
                                           #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
+                                          tabPanel("Scores",
+                                                   HTML("<h4>Top candidate genes with scores"),
+                                                   downloadButton('downloadData', 'Download', class='btn btn-link'),
+                                                   HTML("</h4>"),
+                                                   #uiOutput("cancerSelectorC1Sub"),
+                                                   dataTableOutput('genesResTable'))
                                         )
                                  )
-                              ),
-                          fluidRow(
-                            ## result genes
-                            column(10,
-                                   HTML("<hr><h3> View Cancer Specific Details"),
-                                   downloadButton('downloadData', 'Download', class='btn btn-link'),
-                                   uiOutput("cancerSelectorC1Sub"),
-                                   HTML("</h3>"),
-                                   shiny::dataTableOutput('genesResTable')
-                            )
-                          )
+                              )
                       )
                     )    
              ),
              
+        ## comp6
+        tabPanel("User Genes", 
+         fluidRow(
+           column(12,
+                  HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                       <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
+                       </div>
+                       ")
+                  )
+                  ),
+         fluidRow(
+           column(2,
+                  wellPanel(                    
+                    ## gene selection criteria
+                    HTML("<h4>Select a Method for your Genes</h4>"),
+                    uiOutput("geneSelectionMethodC6"),
+                    conditionalPanel(
+                      condition = "input.geneSelectionMethodC6Value == 'type3'",
+                      helpText("Note: Copy paste your genes in the text box below separated by comma(,)")
+                    
+                    ),
+                    conditionalPanel(
+                      condition = "input.geneSelectionMethodC6Value == 'type3'",
+                      shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
+                    ),
+                    
+                    conditionalPanel(
+                      condition = "input.geneSelectionMethodC6Value == 'type2'",
+                      HTML("
+                           <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+                           Show help on Input File !
+                           </a>
+                           <div class='collapse' id='collapseExample'>
+                           <div class='well'>
+                           <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
+                           Header line should also be provided.</p>
+                           <p><strong>Another thing!</strong>Once you upload a file, the uploaded data remains active in your current session.
+                           So uploading multiple times is not needed.</p>
+                           </div>
+                           </div>
+                           ")
+                    ),
+                    uiOutput("geneSelectionPanelC6"),                                                
+                    shiny::tags$hr(),
+                    
+                    ## score type select
+                    HTML("<h4>Select Score type</h4>"),
+                    uiOutput("scoreTypeSelectorC6"),
+                    shiny::tags$hr(),
+                    
+                    
+                    
+                    ## tumors or cell-lines
+                    HTML("<h4>Select Sample type</h4>"),
+                    uiOutput("sampleSelectorC6"),
+                    shiny::tags$hr(),
+                    
+                    ## action button
+                    shiny::actionButton("refreshPlotC6",label="Refresh Results",class='btn btn-primary')
+                    )
+                    ),
+           column(10,
+                  fluidRow(
+                    ## plot window 
+                    column(10,                 
+                           tabsetPanel(
+                             ## view type 1
+                             tabPanel("Detailed Aberration Profiles",
+                                      HTML("<h4>Detailed abberation profile of uploaded genes acoss Pan-Cancers"),
+                                      downloadButton('downloadPlotDAPlotC6', 'Download', class='btn btn-link'),
+                                      HTML("</h4>"),
+                                      plotOutput("distPlot2C6")),
+                             ## view type 2
+                             tabPanel("Summary Heat-Map",
+                                      HTML("<h4>Summary heatmap of uploaded genes acoss Pan-Cancers"),
+                                      downloadButton('downloadPlotHPlotC6', 'Download', class='btn btn-link'),
+                                      HTML("</h4>"),
+                                      plotOutput("distPlotC6")),
+                             #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
+                             tabPanel("Scores",
+                                      HTML("<h4>Uploaded genes with scores"),
+                                      downloadButton('downloadDataC6', 'Download', class='btn btn-link'),
+                                      HTML("</h4>"),
+                                      ## cancer type select
+                                      HTML("<p>Select to view detail scores on scecific cancer type: "),
+                                      uiOutput("cancerSelectorC6"),
+                                      HTML("</p>"),
+                                      shiny::tags$hr(),   
+                                      
+                                      #uiOutput("cancerSelectorC1Sub"),
+                                      shiny::dataTableOutput('genesResTableC6'))
+                           )
+                    )
+                  )
+           )
+                  )    
+           ),
+
+
              ## comp2
-             tabPanel("Single Gene in Cancers",
+             tabPanel("Single Gene Boxplots",
                       fluidRow(
                         column(12,
                                HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Display/Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
                                     </div>
                                     ")
                         )
@@ -201,7 +312,7 @@ shinyUI(
                                  shiny::tags$hr(),
                                
                                  ## action button
-                                 shiny::actionButton("refreshPlotC2",label="Display/Refresh Results",class='btn btn-primary')
+                                 shiny::actionButton("refreshPlotC2",label="Refresh Results",class='btn btn-primary')
                                )   
                         ),
                         column(10,
@@ -227,12 +338,12 @@ shinyUI(
              ),
              
              ## comp3
-             tabPanel("Genes across Choromosomes",
+             tabPanel("Genomic Regions",
                       fluidRow(
                         column(12,
                                HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Display/Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
                                     </div>
                                     ")
                         )
@@ -257,7 +368,7 @@ shinyUI(
                                    shiny::tags$hr(),
                                    
                                    ## action button
-                                   shiny::actionButton("refreshPlotC3",label="Display/Refresh Results",class='btn btn-primary')                         
+                                   shiny::actionButton("refreshPlotC3",label="Refresh Results",class='btn btn-primary')                         
                                  )     
                         ),
                         column(10,
@@ -286,7 +397,7 @@ shinyUI(
                         column(12,
                                HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Display/Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
                                     </div>
                                     ")
                         )
@@ -309,7 +420,7 @@ shinyUI(
                                  shiny::tags$hr(),
                                  
                                  ## action button
-                                 shiny:: actionButton("refreshPlotC4",label="Display/Refresh Results",class='btn btn-primary')                         
+                                 shiny:: actionButton("refreshPlotC4",label="Refresh Results",class='btn btn-primary')                         
                                )
                       ),
                       column(10,
@@ -326,7 +437,7 @@ shinyUI(
              ),
              
              ## comp5
-             tabPanel("Summary statistics",
+             tabPanel("Summary",
                       fluidRow(
                           column(3),
                             column(6,
