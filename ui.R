@@ -70,8 +70,8 @@ shinyUI(
                                                  column(3, class="frontPageBottomPanelColumn",
                                                             fluidRow(
                                                               HTML("<h4>Publication</h4>"),
-                                                              HTML("<p>If you use this web application for data analysis in a publication, 
-                                                              please cite ... </p>"),
+                                                              HTML("<p>If you use OncoScape in a publication, please cite:
+                                                              Schlicker A, Michaut M, Rahman R and Wessels LFA, Exploring the cancer aberration landscape by genomic data fusion (submitted) </p>"),
                                                               tags$head(tags$style("
                                                                 .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
                                                                 )   
@@ -266,7 +266,7 @@ shinyUI(
              ),
              
         ## comp6
-        tabPanel("User Genes", 
+        tabPanel("User-defined Genes", 
          
          fluidRow(
            column(2,
@@ -565,22 +565,22 @@ shinyUI(
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 1"),
                                    shiny::tags$hr(),
-                                   shiny::tags$p("Number of genes with scores greater of equal to 1. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   shiny::tags$p("Number of genes with respective scores greater or equal to 1. In case of the combined score (calculated as oncogene score (OG) - tumor suppressor gene score (TS)), the absolute value was taken into account."),
                                    shiny::dataTableOutput('genesCutoff1C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 2"),
                                    shiny::tags$hr(),
-                                   shiny::tags$p("Number of genes with scores greater of equal to 2. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   shiny::tags$p("Number of genes with respective scores greater or equal to 2. In case of the combined score (calculated as oncogene score (OG) - tumor suppressor gene score (TS)), the absolute value was taken into account."),
                                    shiny::dataTableOutput('genesCutoff2C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 3"),
                                    shiny::tags$hr(),
-                                   shiny::tags$p("Number of genes with scores greater of equal to 3. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   shiny::tags$p("Number of genes with respective scores greater or equal to 3. In case of the combined score (calculated as oncogene score (OG) - tumor suppressor gene score (TS)), the absolute value was taken into account."),
                                    shiny::dataTableOutput('genesCutoff3C5'),
                                    shiny::tags$br(),
                                    shiny::tags$h3("Number of genes with score >= 4"),
                                    shiny::tags$hr(),
-                                   shiny::tags$p("Number of genes with scores greater of equal to 4. In case of the combined score (calculated as oncogene score (OG) ? tumor suppressor gene score (TS)), the absolute value was taken into account."),
+                                   shiny::tags$p("Number of genes with respective scores greater or equal to 4. In case of the combined score (calculated as oncogene score (OG) - tumor suppressor gene score (TS)), the absolute value was taken into account."),
                                    shiny::dataTableOutput('genesCutoff4C5'),
                                    shiny::tags$br()
                                    
@@ -599,31 +599,31 @@ shinyUI(
                               shiny::tags$p("Tumor samples are compared with normal samples to identify differences. If a gene is found to be altered, this gene receives a score of 1 for this data type and else a score of 0. Details on the scoring for each data type are given below. Activating and inactivating alterations are both scored independently for each gene, and the sums of the activating and inactivating aberrations yielded an oncogene score and a tumor suppressor gene score, respectively. Additionally, we calculated the difference between oncogene score and tumor suppressor gene score, referred to as overall score, and the sum between oncogene and tumor suppressor scores, referred to as aberration score. Genes were then ranked based on one of these scores to be classified as potential new oncogene or tumor suppressor gene. Pathway alteration scores were calculated by averaging scores for all genes assigned to the same pathway. Aberrations in cancer cell lines were assessed by comparing the cell lines with normal samples available from TCGA using the same approach as for tumor samples."),
                               shiny::tags$br(),
                               
-                              shiny::tags$h3("Gene expression analysis"),
+                              shiny::tags$h3("How are gene expression aberrations scored?"),
                               shiny::tags$hr(),
                               shiny::tags$p("Normalized gene expression data for tumor and normal samples, either from an Illumina sequencing platform or Agilent arrays depending on availability for each cancer type, was obtained from TCGA. We compared expression levels for each gene between tumors and matched normal samples using paired Wilcoxon tests and corrected nominal p-values using the Benjamini-Hochberg procedure. If a gene was significantly (FDR < 0.05) expressed (lower or higher) in tumor samples, it received a +1 towards tumor suppressor or oncogene score, respectively."),
                               shiny::tags$br(),
                               
-                              shiny::tags$h3("Copy-number analysis"),
+                              shiny::tags$h3("How are copy-number changes scored?"),
                               shiny::tags$hr(),
                               shiny::tags$p("Segmented DNA copy-number data for tumor and normal samples were obtained using Affymetrix SNP6 arrays by TCGA. We compared log-ratio copy number values between tumor samples and matched normal samples using paired Wilcoxon tests and corrected p-values using Benjamini-Hochberg’s procedure. For genes with a significant difference in copy-number (FDR < 0.05), we calculated the Spearman correlation between copy-number and gene expression. A gene was scored as potential tumor suppressor or oncogene if 1) its copy-number value in tumor samples was significantly lower or higher than in normal samples and 2) the copy-number was significantly (FDR < 0.05) positively correlated with gene expression across the tumor samples."),
                               shiny::tags$br(),
                               
-                              shiny::tags$h3("DNA methylation analysis"),
+                              shiny::tags$h3("How are DNA methylation changes scored?"),
                               shiny::tags$hr(),
-                              shiny::tags$p("We analyzed DNA methylation data in a probe-wise fashion. For each probe, we compared methylation values in tumor and normal samples using unpaired Wilcoxon tests and corrected p-values using the Benjamini-Hochberg procedure. For each probe with a significant (FDR < 0.05) difference between methylation in tumor and normal samples, we computed the Spearman correlation between methylation level and expression of the genes annotated to that probe according to the Illumina annotation across all tumor samples. Correlations with FDR < 0.05 were regarded as significant. A gene was scored as tumor suppressor gene if 1) at least one associated methylation probe in the gene body exhibited significantly lower methylation in tumors and 2) the methylation was positively correlated with gene expression, or if at least one other associated methylation probe showed gain of methylation in tumors and gene expression was negatively correlated. In contrast, a gene was scored as oncogene if 1) at least one probe in the gene body showed gain of methylation and 2) was positively correlated with expression or any other associated probe exhibited lower methylation in tumors and methylation was negatively correlated with gene expression."),
+                              shiny::tags$p("We analyzed DNA methylation data in a probe-wiseuser fashion. For each probe, we compared methylation values in tumor and normal samples using unpaired Wilcoxon tests and corrected p-values using the Benjamini-Hochberg procedure. For each probe with a significant (FDR < 0.05) difference between methylation in tumor and normal samples, we computed the Spearman correlation between methylation level and expression of the genes annotated to that probe according to the Illumina annotation across all tumor samples. Correlations with FDR < 0.05 were regarded as significant. A gene was scored as tumor suppressor gene if 1) at least one associated methylation probe in the gene body exhibited significantly lower methylation in tumors and 2) the methylation was positively correlated with gene expression, or if at least one other associated methylation probe showed gain of methylation in tumors and gene expression was negatively correlated. In contrast, a gene was scored as oncogene if 1) at least one probe in the gene body showed gain of methylation and 2) was positively correlated with expression or any other associated probe exhibited lower methylation in tumors and methylation was negatively correlated with gene expression."),
                               shiny::tags$br(),
                               
                               
-                              shiny::tags$h3("Mutation analysis"),
+                              shiny::tags$h3("How are somatic mutations scores?"),
                               shiny::tags$hr(),
                               shiny::tags$p("Mutations were scored according to the 20/20 rule published by Vogelstein and colleagues. We divided mutations according to their classification into oncogene mutations (missense mutations and in frame deletion/insertions) and tumor suppressor mutations (frame-shift deletions/insertions, nonsense mutations and splice site mutations). Then, we calculated an oncogene mutation rate (OGMR) and a tumor suppressor mutation rate (TSMR) for each gene. The OGMR was defined as one minus the number of distinct oncogene mutations divided by the total number of mutations. The TSMR was defined as distinct tumor suppressor mutations divided by the number of total mutations. Genes with an OGMR > 0.2 and TSMR < 0.05 were scored as oncogene. A gene was scored as tumor suppressor if its TSMR > 0.2 or if the OGMR > 0.2 and the TSMR > 0.05. We required a minimum of five oncogene or tumor suppressor mutations in order to score a gene as oncogene or tumor suppressor, respectively."),
                               shiny::tags$br(),
                               
                               
-                              shiny::tags$h3("Analysis of shRNA knock-down screens"),
+                              shiny::tags$h3("How are data from shRNA knock-down screens scored?"),
                               shiny::tags$hr(),
-                              shiny::tags$p("Project Achilles assessed cell viability after knocking down genes using different shRNA hairpins. In order to minimize off-target effects, Project Achilles integrated knock-down results of several hairpins targeting the same gene into so called “gene solutions”, providing a cell viability score for each gene and cell line combination. We used only genes for which only a single gene solution was provided. For each gene, we derived a distribution of viability values across all cell lines. A gene was scored as potential oncogene for one cancer type if at least 25% of the cell lines for this cancer type had a knock-down viability score that was lower than the 25th percentile across all cell lines. If at least 25% of the cell lines had a knock-down viability score greater than the 75th percentile for that gene, it was scored as potential tumor suppressor gene."),
+                              shiny::tags$p("Project Achilles assessed cell viability after knocking down genes using different shRNA hairpins. In order to minimize off-target effects, Project Achilles integrated knock-down results of several hairpins targeting the same gene into so called \"gene solutions\", providing a cell viability score for each gene and cell line combination. We used only genes for which only a single gene solution was provided. For each gene, we derived a distribution of viability values across all cell lines. A gene was scored as potential oncogene for one cancer type if at least 25% of the cell lines for this cancer type had a knock-down viability score that was lower than the 25th percentile across all cell lines. If at least 25% of the cell lines had a knock-down viability score greater than the 75th percentile for that gene, it was scored as potential tumor suppressor gene."),
                               shiny::tags$br()
 
                               ),
