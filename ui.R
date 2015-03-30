@@ -390,7 +390,7 @@ shinyUI(
                              tabPanel("Scores",
                                       fluidRow(
                                         column(12,
-                                               HTML("<h4>Cancer-type-specific scores for the user genes"),
+                                               HTML("<h4>Cancer-type-specific scores for user-selected genes"),
                                                downloadButton('downloadDataC6', 'Download', class='btn btn-link'),
                                                HTML("</h4>"),
                                                ## cancer type select
@@ -600,9 +600,10 @@ shinyUI(
                                  ),
                                  column(10,
                                         HTML("<div align='left'>
-                                      <p><I>The pathway diagram is retried from <a href='http://www.kegg.jp' target='_blank'>KEGG</a>. 
-                                            Each square represents a gene product and is coloured according to the selected score for that gene 
-                                            (oncogene, tumor suppressor or combined). In the overview with all cancer types, each cancer type is shown as a 
+                                      <p><I>The pathway diagrams are retrieved from <a href='http://www.kegg.jp' target='_blank'>KEGG</a> using the 
+                                      			<a href="http://www.bioconductor.org/packages/release/bioc/html/pathview.html", target="_blank">pathview</a> package. 
+                                            Each square represents a gene family and is coloured according to the maximal absolute value of the selected score 
+                                            (oncogene, tumor suppressor or combined) for genes in this family. In the overview with all cancer types, each cancer type is shown as a 
                                             stripe in alphabetical order of the cancer type abbreviations. When you select a specific cancer type in the menu, 
                                               you can see the scores of the tumours, the cell lines, or both at the same time (stripes with tumours on the 
                                               left and cell lines on the right).
