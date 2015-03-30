@@ -161,14 +161,14 @@ shinyUI(
 #                             
 #                             conditionalPanel(
 #                               condition = "input.geneSelectionMethodC1Value == 'type3'",
-#                               shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
+#                               shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example!", class='btn btn-link')
 #                             ),
 #                             
 #                             conditionalPanel(
 #                               condition = "input.geneSelectionMethodC1Value == 'type2'",
 #                               HTML("
 #                                     <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
-#                                    Show help on Input File !
+#                                    Show help on Input File!
 #                                    </a>
 #                                     <div class='collapse' id='collapseExample'>
 #                                       <div class='well'>
@@ -193,7 +193,7 @@ shinyUI(
 #                                           selected = 3)
 #                             ),
 #                             conditionalPanel(
-#                               condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1 != 'combined.score'",
+#                               condition = "input.geneSelectionMethodC1Value == 'type1' && input.selectScoreTypeC1!= 'combined.score'",
 #                               selectInput("scoreCutoff", label = "Score cut-off", 
 #                                           choices = list(">=2" = 2, ">=3" = 3, ">=4" = 4),
 #                                           selected = 3)
@@ -223,7 +223,7 @@ shinyUI(
                                   column(12,
                                          HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots!</strong>
                                     </div>
                                     ")
                                   )
@@ -268,7 +268,7 @@ shinyUI(
                                                             HTML("<hr>"),
                                                             HTML("
                                                           <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
-                                                          Click to see table header descriptions ! 
+                                                          Click to see table header descriptions! 
                                                           </a>
                                                           <div class='collapse' id='collapseExample'>
                                                             <div class='well'>
@@ -321,14 +321,14 @@ shinyUI(
                     ),
                     conditionalPanel(
                       condition = "input.geneSelectionMethodC6Value == 'type3'",
-                      shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example !", class='btn btn-link')
+                      shiny::actionButton("actionAutoFillGeneTextArea", label = "Load an example!", class='btn btn-link')
                     ),
                     
                     conditionalPanel(
                       condition = "input.geneSelectionMethodC6Value == 'type2'",
                       HTML("
                            <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
-                           Show help on Input File !
+                           Show help on Input File!
                            </a>
                            <div class='collapse' id='collapseExample'>
                            <div class='well'>
@@ -365,7 +365,7 @@ shinyUI(
                       column(12,
                              HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                       <strong>Click on the 'Refresh Results' to populate table data and generate plots !</strong>
+                       <strong>Click on the 'Refresh Results' to populate table data and generate plots!</strong>
                        </div>
                        ")
                       )
@@ -412,7 +412,7 @@ shinyUI(
                                                HTML("<hr>"),
                                                HTML("
                                                           <a class='btn btn-link' data-toggle='collapse' href='#collapseExampleC6' aria-expanded='false' aria-controls='collapseExampleC6'>
-                                                          Click to see table header descriptions ! 
+                                                          Click to see table header descriptions! 
                                                           </a>
                                                           <div class='collapse' id='collapseExampleC6'>
                                                             <div class='well'>
@@ -463,7 +463,7 @@ shinyUI(
                               column(12,
                                      HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
                                     </div>
                                     ")
                               )
@@ -529,7 +529,7 @@ shinyUI(
                                  column(12,
                                         HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
                                     </div>
                                     ")
                                  )
@@ -594,7 +594,7 @@ shinyUI(
                                  column(12,
                                         HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots !</strong>
+                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
                                     </div>
                                     ")
                                  ),
