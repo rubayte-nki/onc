@@ -376,13 +376,13 @@ shinyUI(
                            tabsetPanel(
                              ## view type 1
                              tabPanel("Detailed Aberration Profiles",
-                                      HTML("<h4>User genes across cancer-types"),
+                                      HTML("<h4>User-selected genes across cancer-types"),
                                       downloadButton('downloadPlotDAPlotC6', 'Download', class='btn btn-link'),
                                       HTML("</h4>"),
                                       plotOutput("distPlot2C6")),
                              ## view type 2
                              tabPanel("Summary Heat-Map",
-                                      HTML("<h4>User genes across cancer-types"),
+                                      HTML("<h4>User-selected genes across cancer-types"),
                                       downloadButton('downloadPlotHPlotC6', 'Download', class='btn btn-link'),
                                       HTML("</h4>"),
                                       plotOutput("distPlotC6")),
