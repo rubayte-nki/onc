@@ -274,9 +274,22 @@ shinyUI(
                                                             <div class='well'>
                                                                 <h4>Table column descriptions</h4>
                                                                 <ul>
-                                                                    <li> <b>Genes</b>: something about the genes .. </li>
-                                                                    <li> <b>OG.Scores</b>: something about the scores .. </li>
-                                                                    <li> so on ... </li>
+                                                                    <li> <b>Genes</b>: HUGO gene symbol </li>
+                                                                    <li> <b>OG Score</b>: Oncogene score for the respective gene</li>
+                                                                    <li> <b>TS Score</b>: Tumor suppressor score for the respective gene</li>
+                                                                    <li> <b>Combined Score</b>: Combined score, calculated as oncogene score - tumor suppressor score, for the respective gene</li>
+                                                                    <li> <b>OG.Meth</b>: Indicates if the gene shows oncogene-like DNA methylation changes</li>
+                                                                    <li> <b>OG.CNA</b>: Indicates if the gene shows oncogene-like DNA copy number alterations</li>
+                                                                    <li> <b>OG.Mut</b>: Indicates if the gene shows oncogene-like somatic mutation profiles</li>
+                                                                    <li> <b>OG.shRNA</b>: Indicates if the gene shows oncogene-like changes after shRNA knock-down</li>
+                                                                    <li> <b>OG.Expr</b>: Indicates if the gene shows oncogene-like gene expression changes</li>
+                                                                    <li> <b>TS.Meth</b>: Indicates if the gene shows tumor suppressor-like DNA methylation changes</li>
+                                                                    <li> <b>TS.CNA</b>: Indicates if the gene shows tumor suppressor-like DNA copy number alterations</li>
+                                                                    <li> <b>TS.Mut</b>: Indicates if the gene shows tumor suppressor-like somatic mutation profiles</li>
+                                                                    <li> <b>TS.shRNA</b>: Indicates if the gene shows tumor suppressor-like changes after shRNA knock-down</li>
+                                                                    <li> <b>TS.Expr</b>: Indicates if the gene shows tumor suppressor-like gene expression changes</li>
+                                                                    <li> <b>Cancer</b>: Cancer type showing the association</li>
+                                                                    <li> <b>External links</b>: Link to the GeneCards entry for the respective gene</li>
                                                                 </ul>
                                                               </div>
                                                             </div>
