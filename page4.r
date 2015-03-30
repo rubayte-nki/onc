@@ -106,20 +106,20 @@ generatePathview2 = function(updateProgress = NULL,pathway, cancer,sample,scores
     
     # Get the score matrix and combine them if necessary
     if (what == "tcga") {
-      scoreMat <- tcgaScoreMat[[cancer]]
+      scoreMat <- tcgaScoreMat[[cancer]][[scores]]
       limit = c(min(scoreMat, na.rm=TRUE), max(scoreMat, na.rm=TRUE))  
     } else if (what == "ccle") {
-      scoreMat <- ccleScoreMat[[cancer]]
+      scoreMat <- ccleScoreMat[[cancer]][[scores]]
       limit = c(min(scoreMat, na.rm=TRUE), max(scoreMat, na.rm=TRUE))  
     } else {
-      if (nrow(tcgaScoreMat[[cancer]]) == nrow(ccleScoreMat[[cancer]]))
+      if (nrow(tcgaScoreMat[[cancer]][[scores]]) == nrow(ccleScoreMat[[cancer]][[scores]]))
       {
-        scoreMat = cbind(tcgaScoreMat[[cancer]],ccleScoreMat[[cancer]])
+        scoreMat = cbind(tcgaScoreMat[[cancer]][[scores]],ccleScoreMat[[cancer]][[scores]])
         limit = c(min(scoreMat[,c(2,3)], na.rm=TRUE), max(scoreMat[,c(2,3)], na.rm=TRUE))
       }else{
-        tmat <- data.frame(tcgaScoreMat[[cancer]],rownames(tcgaScoreMat[[cancer]]))
+        tmat <- data.frame(tcgaScoreMat[[cancer]][[scores]],rownames(tcgaScoreMat[[cancer]][[scores]]))
         colnames(tmat) <- c(paste("tumor.",cancer,sep=""),"gene")
-        cmat <- data.frame(ccleScoreMat[[cancer]],rownames(ccleScoreMat[[cancer]]))
+        cmat <- data.frame(ccleScoreMat[[cancer]][[scores]],rownames(ccleScoreMat[[cancer]][[scores]]))
         colnames(cmat) <- c(paste("cellline.",cancer,sep=""),"gene")
         scoreMat <- plyr::join(tmat,cmat,type="inner",by="gene")
         rownames(scoreMat) <- scoreMat[,2]

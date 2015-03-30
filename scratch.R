@@ -206,9 +206,13 @@ for(c in cancers)
   if (c == "All")
   {
     temp = names(tcgaResults)
-    tcgaScoreMat[[c]] = pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "combined.score")
+    tcgaScoreMat[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "combined.score"),
+    												 og.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "og.score"),
+    												 ts.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "ts.score"))
   }else{
-    tcgaScoreMat[[c]] = pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "combined.score")
+    tcgaScoreMat[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "combined.score"),
+    												 og.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "og.score"),
+    												 ts.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "ts.score"))
   }
 }
 
@@ -221,9 +225,13 @@ for(c in cancers)
   if (c == "All")
   {
     temp = names(ccleResults)
-    ccleScoreMat[[c]] = pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "combined.score")
+    ccleScoreMat[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "combined.score"),
+    												 og.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "og.score"),
+    												 ts.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "ts.score"))
   }else{
-    ccleScoreMat[[c]] = pathviewMat(ccleResults[intersect(c, names(ccleResults))], "combined.score")
+    ccleScoreMat[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "combined.score"),
+    												 og.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "og.score"),
+    												 ts.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "ts.score"))
   }
 }
 
