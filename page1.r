@@ -102,7 +102,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   
   if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
   {
-    return(list(genecounts="auto"))
+    return(list(genecounts=400))
   }
   
   df = NULL
@@ -196,7 +196,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   
   if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
   {
-    return(list(genecounts="auto"))
+    return(list(genecounts=400))
   }
   genecounts = 0
   

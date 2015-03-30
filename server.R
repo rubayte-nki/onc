@@ -1,14 +1,3 @@
-
-# This is the server logic for a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
-
-
-#initializeApp <- function(updateProgress=NULL)
-#{
-  
 library(shiny)
 library(shinysky)
 library(ggplot2)
@@ -185,7 +174,7 @@ shinyServer(function(input, output, session) {
       if (!(is.null(userfile)))
       {
         userdata <- read.delim(userfile$datapath,sep="\t")
-        dFHeight = (nrow(userdata)*20 ) + 100      
+        dFHeight = (nrow(userdata)*20 ) + 300      
       }else{
         return("auto")
       }
@@ -195,7 +184,7 @@ shinyServer(function(input, output, session) {
         genelist <- as.data.frame(strsplit(input$geneListValuesC6,',')[[1]])
         genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
         genelist <- as.data.frame(genelist)
-        dFHeight = (nrow(genelist)*20 ) + 100        
+        dFHeight = (nrow(genelist)*20 ) + 300        
       }else{
         return("auto")
       }      
@@ -439,40 +428,21 @@ shinyServer(function(input, output, session) {
   }, height = setHeightHPlot)
   
   ## downloads
+  ## table
   output$downloadData <- downloadHandler(
     filename = function() {
       paste('data-', Sys.Date(), '.tsv', sep="")
     },
     content <- function(filename){
       
-      if (input$geneSelectionMethodC1Value == "type1")
-      {    
-        write.table(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
+    write.table(geneDataFrameResultSet(NULL,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL), 
                  sep="\t",filename, row.names = FALSE, quote=FALSE) 
-        
-      }else if (input$geneSelectionMethodC1Value == "type2")
-      {
-        userfile <- input$geneListUploadC1
-        if (!(is.null(userfile)))
-        {
-          userdata <- read.delim(userfile$datapath,sep="\t")
-          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
-                    sep="\t",filename, row.names = FALSE,quote=FALSE)          
-        }
-      }else{
-        genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
-        genelist <- gsub("[\r\n]","",genelist[,1])
-        genelist <- as.data.frame(genelist)
-        colnames(genelist) <-c ("uploadedGenes")
-        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
-                    sep="\t",filename, row.names = FALSE,quote=FALSE)                        
-        }
-      }
+
       
     }
   )
 
+  ## detail abberation plot
   output$downloadPlotDAPlot <- downloadHandler(
     filename = function() {
       paste('plot-', Sys.Date(), '.jpeg', sep="")
@@ -483,38 +453,15 @@ shinyServer(function(input, output, session) {
                        res = 100, units = "px")
       }
       
-      if (input$geneSelectionMethodC1Value == "type1")
-      {
-        g <- arrangeGrob(comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['daplot']])#, 
+
+      g <- arrangeGrob(comp1view2Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['daplot']])#, 
                          #comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL))
-        ggsave(file, plot = g, device = device)
-      }else if (input$geneSelectionMethodC1Value == "type2")
-      {
-        userfile <- input$geneListUploadC1
-        if (!(is.null(userfile)))
-        {
-          userdata <- read.delim(userfile$datapath,sep="\t")
-          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
-                           comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata))
-          ggsave(file,plot = g, device = device)
-        }
-      }else{
-        genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
-        genelist <- gsub("[\r\n]","",genelist[,1])
-        genelist <- as.data.frame(genelist)
-        colnames(genelist) <-c ("uploadedGenes")
-        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
-                           comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist))
-          ggsave(file, plot = g, device = device)
-        }
-        
-      }  
+      ggsave(file, plot = g, device = device)  
       
     }
   )
 
-
+  ## summary heatmap
   output$downloadPlotHPlot <- downloadHandler(
     filename = function() {
       paste('plot-', Sys.Date(), '.jpeg', sep="")
@@ -525,32 +472,8 @@ shinyServer(function(input, output, session) {
                        res = 100, units = "px")
       }
     
-      if (input$geneSelectionMethodC1Value == "type1")
-      {
-        g <- arrangeGrob(comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['hplot']])
-        ggsave(file, plot = g, device = device)
-      }else if (input$geneSelectionMethodC1Value == "type2")
-      {
-        userfile <- input$geneListUploadC1
-        if (!(is.null(userfile)))
-        {
-          userdata <- read.delim(userfile$datapath,sep="\t")
-          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata),
-                           comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,userdata))
-          ggsave(file,plot = g, device = device)
-        }
-      }else{
-        genelist <- as.data.frame(strsplit(input$geneListValuesC1,',')[[1]])
-        genelist <- gsub("[\r\n]","",genelist[,1])
-        genelist <- as.data.frame(genelist)
-        colnames(genelist) <-c ("uploadedGenes")
-        if (nrow(genelist)>0 && genelist[1,1] != "Copy Paste your genes here separated by comma"){
-          g <- arrangeGrob(comp1view2Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist), 
-                         comp1view1Plot(updateProgress,-10,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,genelist))
-          ggsave(file, plot = g, device = device)
-        }
-      
-      }  
+      g <- arrangeGrob(comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['hplot']])
+      ggsave(file, plot = g, device = device)  
     
     }
   )
@@ -821,6 +744,113 @@ shinyServer(function(input, output, session) {
   
   
   }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15, searching=FALSE)
+  )
+
+
+  
+  ## downloads
+  ## detail abberation plot
+  output$downloadPlotDAPlotC6 <- downloadHandler(
+    filename = function() {
+      paste('plot-', Sys.Date(), '.jpeg', sep="")
+    },
+    content <- function(file){
+      device <- function(..., width, height) {
+        grDevices::png(..., width = 1000, height = getHeightUserPlotC6(),
+                     res = 100, units = "px")
+      }
+    
+      if (input$geneSelectionMethodC6Value == "type2")
+      {
+        userfile <- input$geneListUploadC6
+        if (!(is.null(userfile)))
+        {
+          userdata <- read.delim(userfile$datapath,sep="\t")
+          g <- arrangeGrob(
+            comp1view2Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,userdata)[['daplot']])
+          ggsave(file,plot = g, device = device)
+        }
+      }else{
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC6),',')[[1]])
+        genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
+        genelist <- as.data.frame(genelist)
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != ""){
+          g <- arrangeGrob(
+            comp1view2Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,genelist)[['daplot']])
+          ggsave(file, plot = g, device = device)
+        }
+        
+      }  
+      
+    }
+  )
+
+  ## summary heatmap
+  output$downloadPlotHPlotC6 <- downloadHandler(
+    filename = function() {
+      paste('plot-', Sys.Date(), '.jpeg', sep="")
+    },
+    content <- function(file){
+      device <- function(..., width, height) {
+        grDevices::png(..., width = 1000, height = getHeightUserPlotC6(),
+                       res = 100, units = "px")
+      }
+    
+      if (input$geneSelectionMethodC6Value == "type2")
+      {
+        userfile <- input$geneListUploadC6
+        if (!(is.null(userfile)))
+        {
+          userdata <- read.delim(userfile$datapath,sep="\t")
+          g <- arrangeGrob(
+            comp1view1Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,userdata)[['hplot']])
+          ggsave(file,plot = g, device = device)
+        }
+      }else{
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC6),',')[[1]])
+        genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
+        genelist <- as.data.frame(genelist)
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != ""){
+          g <- arrangeGrob(
+            comp1view1Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,genelist)[['hplot']])
+          ggsave(file, plot = g, device = device)
+        }
+        
+      }  
+      
+    }
+  )
+
+  ## table
+  output$downloadDataC6 <- downloadHandler(
+    filename = function() {
+      paste('data-', Sys.Date(), '.tsv', sep="")
+    },
+    content <- function(filename){
+    
+      if (input$geneSelectionMethodC6Value == "type2")
+      {
+        userfile <- input$geneListUploadC6
+        if (!(is.null(userfile)))
+        {
+          userdata <- read.delim(userfile$datapath,sep="\t")
+          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC6,input$selectScoreTypeC6,input$sampleSelectorC6,userdata),
+                      sep="\t",filename, row.names = FALSE,quote=FALSE)          
+        }
+      }else{
+        genelist <- as.data.frame(strsplit(isolate(input$geneListValuesC6),',')[[1]])
+        genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
+        genelist <- as.data.frame(genelist)
+        colnames(genelist) <-c ("uploadedGenes")
+        if (nrow(genelist)>0 && genelist[1,1] != ""){
+          write.table(geneDataFrameResultSet(updateProgress,-10,input$cancerSelectorChoiceC6,input$selectScoreTypeC6,input$sampleSelectorC6,genelist), 
+                      sep="\t",filename, row.names = FALSE,quote=FALSE)                        
+        }
+      }
+    
+    }
   )
 
 
