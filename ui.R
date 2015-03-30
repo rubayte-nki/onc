@@ -7,7 +7,7 @@ shinyUI(
   
   shinyUI(navbarPage(title="", windowTitle ="OncoScape",header="",
 
-             ## comp0
+            ## comp0
              tabPanel("OncoScape",
                           fluidRow(
                             column(2),
@@ -32,7 +32,7 @@ shinyUI(
                                                    oncogene score minus tumor suppressor score. OncoScape can be applied to the comparison of any arbitrary 
                                                    groups of samples, such as: (A) Tumors vs. Normals (B) Cell-lines vs. Normals (C) Samples sensitive
                                                    to treatment vs. resistant ones (D) Samples with mutations in gene X vs. wild type ones 
-                                                   (E) Diferent cancer subtypes</font></p>"),
+                                                   (E) Diferent cancer subtypes.</font></p>"),
                                      #shiny::tags$p("OncoScape can be applied to the comparison of any arbitrary groups of samples, such as:"),
                                      #shiny::tags$ul(shiny::tags$li("tumors vs. normals"),
                                     #                shiny::tags$li("cell lines vs. normals"),
@@ -41,7 +41,7 @@ shinyUI(
                                     #                shiny::tags$li("different cancer subtypes")),
                                      ## shiny::tags$p("This web page provides access to the results of our comprehensive analysis of tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE)."),
                                      HTML("<p class='frontPage' ><font color=\"#FFFFFF\">This web page provides access to the results of our comprehensive analysis of 
-                                          tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data was obtained from The Cancer 
+                                          tumor samples from 11 cancer types and cell lines from 10 cancer types. Tumor data were obtained from The Cancer 
                                           Genome Atlas (TCGA) and cell line data from the Cancer Cell Line Encyclopedia (CCLE). The analyses are presented in the 
                                           following publication: <I>Exploring the cancer aberration landscape by genomic data fusion, Andreas Schlicker, 
                                           Magali Michaut, Rubayte Rahman and  Lodewyk FA Wessels (submitted)</I></font></p>"),
@@ -74,7 +74,7 @@ shinyUI(
                                                      column(3,class="frontPageBottomPanelColumn",
                                                             fluidRow(
                                                               HTML("<h4>Contacts</h4>"),
-                                                              HTML("<p>If you have any questions or suggestions regarding OncoScape or this app, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
+                                                              HTML("<p>If you have any questions or suggestions regarding OncoScape, please contact Lodewyk Wessels (l.wessels@nki.nl).</p>"),
                                                               tags$head(tags$style("
                                                                 .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
                                                               )   
@@ -84,7 +84,7 @@ shinyUI(
                                                      column(3,class="frontPageBottomPanelColumn",
                                                             fluidRow(
                                                               HTML("<h4>Shiny WebApp</h4>"),
-                                                              HTML("<p>This shiny web app is developed & hosted by Research - IT department (contact: r.rahman@nki.nl) at the  <a href='http://www.nki.nl/' target='_blank'>Netherlands Cancer Institute - NKI</a>."),
+                                                              HTML("<p>This shiny web app is developed & hosted by Research - IT department (r.rahman@nki.nl) at the  <a href='http://www.nki.nl/' target='_blank'>Netherlands Cancer Institute - NKI</a>."),
                                                               tags$head(tags$style("
                                                                 .frontPageBottomPanelColumn{margin: 0.5cm 0.5cm 0.5cm 0.5cm;}"
                                                               )   
@@ -234,23 +234,57 @@ shinyUI(
                                         tabsetPanel(
                                           ## view type 1
                                           tabPanel("Detailed Aberration Profiles",
-                                                   HTML("<h4>Detailed abberation profile of top candidate genes acoss Pan-Cancers"),
+                                                   HTML("<h4>Cancer-type-specific top candidate genes"),
                                                    downloadButton('downloadPlotDAPlot', 'Download', class='btn btn-link'),
                                                    HTML("</h4>"),
                                                    plotOutput("distPlot2")),
                                           ## view type 2
                                           tabPanel("Summary Heat-Map",
-                                                   HTML("<h4>Summary heatmap of top candidate genes acoss Pan-Cancers"),
+                                                   HTML("<h4>Cancer-type-specific top candidate genes"),
                                                    downloadButton('downloadPlotHPlot', 'Download', class='btn btn-link'),
                                                    HTML("</h4>"),
                                                    plotOutput("distPlot")),
                                           #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
                                           tabPanel("Scores",
-                                                   HTML("<h4>Top candidate genes with scores"),
-                                                   downloadButton('downloadData', 'Download', class='btn btn-link'),
-                                                   HTML("</h4>"),
-                                                   #uiOutput("cancerSelectorC1Sub"),
-                                                   dataTableOutput('genesResTable'))
+                                                   fluidRow(
+                                                     column(12,
+                                                            HTML("<h4>Cancer-type-specific top candidate genes"),
+                                                            downloadButton('downloadData', 'Download', class='btn btn-link'),
+                                                            HTML("</h4>")
+                                                            )
+                                                    # column(6,
+                                                    #    HTML("</br><div align='center' class='alert alert-info alert-dismissible' role='alert'>
+                                                    #        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                                    #         <strong>Table header definitions are listed below.</strong>
+                                                    #          </div>")
+                                                     #)
+                                                     ),
+                                                   fluidRow(column(12,
+                                                                   dataTableOutput('genesResTable')
+                                                                   )
+                                                    ),
+                                                   fluidRow(
+                                                     column(12,
+                                                            HTML("<hr>"),
+                                                            HTML("
+                                                          <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+                                                          Click to see table header descriptions ! 
+                                                          </a>
+                                                          <div class='collapse' id='collapseExample'>
+                                                            <div class='well'>
+                                                                <h4>Table column descriptions</h4>
+                                                                <ul>
+                                                                    <li> <b>Genes</b>: something about the genes .. </li>
+                                                                    <li> <b>OG.Scores</b>: something about the scores .. </li>
+                                                                    <li> so on ... </li>
+                                                                </ul>
+                                                              </div>
+                                                            </div>
+                                                            ")
+                                                      )
+                                                     )
+                                                    #uiOutput("cancerSelectorC1Sub"),
+                                              )
                                         )
                                  )
                               )
@@ -265,7 +299,7 @@ shinyUI(
            column(2,
                   wellPanel(                    
                     ## gene selection criteria
-                    HTML("<h4>Select a Method for your Genes</h4>"),
+                    HTML("<h4>Gene Upload Method</h4>"),
                     uiOutput("geneSelectionMethodC6"),
                     conditionalPanel(
                       condition = "input.geneSelectionMethodC6Value == 'type3'",
@@ -329,29 +363,58 @@ shinyUI(
                            tabsetPanel(
                              ## view type 1
                              tabPanel("Detailed Aberration Profiles",
-                                      HTML("<h4>Detailed abberation profile of uploaded genes acoss Pan-Cancers"),
+                                      HTML("<h4>User genes across cancer-types"),
                                       downloadButton('downloadPlotDAPlotC6', 'Download', class='btn btn-link'),
                                       HTML("</h4>"),
                                       plotOutput("distPlot2C6")),
                              ## view type 2
                              tabPanel("Summary Heat-Map",
-                                      HTML("<h4>Summary heatmap of uploaded genes acoss Pan-Cancers"),
+                                      HTML("<h4>User genes across cancer-types"),
                                       downloadButton('downloadPlotHPlotC6', 'Download', class='btn btn-link'),
                                       HTML("</h4>"),
                                       plotOutput("distPlotC6")),
                              #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
                              tabPanel("Scores",
-                                      HTML("<h4>Uploaded genes with scores"),
-                                      downloadButton('downloadDataC6', 'Download', class='btn btn-link'),
-                                      HTML("</h4>"),
-                                      ## cancer type select
-                                      HTML("<p>Select to view detail scores on scecific cancer type: "),
-                                      uiOutput("cancerSelectorC6"),
-                                      HTML("</p>"),
-                                      shiny::tags$hr(),   
-                                      
-                                      #uiOutput("cancerSelectorC1Sub"),
-                                      shiny::dataTableOutput('genesResTableC6'))
+                                      fluidRow(
+                                        column(12,
+                                               HTML("<h4>Cancer-type-specific scores for the user genes"),
+                                               downloadButton('downloadDataC6', 'Download', class='btn btn-link'),
+                                               HTML("</h4>"),
+                                               ## cancer type select
+                                               HTML("<p>Select to view detail scores on scecific cancer type: "),
+                                               uiOutput("cancerSelectorC6"),
+                                               HTML("</p>"),
+                                               shiny::tags$hr()   
+                                               
+                                        )
+                                      ),
+                                      fluidRow(
+                                        column(12,
+                                               #uiOutput("cancerSelectorC1Sub"),
+                                               shiny::dataTableOutput('genesResTableC6')
+                                               )
+                                      ),
+                                      fluidRow(
+                                        column(12,
+                                               HTML("<hr>"),
+                                               HTML("
+                                                          <a class='btn btn-link' data-toggle='collapse' href='#collapseExampleC6' aria-expanded='false' aria-controls='collapseExampleC6'>
+                                                          Click to see table header descriptions ! 
+                                                          </a>
+                                                          <div class='collapse' id='collapseExampleC6'>
+                                                            <div class='well'>
+                                                                <h4>Table column descriptions</h4>
+                                                                <ul>
+                                                                    <li> <b>Genes</b>: something about the genes .. </li>
+                                                                    <li> <b>OG.Scores</b>: something about the scores .. </li>
+                                                                    <li> so on ... </li>
+                                                                </ul>
+                                                              </div>
+                                                            </div>
+                                                            ")
+                                        )
+                                     )                                      
+                                    )
                            )
                     )
                   )
@@ -521,6 +584,18 @@ shinyUI(
                                         <strong>Click on the 'Refresh Results' to generate plots !</strong>
                                     </div>
                                     ")
+                                 ),
+                                 column(10,
+                                        HTML("<div align='left'>
+                                      <p><I>The pathway diagram is retried from <a href='http://www.kegg.jp' target='_blank'>KEGG</a>. 
+                                            Each square represents a gene product and is coloured according to the selected score for that gene 
+                                            (oncogene, tumor suppressor or combined). In the overview with all cancer types, each cancer type is shown as a 
+                                            stripe in alphabetical order of the cancer type abbreviations. When you select a specific cancer type in the menu, 
+                                              you can see the scores of the tumours, the cell lines, or both at the same time (stripes with tumours on the 
+                                              left and cell lines on the right).
+                                      </I></p>
+                                    </div>
+                                    ")
                                  )
                                ),
                                
@@ -583,7 +658,7 @@ shinyUI(
                       ),
 
             ## comp7
-            tabPanel("FAQ",
+            tabPanel("FAQ",value='faq',
                      fluidRow(
                        column(3),
                        column(6,
@@ -624,7 +699,6 @@ shinyUI(
                        )
               )
                       
-
           )
   
     ))

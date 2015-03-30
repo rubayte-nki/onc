@@ -354,7 +354,7 @@ shinyServer(function(input, output, session) {
           #geneDataFrameResultSet(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)
         }
     })    
-  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15,searching=FALSE)
+  }, escape = FALSE,options = list(lengthMenu = list(c(5, 10, 15, 25, 50, -1), list('5', '10', '15', '25', '50', 'All')), pageLength = 10,searching=FALSE)
     ##                               columnDefs = list(list(targets = ncol(restable) -1 , searchable = FALSE)))
   )
   
@@ -495,7 +495,7 @@ shinyServer(function(input, output, session) {
     }
     if (input$actionAutoFillGeneTextArea > 0)
     {
-      copyPastedGenes <- "ATM,ZNF3"
+      copyPastedGenes <- "EGFR,BOP1,TRPC4AP,RBM39,VKORC1L1,TM9SF4,PUF60,CPSF1,COPA,BUD31,RB1,EFHA2,TSC22D1,PTK2B,MTUS1,MSRA,IQGAP2,SYNE2,PITPNM3,FZD3" ## "ATM,ZNF3"
     }
     switch(input$geneSelectionMethodC6Value,
            "type2" = fileInput('geneListUploadC6', 'Upload Gene List File',accept = c(".tsv")),
@@ -743,7 +743,7 @@ shinyServer(function(input, output, session) {
   })    
   
   
-  }, escape = FALSE,options = list(lengthMenu = list(c(5, 15, 25, 50, -1), list('5', '15', '25', '50', 'All')), pageLength = 15, searching=FALSE)
+  }, escape = FALSE,options = list(lengthMenu = list(c(5, 10, 15, 25, 50, -1), list('5', '10' , '15', '25', '50', 'All')), pageLength = 10, searching=FALSE)
   )
 
 
