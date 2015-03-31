@@ -64,7 +64,7 @@ plotHeatmapPage1 = function(results, scoreType=c("combined.score", "ts.score", "
 ##' @param results a subsetted data.frame as returned by page1DataFrame()
 ##' @return the ggplot2 object with the plot for view 2 of page 1
 ##' @author Andreas Schlicker
-plotCategoryOverview = function(results) {
+plotCategoryOverview = function(results,iniScore) {
 	result.df = results
 	result.df$score.type = factor(result.df$score.type, levels=c("CNA", "Expr", "Meth", "Mut", "shRNA", "Combined"))
 	result.df$gene <- factor(result.df$gene, levels=unique(as.character(result.df$gene)))
@@ -76,7 +76,7 @@ plotCategoryOverview = function(results) {
 	result.df[which(is.na(result.df[, 2]) | result.df[, 2] == "0"), 2] = "NONE"
 	
 	#ggplot(subset(result.df, score.type != "combined" & gene %in% topgenes), aes(x=score.type, y=gene)) + 
-	ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) +  #coord_flip()  +
+	dap <- ggplot(subset(result.df, score.type != "Combined"), aes(x=score.type, y=gene)) +  #coord_flip()  +
 	geom_tile(aes(fill=score), color="white", size=0.7) +
 	scale_fill_manual(values=c(NONE="white", CNA="#888888", Expr="#E69F00", Meth="#56B4E9", Mut="#009E73", shRNA="#F0E442"), 
 		          breaks=c("CNA", "Expr", "Meth", "Mut", "shRNA"), labels = c("CNA","Expr","Meth","Mut","Achilles (shRNA)")) +
@@ -90,9 +90,11 @@ plotCategoryOverview = function(results) {
 	      axis.title.x=element_text(color="gray30", size=10, face="bold"),
 	      strip.text.x=element_text(color="gray30", size=10, face="bold"),
 	      legend.text=element_text(color="gray30", size=10, face="bold"),
-	      legend.title=element_blank(),
+	      #legend.title=element_blank(),
 	      legend.position="top")
 	#)
+  dap <- dap + labs(title=paste('Aberrations contributing to ',iniScore,sep=""))
+  dap
 }
 
 ##' main call to comp1 plots
@@ -199,7 +201,17 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     return(list(genecounts=400))
   }
   genecounts = 0
-  
+  scoreText = ""
+  ## map score text for ploting
+  if (score == 'og.score')
+  {
+    scoreText = "oncogene score"  
+  }else if (score == "ts.score")
+  {
+    scoreText = "tumor suppressor score"
+  }else{
+    scoreText = "combined score"
+  }
   
   if (sample == 'tumors'){
     if(score == 'og.score'){
@@ -229,7 +241,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        daplot <- plotCategoryOverview(resultsSub)
+        daplot <- plotCategoryOverview(resultsSub,scoreText)
         genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
@@ -264,7 +276,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        daplot <- plotCategoryOverview(resultsSub)
+        daplot <- plotCategoryOverview(resultsSub,scoreText)
         genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
@@ -307,7 +319,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- rbind(temp2,temp,res)
         rm(temp)
         rm(temp2)
-        daplot <- plotCategoryOverview(res)
+        daplot <- plotCategoryOverview(res,scoreText)
         genecounts <- length(unique(res$gene))
       }else{
         rm(temp)
@@ -345,7 +357,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        daplot <- plotCategoryOverview(resultsSub)
+        daplot <- plotCategoryOverview(resultsSub,scoreText)
         genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
@@ -380,7 +392,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         ## call plot function
-        daplot <- plotCategoryOverview(resultsSub)
+        daplot <- plotCategoryOverview(resultsSub,scoreText)
         genecounts <- length(unique(resultsSub$gene))
       }else{
         rm(temp)
@@ -423,7 +435,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         res <- rbind(temp2,temp,res)
         rm(temp)
         rm(temp2)
-        daplot <- plotCategoryOverview(res)
+        daplot <- plotCategoryOverview(res,scoreText)
         genecounts <- length(unique(res$gene))
       }else{
         rm(temp)

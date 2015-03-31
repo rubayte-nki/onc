@@ -327,10 +327,10 @@ shinyUI(
                     conditionalPanel(
                       condition = "input.geneSelectionMethodC6Value == 'type2'",
                       HTML("
-                           <a class='btn btn-link' data-toggle='collapse' href='#collapseExample' aria-expanded='false' aria-controls='collapseExample'>
+                           <a class='btn btn-link' data-toggle='collapse' href='#collapseExampleC6' aria-expanded='false' aria-controls='collapseExampleC6'>
                            Show help on Input File!
                            </a>
-                           <div class='collapse' id='collapseExample'>
+                           <div class='collapse' id='collapseExampleC6'>
                            <div class='well'>
                            <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
                            Header line should also be provided.</p>
