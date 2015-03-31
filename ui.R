@@ -306,7 +306,7 @@ shinyUI(
              ),
              
         ## comp6
-        tabPanel("User-defined Genes", 
+        tabPanel("User-selected Genes", 
          
          fluidRow(
            column(2,
@@ -689,7 +689,7 @@ shinyUI(
                      fluidRow(
                        column(3),
                        column(6,
-                              shiny::tags$h4("what are the cancer types / cancer codes?"),
+                              shiny::tags$h4("Which cancer types were analyzed and what do the cancer codes mean?"),
                               shiny::tags$hr(),
                               HTML("<ul>
                                     <li>BLCA : Bladder Urothelial Carcinoma</li>
