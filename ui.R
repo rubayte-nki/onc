@@ -411,17 +411,30 @@ shinyUI(
                                         column(12,
                                                HTML("<hr>"),
                                                HTML("
-                                                          <a class='btn btn-link' data-toggle='collapse' href='#collapseExampleC6' aria-expanded='false' aria-controls='collapseExampleC6'>
+                                                          <a class='btn btn-link' data-toggle='collapse' href='#collapseExampleC6Table' aria-expanded='false' aria-controls='collapseExampleC6Table'>
                                                           Click to see table header descriptions! 
                                                           </a>
-                                                          <div class='collapse' id='collapseExampleC6'>
+                                                          <div class='collapse' id='collapseExampleC6Table'>
                                                             <div class='well'>
                                                                 <h4>Table column descriptions</h4>
                                                                 <ul>
-                                                                    <li> <b>Genes</b>: something about the genes .. </li>
-                                                                    <li> <b>OG.Scores</b>: something about the scores .. </li>
-                                                                    <li> so on ... </li>
-                                                                </ul>
+                                                                    <li> <b>Genes</b>: HUGO gene symbol </li>
+                                                                    <li> <b>OG Score</b>: Oncogene score for the respective gene</li>
+                                                                    <li> <b>TS Score</b>: Tumor suppressor score for the respective gene</li>
+                                                                    <li> <b>Combined Score</b>: Combined score, calculated as oncogene score - tumor suppressor score, for the respective gene</li>
+                                                                    <li> <b>OG.Meth</b>: Indicates if the gene shows oncogene-like DNA methylation changes</li>
+                                                                    <li> <b>OG.CNA</b>: Indicates if the gene shows oncogene-like DNA copy number alterations</li>
+                                                                    <li> <b>OG.Mut</b>: Indicates if the gene shows oncogene-like somatic mutation profiles</li>
+                                                                    <li> <b>OG.shRNA</b>: Indicates if the gene shows oncogene-like changes after shRNA knock-down</li>
+                                                                    <li> <b>OG.Expr</b>: Indicates if the gene shows oncogene-like gene expression changes</li>
+                                                                    <li> <b>TS.Meth</b>: Indicates if the gene shows tumor suppressor-like DNA methylation changes</li>
+                                                                    <li> <b>TS.CNA</b>: Indicates if the gene shows tumor suppressor-like DNA copy number alterations</li>
+                                                                    <li> <b>TS.Mut</b>: Indicates if the gene shows tumor suppressor-like somatic mutation profiles</li>
+                                                                    <li> <b>TS.shRNA</b>: Indicates if the gene shows tumor suppressor-like changes after shRNA knock-down</li>
+                                                                    <li> <b>TS.Expr</b>: Indicates if the gene shows tumor suppressor-like gene expression changes</li>
+                                                                    <li> <b>Cancer</b>: Cancer type showing the association</li>
+                                                                    <li> <b>External links</b>: Link to the GeneCards entry for the respective gene</li>
+                                                                  </ul>
                                                               </div>
                                                             </div>
                                                             ")
@@ -676,6 +689,24 @@ shinyUI(
                      fluidRow(
                        column(3),
                        column(6,
+                              shiny::tags$h3("what are the cancer types / cancer codes?"),
+                              shiny::tags$hr(),
+                              HTML("<ul>
+                                    <li>BLCA : Bladder Urothelial Carcinoma</li>
+                                    <li>BRCA : Breast invasive carcinoma</li>
+                                    <li>COAD : Colon adenocarcinoma</li>
+                                    <li>GBM  : Glioblastoma multiforme</li>
+                                    <li>HNSC : Head and Neck squamous cell carcinoma</li>
+                                    <li>KIRC : Kidney renal clear cell carcinoma</li>
+                                    <li>LUAD : Lung adenocarcinoma</li>
+                                    <li>LUSC : Lung squamous cell carcinoma</li>
+                                    <li>OV  :  Ovarian serous cystadenocarcinoma</li>
+                                    <li>READ : Rectum adenocarcinoma</li>
+                                    <li>UCEC : Uterine Corpus Endometrial Carcinoma</li>
+                                    </ul>
+                                   "),
+                              shiny::tags$br(),
+                              
                               shiny::tags$h3("How are the scores computed / what do the scores mean?"),
                               shiny::tags$hr(),
                               shiny::tags$p("Tumor samples are compared with normal samples to identify differences. If a gene is found to be altered, this gene receives a score of 1 for this data type and else a score of 0. Details on the scoring for each data type are given below. Activating and inactivating alterations are both scored independently for each gene, and the sums of the activating and inactivating aberrations yielded an oncogene score and a tumor suppressor gene score, respectively. Additionally, we calculated the difference between oncogene score and tumor suppressor gene score, referred to as overall score, and the sum between oncogene and tumor suppressor scores, referred to as aberration score. Genes were then ranked based on one of these scores to be classified as potential new oncogene or tumor suppressor gene. Pathway alteration scores were calculated by averaging scores for all genes assigned to the same pathway. Aberrations in cancer cell lines were assessed by comparing the cell lines with normal samples available from TCGA using the same approach as for tumor samples."),

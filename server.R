@@ -163,33 +163,38 @@ shinyServer(function(input, output, session) {
   #}
   
   getHeightUserPlotC6 <- reactive({
-    if (is.null(input$geneSelectionMethodC6Value))
-    {
-      return("auto")
-    }
-    dFHeight <- 0
-    if(input$geneSelectionMethodC6Value == "type2")
-    {
-      userfile <- input$geneListUploadC6
-      if (!(is.null(userfile)))
+    
+    input$refreshPlotC6
+    isolate({
+      if (is.null(input$geneSelectionMethodC6Value))
       {
-        userdata <- read.delim(userfile$datapath,sep="\t")
-        dFHeight = (nrow(userdata)*20 ) + 300      
-      }else{
         return("auto")
       }
-    }else{
-      if (length(input$geneListValuesC6)>0)
+      dFHeight <- 0
+      if(input$geneSelectionMethodC6Value == "type2")
       {
-        genelist <- as.data.frame(strsplit(input$geneListValuesC6,',')[[1]])
-        genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
-        genelist <- as.data.frame(genelist)
-        dFHeight = (nrow(genelist)*20 ) + 300        
+        userfile <- input$geneListUploadC6
+        if (!(is.null(userfile)))
+        {
+          userdata <- read.delim(userfile$datapath,sep="\t")
+          dFHeight = (nrow(userdata)*20 ) + 300      
+        }else{
+          return("auto")
+        }
       }else{
-        return("auto")
-      }      
-    }
-    return(dFHeight)
+        if (length(input$geneListValuesC6)>0)
+        {
+          genelist <- as.data.frame(strsplit(input$geneListValuesC6,',')[[1]])
+          genelist <- gsub("[ \t\n\r\v\f]","",genelist[,1])
+          genelist <- as.data.frame(genelist)
+          dFHeight = (nrow(genelist)*20 ) + 300        
+        }else{
+          return("auto")
+        }      
+      }
+      return(dFHeight)
+      
+    })
   })
   
   getTableColumnNumberSeq <- reactive({
