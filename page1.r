@@ -12,6 +12,7 @@ page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
   {
     return()
   }
+  result.df = ''
 	# Filter the genes according to user's criteria
 	if (scoreCutoff > 0 || scoreCutoff == -10) {
 		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
@@ -19,18 +20,22 @@ page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
 		genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score <= as.integer(scoreCutoff))$gene)
 	}
 	
-	# Sort the genes according to highest sum across all cancer types
-	# Get the subset with the selected genes and drop unused levels
-	# gene.order = subset(result.df, score.type=="combined" & gene %in% genes)
-	gene.order = subset(results, score.type == comstring & gene %in% genes)
-  gene.order$gene = droplevels(gene.order$gene)
-	# Do the sorting
-	gene.order = names(sort(unlist(lapply(split(gene.order$score, gene.order$gene), sum, na.rm=TRUE))))
-	
-	# Get the data.frame for plotting
-	result.df = subset(results, gene %in% genes)
-	result.df$gene = factor(result.df$gene, levels=gene.order)
-	result.df$cancer = factor(result.df$cancer, levels=sort(unique(as.character(result.df$cancer))))
+  if (length(genes)>0){
+    # Sort the genes according to highest sum across all cancer types
+    # Get the subset with the selected genes and drop unused levels
+    # gene.order = subset(result.df, score.type=="combined" & gene %in% genes)
+    gene.order = subset(results, score.type == comstring & gene %in% genes)
+    gene.order$gene = droplevels(gene.order$gene)
+    # Do the sorting
+    gene.order = names(sort(unlist(lapply(split(gene.order$score, gene.order$gene), sum, na.rm=TRUE))))
+    
+    # Get the data.frame for plotting
+    result.df = subset(results, gene %in% genes)
+    result.df$gene = factor(result.df$gene, levels=gene.order)
+    result.df$cancer = factor(result.df$cancer, levels=sort(unique(as.character(result.df$cancer))))    
+  }else{
+    result.df <- data.frame(gene= character(0), score= character(0), score.type = character(0), cancer = character(0))
+  }
 	
 	result.df
 }
@@ -90,11 +95,17 @@ plotCategoryOverview = function(results,iniScore) {
 	      axis.title.x=element_text(color="gray30", size=10, face="bold"),
 	      strip.text.x=element_text(color="gray30", size=10, face="bold"),
 	      legend.text=element_text(color="gray30", size=10, face="bold"),
-	      #legend.title=element_blank(),
+	      legend.title=element_blank(),
 	      legend.position="top")
 	#)
   dap <- dap + labs(title=paste('Aberrations contributing to ',iniScore,sep=""))
   dap
+}
+
+getMissingPlot <- function(){
+  p <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+  p <- p + text(1,"Empty result set returned by filter. Nothing to plot.")
+  p
 }
 
 ##' main call to comp1 plots
@@ -158,8 +169,10 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }else{
     rm(df)
     rm(temp)
-    hplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-    hplot <- hplot + text(1,"Empty result set returned by filter. Nothing to plot.")
+    hplot <- 'NA' #getMissingPlot()
+    return(list(hplot=hplot, genecounts=400))    
+    #hplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+    #hplot <- hplot + text(1,"Empty result set returned by filter. Nothing to plot.")
   }  
 
   list(hplot=hplot, genecounts=(genecounts*20))
@@ -246,8 +259,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
@@ -281,8 +296,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        dapolot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else{
       ## subset data frame based on user input
@@ -324,8 +341,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
       
     }
@@ -362,8 +381,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
@@ -397,8 +418,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
     }else{
       ## subset data frame based on user input
@@ -440,8 +463,10 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }else{
         rm(temp)
         rm(temp2)
-        daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
-        daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
+        daplot <- 'NA' #getMissingPlot()
+        return(list(daplot=daplot, genecounts=400))
+        #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+        #daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
     }
   }  
@@ -510,23 +535,24 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
       rgsog <- resultsSub[resultsSub[,4]== cancer,]
-      rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgsog))
-      {
-        clist <- c(clist,cancer)
-      }
-      rgsog <- data.frame(rgsog,clist)
-      colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
-          temp <- as.data.frame(inputdf[,1])
-          colnames(temp) <- c("Genes")
-          rgsog <- plyr::join(temp,rgsog,type="left")          
-      }
       ## handle empty result set
       if (nrow(rgsog)>0){
+        
+        rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        clist <- NULL
+        for (i in 1:nrow(rgsog))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgsog <- data.frame(rgsog,clist)
+        colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
+            temp <- as.data.frame(inputdf[,1])
+            colnames(temp) <- c("Genes")
+            rgsog <- plyr::join(temp,rgsog,type="left")          
+        }
         ## select others
         resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, -10, cancer,"Combined")
         rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -556,23 +582,24 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined")
       rgsts <- resultsSub[resultsSub[,4]== cancer,]
-      rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgsts))
-      {
-        clist <- c(clist,cancer)
-      }
-      rgsts <- data.frame(rgsts,clist)
-      colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
+      ## handle empty result set
+      if (nrow(rgsts)>0){
+        
+        rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        clist <- NULL
+        for (i in 1:nrow(rgsts))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgsts <- data.frame(rgsts,clist)
+        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
           temp <- as.data.frame(inputdf[,1])
           colnames(temp) <- c("Genes")
           rgsts <- plyr::join(temp,rgsts,type="left")          
-      }
-      ## handle empty result set
-      if (nrow(rgsts)>0){
+        }
         ## select others
         resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer,"Combined")
         rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -602,23 +629,24 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer, "Combined")
       rgscom <- resultsSub[resultsSub[,4]== cancer,]
-      rgscom <- reshape(rgscom[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      clist <- NULL
-      for (i in 1:nrow(rgscom))
-      {
-        clist <- c(clist,cancer)
-      }
-      rgscom <- data.frame(rgscom,clist)
-      colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
-        temp <- as.data.frame(inputdf[,1])
-        colnames(temp) <- c("Genes")
-        rgscom <- plyr::join(temp,rgscom,type="left")            
-      }
       ## handle empty result set
       if (nrow(rgscom)>0){
+        
+        rgscom <- reshape(rgscom[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        clist <- NULL
+        for (i in 1:nrow(rgscom))
+        {
+          clist <- c(clist,cancer)
+        }
+        rgscom <- data.frame(rgscom,clist)
+        colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgscom <- plyr::join(temp,rgscom,type="left")            
+        }
         ## select others
         resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, -10, cancer, "Combined")
         rgsog <- resultsSub[resultsSub[,4]== cancer,]
@@ -668,30 +696,31 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer, "Combined")
       rgsog <- resultsSub[resultsSub[,4]== cancer,]
-      rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      if (nrow(rgsog)>0)
-      {
-        clist <- NULL
-        for (i in 1:nrow(rgsog))
-        {
-          clist <- c(clist,cancer)
-        }
-        rgsog <- data.frame(rgsog,clist)
-        colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")        
-      }else{
-        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
-        colnames(dfgenes) <- c("Empty result set")
-        #dfgenes
-      }
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
-        temp <- as.data.frame(inputdf[,1])
-        colnames(temp) <- c("Genes")
-        rgsog <- plyr::join(temp,rgsog,type="left")            
-      }
       ## handle empty result set
       if (nrow(rgsog)>0){
+        
+        rgsog <- reshape(rgsog[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        if (nrow(rgsog)>0)
+        {
+          clist <- NULL
+          for (i in 1:nrow(rgsog))
+          {
+            clist <- c(clist,cancer)
+          }
+          rgsog <- data.frame(rgsog,clist)
+          colnames(rgsog) <- c("Genes","Oncogene Score","Meth","CNA","Mut","shRNA","Expr","Cancer")        
+        }else{
+          dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+          colnames(dfgenes) <- c("Empty result set")
+          #dfgenes
+        }
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgsog <- plyr::join(temp,rgsog,type="left")            
+        }
         ## select others
         resultsSub <- page1DataFrame(ccleResultsHeatmapTS, -10, cancer, "Combined")
         rgsts <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -722,31 +751,32 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
       rgsts <- resultsSub[resultsSub[,4]== cancer,]
-      rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      if (nrow(rgsts)>0)
-      {
-        clist <- NULL
-        for (i in 1:nrow(rgsts))
-        {
-          clist <- c(clist,cancer)
-        }
-        rgsts <- data.frame(rgsts,clist)
-        colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
-      }else{
-        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
-        colnames(dfgenes) <- c("Empty result set")
-        #dfgenes
-      }
-      
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
-        temp <- as.data.frame(inputdf[,1])
-        colnames(temp) <- c("Genes")
-        rgsts <- plyr::join(temp,rgsts,type="left")            
-      }
       ## handle empty result set
       if (nrow(rgsts)>0){
+        
+        rgsts <- reshape(rgsts[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        if (nrow(rgsts)>0)
+        {
+          clist <- NULL
+          for (i in 1:nrow(rgsts))
+          {
+            clist <- c(clist,cancer)
+          }
+          rgsts <- data.frame(rgsts,clist)
+          colnames(rgsts) <- c("Genes","Tumor Suppressor Score","Meth","CNA","Mut","shRNA","Expr","Cancer")
+        }else{
+          dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+          colnames(dfgenes) <- c("Empty result set")
+          #dfgenes
+        }
+      
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgsts <- plyr::join(temp,rgsts,type="left")            
+        }
         ## select others
         resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "Combined")
         rgsog <- resultsSub[resultsSub[,3] == 'Combined' & resultsSub[,4]== cancer,c(1,2,4)]
@@ -777,30 +807,31 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
       ## subset data frame based on user input
       resultsSub <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer, "Combined")
       rgscom <- resultsSub[resultsSub[,4]== cancer,]
-      rgscom <- reshape(rgscom[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
-      if (nrow(rgscom)>0)
-      {
-        clist <- NULL
-        for (i in 1:nrow(rgscom))
-        {
-          clist <- c(clist,cancer)
-        }
-        rgscom <- data.frame(rgscom,clist)
-        colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
-      }else{
-        dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
-        colnames(dfgenes) <- c("Empty result set")
-        #dfgenes
-      }      
-      ## if input dataframe is not null then update the target dataframe with the inputdf genes
-      if (!(is.null(inputdf)))
-      {
-        temp <- as.data.frame(inputdf[,1])
-        colnames(temp) <- c("Genes")
-        rgscom <- plyr::join(temp,rgscom,type="left")            
-      }
       ## handle empty result set
       if (nrow(rgscom)>0){
+        
+        rgscom <- reshape(rgscom[,c(1,2,3)], direction = "wide", idvar="gene",timevar='score.type')
+        if (nrow(rgscom)>0)
+        {
+          clist <- NULL
+          for (i in 1:nrow(rgscom))
+          {
+            clist <- c(clist,cancer)
+          }
+          rgscom <- data.frame(rgscom,clist)
+          colnames(rgscom) <- c("Genes","Oncogene Score","Tumor Suppressor Score","Combined Score","OG Score Affected","TS Score Affected","Combined Score Affected","Cancer")
+        }else{
+          dfgenes <- data.frame(c("Empty result set returned by filter. Nothing to show."))
+          colnames(dfgenes) <- c("Empty result set")
+          #dfgenes
+        }      
+        ## if input dataframe is not null then update the target dataframe with the inputdf genes
+        if (!(is.null(inputdf)))
+        {
+          temp <- as.data.frame(inputdf[,1])
+          colnames(temp) <- c("Genes")
+          rgscom <- plyr::join(temp,rgscom,type="left")            
+        }
         ## select others
         resultsSub <- page1DataFrame(ccleResultsHeatmapOG, -10, cancer, "Combined")
         rgsog <- resultsSub[resultsSub[,4]== cancer,]
@@ -849,7 +880,7 @@ geneDataFrameResultSet = function(updateProgress = NULL,cutoff,cancer,score,samp
   rm(rgsts)
   rm(rgscom)
   rm(resultsSub)
-  rm(clist)
+  # rm(clist)
   dfgenes
 }
 

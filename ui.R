@@ -334,8 +334,8 @@ shinyUI(
                            <div class='well'>
                            <p><strong>Notice!</strong> Input file must be tab-separated with the first column having the HGNC gene symbols. 
                            Header line should also be provided.</p>
-                           <p><strong>Another thing!</strong>Once you upload a file, the uploaded data remains active in your current session.
-                           So uploading multiple times is not needed.</p>
+                           <p><strong>Another thing!</strong>Once your file is uploaded, the meassage 'Upload complete' will be visible. 
+                            Please then click the 'Refresh Results' button to generate plots and scores.</p>
                            </div>
                            </div>
                            ")

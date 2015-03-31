@@ -387,11 +387,14 @@ shinyServer(function(input, output, session) {
       
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
           #showProgress()
-          detabbplot <- comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)
-          #setHeight(detabbplot[['genecounts']])
-          #dapFrameHeight <<- detabbplot[['genecounts']] * 20
-          #dapFrameHeight
-          detabbplot[['daplot']]        
+          detabbplot <- comp1view2Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)[['daplot']]
+          if (detabbplot != 'NA')
+          {
+            detabbplot
+          }else{
+            plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+            text(1,"Empty result set returned by filter. Nothing to plot.")
+          }
         }else{
           #showProgress()
           return()
@@ -421,7 +424,14 @@ shinyServer(function(input, output, session) {
       
       if (length(isolate(input$scoreCutoff))>0 && length(isolate(input$cancerSelectorChoiceC1))>0 && length(isolate(input$selectScoreTypeC1))>0 && length(isolate(input$sampleSelectorC1))>0){
           #showProgress()
-          comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)[['hplot']]
+          summaryheatmapplot = comp1view1Plot(updateProgress,isolate(input$scoreCutoff),isolate(input$cancerSelectorChoiceC1),isolate(input$selectScoreTypeC1),isolate(input$sampleSelectorC1),NULL)[['hplot']]
+          if (summaryheatmapplot != 'NA')
+          {
+            summaryheatmapplot
+          }else{
+            plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+            text(1,"Empty result set returned by filter. Nothing to plot.")
+          }
         }else{
           #showProgress()
           return()
@@ -568,7 +578,14 @@ shinyServer(function(input, output, session) {
         userdata <- read.delim(userfile$datapath,sep="\t")
         #setHeightDAPlotC6(nrow(userdata))
         if (length(isolate(input$sampleSelectorC6))>0 && length(isolate(input$selectScoreTypeC6))>0){
-          comp1view2Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),userdata)[['daplot']]
+          detabbplotc6 = comp1view2Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),userdata)[['daplot']]
+          if (detabbplotc6 != 'NA')
+          {
+            detabbplotc6
+          }else{
+            plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+            text(1,"Uploaded genes not found in database. Nothing to plot.")
+          }
           #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
           return()
@@ -588,7 +605,14 @@ shinyServer(function(input, output, session) {
         #setHeightDAPlotC6(nrow(genelist))
         if (nrow(genelist)>0 && genelist[1,1] != ""){
           if (length(isolate(input$sampleSelectorC6))>0 && length(isolate(input$selectScoreTypeC6))>0){
-            comp1view2Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),genelist)[['daplot']]
+            detabbplotc6 = comp1view2Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),genelist)[['daplot']]
+            if (detabbplotc6 != 'NA')
+            {
+              detabbplotc6
+            }else{
+              plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+              text(1,"Uploaded genes not found in database. Nothing to plot.")
+            }
             #comp1view2FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
             return()
@@ -638,7 +662,14 @@ shinyServer(function(input, output, session) {
         userdata <- read.delim(userfile$datapath,sep="\t")
         #setHeightHPlotC6(nrow(userdata))
         if (length(isolate(input$sampleSelectorC6))>0 && length(isolate(input$selectScoreTypeC6))>0){
-          comp1view1Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),userdata)[['hplot']]
+          summaryheatmapplotc6 = comp1view1Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),userdata)[['hplot']]
+          if (summaryheatmapplotc6 != 'NA')
+          {
+            summaryheatmapplotc6
+          }else{
+            plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+            text(1,"Uploaded genes not found in database. Nothing to plot.")
+          }
           #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),userdata,isolate(input$sampleSelectorC1))
         }else{
           return()
@@ -659,7 +690,14 @@ shinyServer(function(input, output, session) {
         #setHeightHPlotC6(nrow(genelist))
         if (nrow(genelist)>0 && genelist[1,1] != ""){
           if (length(isolate(input$sampleSelectorC6))>0 && length(isolate(input$selectScoreTypeC6))>0){
-            comp1view1Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),genelist)[['hplot']]
+            summaryheatmapplotc6 = comp1view1Plot(updateProgress,-10,'BLCA',isolate(input$selectScoreTypeC6),isolate(input$sampleSelectorC6),genelist)[['hplot']]
+            if (summaryheatmapplotc6 != 'NA')
+            {
+              summaryheatmapplotc6
+            }else{
+              plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
+              text(1,"Uploaded genes not found in database. Nothing to plot.")
+            }
             #comp1view1FilePlot(updateProgress,isolate(input$cancerSelectorChoiceC1),genelist,isolate(input$sampleSelectorC1))
           }else{
             return()
