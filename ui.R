@@ -601,7 +601,7 @@ shinyUI(
                                  column(10,
                                         HTML("<div align='left'>
                                       <p><I>The pathway diagrams are retrieved from <a href='http://www.kegg.jp' target='_blank'>KEGG</a> using the 
-                                      			<a href="http://www.bioconductor.org/packages/release/bioc/html/pathview.html", target="_blank">pathview</a> package. 
+                                      			<a href='http://www.bioconductor.org/packages/release/bioc/html/pathview.html', target='_blank'>pathview</a> package. 
                                             Each square represents a gene family and is coloured according to the maximal absolute value of the selected score 
                                             (oncogene, tumor suppressor or combined) for genes in this family. In the overview with all cancer types, each cancer type is shown as a 
                                             stripe in alphabetical order of the cancer type abbreviations. When you select a specific cancer type in the menu, 

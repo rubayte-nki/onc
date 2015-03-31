@@ -1,3 +1,4 @@
+load("pathwayMatrices.RData")
 ##' Generates pathview plots for all given results. This function can be used to plot 
 ##' different scores for one cancer type or one score across different cancer types.
 ##' If cancers == "all", only the first score in scores is plotted. In all other cases,
@@ -106,20 +107,20 @@ generatePathview2 = function(updateProgress = NULL,pathway, cancer,sample,scores
     
     # Get the score matrix and combine them if necessary
     if (what == "tcga") {
-      scoreMat <- tcgaScoreMat[[cancer]][[scores]]
+      scoreMat <- tcgaScoreMat2[[cancer]][[scores]]
       limit = c(min(scoreMat, na.rm=TRUE), max(scoreMat, na.rm=TRUE))  
     } else if (what == "ccle") {
-      scoreMat <- ccleScoreMat[[cancer]][[scores]]
+      scoreMat <- ccleScoreMat2[[cancer]][[scores]]
       limit = c(min(scoreMat, na.rm=TRUE), max(scoreMat, na.rm=TRUE))  
     } else {
-      if (nrow(tcgaScoreMat[[cancer]][[scores]]) == nrow(ccleScoreMat[[cancer]][[scores]]))
+      if (nrow(tcgaScoreMat2[[cancer]][[scores]]) == nrow(ccleScoreMat2[[cancer]][[scores]]))
       {
-        scoreMat = cbind(tcgaScoreMat[[cancer]][[scores]],ccleScoreMat[[cancer]][[scores]])
+        scoreMat = cbind(tcgaScoreMat2[[cancer]][[scores]],ccleScoreMat2[[cancer]][[scores]])
         limit = c(min(scoreMat[,c(2,3)], na.rm=TRUE), max(scoreMat[,c(2,3)], na.rm=TRUE))
       }else{
-        tmat <- data.frame(tcgaScoreMat[[cancer]][[scores]],rownames(tcgaScoreMat[[cancer]][[scores]]))
+        tmat <- data.frame(tcgaScoreMat2[[cancer]][[scores]],rownames(tcgaScoreMat2[[cancer]][[scores]]))
         colnames(tmat) <- c(paste("tumor.",cancer,sep=""),"gene")
-        cmat <- data.frame(ccleScoreMat[[cancer]][[scores]],rownames(ccleScoreMat[[cancer]][[scores]]))
+        cmat <- data.frame(ccleScoreMat2[[cancer]][[scores]],rownames(ccleScoreMat2[[cancer]][[scores]]))
         colnames(cmat) <- c(paste("cellline.",cancer,sep=""),"gene")
         scoreMat <- plyr::join(tmat,cmat,type="inner",by="gene")
         rownames(scoreMat) <- scoreMat[,2]

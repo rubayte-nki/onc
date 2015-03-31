@@ -200,17 +200,17 @@ res <- getScorePlot(gloc, tcgaResults, cancers$V1[1], '2', 'TS')
 cancers = c(names(tcgaResults),"All")
 
 ## tcga
-tcgaScoreMat = NULL
+tcgaScoreMat2 = NULL
 for(c in cancers)
 {
   if (c == "All")
   {
     temp = names(tcgaResults)
-    tcgaScoreMat[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "combined.score"),
+    tcgaScoreMat2[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "combined.score"),
     												 og.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "og.score"),
     												 ts.score=pathviewMat(tcgaResults[intersect(temp, names(tcgaResults))], "ts.score"))
   }else{
-    tcgaScoreMat[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "combined.score"),
+    tcgaScoreMat2[[c]] = list(combined.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "combined.score"),
     												 og.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "og.score"),
     												 ts.score=pathviewMat(tcgaResults[intersect(c, names(tcgaResults))], "ts.score"))
   }
@@ -219,22 +219,23 @@ for(c in cancers)
 cancers = c(names(ccleResults),"All")
 
 ## ccle
-ccleScoreMat = NULL
+ccleScoreMat2 = NULL
 for(c in cancers)
 {
   if (c == "All")
   {
     temp = names(ccleResults)
-    ccleScoreMat[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "combined.score"),
+    ccleScoreMat2[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "combined.score"),
     												 og.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "og.score"),
     												 ts.score=pathviewMat(ccleResults[intersect(temp, names(ccleResults))], "ts.score"))
   }else{
-    ccleScoreMat[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "combined.score"),
+    ccleScoreMat2[[c]] = list(combined.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "combined.score"),
     												 og.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "og.score"),
     												 ts.score=pathviewMat(ccleResults[intersect(c, names(ccleResults))], "ts.score"))
   }
 }
 
+save(tcgaScoreMat2,ccleScoreMat2,file='pathwayMatrices.RData')
 
 
 #############################################################################
