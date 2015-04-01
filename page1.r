@@ -115,7 +115,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   
   if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
   {
-    return(list(genecounts=400))
+    return(list(genecounts=500))
   }
   
   df = NULL
@@ -170,12 +170,12 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
     rm(df)
     rm(temp)
     hplot <- 'NA' #getMissingPlot()
-    return(list(hplot=hplot, genecounts=400))    
+    return(list(hplot=hplot, genecounts=500))    
     #hplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
     #hplot <- hplot + text(1,"Empty result set returned by filter. Nothing to plot.")
   }  
 
-  list(hplot=hplot, genecounts=(genecounts*20))
+  list(hplot=hplot, genecounts=((genecounts*20)+200))
 }
 
 ## for user file input
@@ -211,7 +211,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   
   if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
   {
-    return(list(genecounts=400))
+    return(list(genecounts=500))
   }
   genecounts = 0
   scoreText = ""
@@ -260,7 +260,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -297,7 +297,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -342,7 +342,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
@@ -382,7 +382,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -419,7 +419,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"Empty result set returned by filter. Nothing to plot.")
       }      
@@ -464,14 +464,14 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
         rm(temp)
         rm(temp2)
         daplot <- 'NA' #getMissingPlot()
-        return(list(daplot=daplot, genecounts=400))
+        return(list(daplot=daplot, genecounts=500))
         #daplot <- plot(1,xaxt='n',yaxt='n',ann=FALSE,type="p",col="white")
         #daplot <- daplot + text(1,"No overlapping genes were found using the same cutoff score. Nothing to plot.")        
       }
     }
   }  
   
-  list(daplot=daplot, genecounts=(genecounts*20))
+  list(daplot=daplot, genecounts=((genecounts*20)+200))
 }
 
 ## for user file input

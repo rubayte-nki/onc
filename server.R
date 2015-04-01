@@ -142,21 +142,21 @@ shinyServer(function(input, output, session) {
     comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['genecounts']]
   }
   
-  setHeightDAPlotC6 <- function(value)
-  {
-    dapFrameHeight <- (value * 20) + 100
+  #setHeightDAPlotC6 <- function(value)
+  #{
+  #  dapFrameHeight <- (value * 20) + 100
     # comp1view2Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,NULL)[['genecounts']]
-  }
-  getHeightDAPlotC6 <- function()
-  {
-    return(dapFrameHeight)
-  }
+  #}
+  #getHeightDAPlotC6 <- function()
+  #{
+  #  return(dapFrameHeight)
+  #}
   
-  setHeightHPlotC6 <- function(value)
-  {
-    dapFrameHeight <- (value * 20) + 100
+  #setHeightHPlotC6 <- function(value)
+  #{
+  #  dapFrameHeight <- (value * 20) + 100
     #comp1view1Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,NULL)[['genecounts']]
-  }
+  #}
   # <- function()
   #{
   #  return(dapFrameHeight)
@@ -197,14 +197,14 @@ shinyServer(function(input, output, session) {
     })
   })
   
-  getTableColumnNumberSeq <- reactive({
-    if ( input$selectScoreTypeC1 != "og.score")
-    {
-      return(seq(from = 1, to = 19, by = 1))
-    }else{
-      return(seq(from = 1, to = 11, by = 1))
-    }
-  })
+#   getTableColumnNumberSeq <- reactive({
+#     if ( input$selectScoreTypeC1 != "og.score")
+#     {
+#       return(seq(from = 1, to = 19, by = 1))
+#     }else{
+#       return(seq(from = 1, to = 11, by = 1))
+#     }
+#   })
   
   
   ###################################################################################
