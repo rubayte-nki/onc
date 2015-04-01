@@ -223,7 +223,7 @@ shinyUI(
                                   column(12,
                                          HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to populate table data and generate plots!</strong>
+                                        <strong>Click on the 'Refresh Results' button to populate table data and generate plots!</strong>
                                     </div>
                                     ")
                                   )
@@ -306,7 +306,7 @@ shinyUI(
              ),
              
         ## comp6
-        tabPanel("User-defined Genes", 
+        tabPanel("User-selected Genes", 
          
          fluidRow(
            column(2,
@@ -365,7 +365,7 @@ shinyUI(
                       column(12,
                              HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                       <strong>Click on the 'Refresh Results' to populate table data and generate plots!</strong>
+                       <strong>Click on the 'Refresh Results' button to populate table data and generate plots!</strong>
                        </div>
                        ")
                       )
@@ -476,7 +476,7 @@ shinyUI(
                               column(12,
                                      HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
+                                        <strong>Click on the 'Refresh Results' button to generate plots!</strong>
                                     </div>
                                     ")
                               )
@@ -542,7 +542,7 @@ shinyUI(
                                  column(12,
                                         HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
+                                        <strong>Click on the 'Refresh Results' button to generate plots!</strong>
                                     </div>
                                     ")
                                  )
@@ -607,7 +607,7 @@ shinyUI(
                                  column(12,
                                         HTML("<div align='center' class='alert alert-info alert-dismissible' role='alert'>
                                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <strong>Click on the 'Refresh Results' to generate plots!</strong>
+                                        <strong>Click on the 'Refresh Results' button to generate plots!</strong>
                                     </div>
                                     ")
                                  ),
@@ -689,7 +689,7 @@ shinyUI(
                      fluidRow(
                        column(3),
                        column(6,
-                              shiny::tags$h4("what are the cancer types / cancer codes?"),
+                              shiny::tags$h4("Which cancer types were analyzed and what do the cancer codes mean?"),
                               shiny::tags$hr(),
                               HTML("<ul>
                                     <li>BLCA : Bladder Urothelial Carcinoma</li>
