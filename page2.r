@@ -60,9 +60,9 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 		cls = tcgaResultsCLS[[cancer]]$cls #tcgaResults[[cancer]]$cls
 	}
 	#meth.anno = infinium450.probe.ann
-  if (is.element(gene,rownames(achilles)))
+  if (is.element(gene,rownames(achilles)) || length(cls) == 0)
   {
-   achls = achilles[gene,] # achilles[gene, cls]    
+   achls = achilles[gene, cls] # achilles[gene,]    
   }else{
     achls = NULL
   }
