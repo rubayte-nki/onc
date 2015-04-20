@@ -177,13 +177,12 @@ getScoreHeatmap2 = function(geneLocs, results, cancType, scoreType) {
            color=cols,
            breaks=brks,
            scale="none",
-           Rowv=NA, Colv=NA,width=13.35,height=10, 
+           Rowv=NA, Colv=NA,width=3.69,height=2.6,fontsize = 3, 
            cexRow=0, cexCol=0,filename=outputImage)
 
   system('composite "temp.png" -compose Multiply "chrom_contours.png"  "temp.png" ')
   #system('composite -compose Multiply "chrom_contours.png" "temp.png" "temp.png" ')
   outputImage
-  
 }
 
 
