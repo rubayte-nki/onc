@@ -139,29 +139,11 @@ shinyServer(function(input, output, session) {
   
   setHeightHPlot <- function()
   {
-    comp1view1Plot(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['genecounts']]
+    comp1view1PlotGC(updateProgress,input$scoreCutoff,input$cancerSelectorChoiceC1,input$selectScoreTypeC1,input$sampleSelectorC1,NULL)[['genecounts']]
   }
   
-  #setHeightDAPlotC6 <- function(value)
-  #{
-  #  dapFrameHeight <- (value * 20) + 100
-    # comp1view2Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,NULL)[['genecounts']]
-  #}
-  #getHeightDAPlotC6 <- function()
-  #{
-  #  return(dapFrameHeight)
-  #}
-  
-  #setHeightHPlotC6 <- function(value)
-  #{
-  #  dapFrameHeight <- (value * 20) + 100
-    #comp1view1Plot(updateProgress,-10,'BLCA',input$selectScoreTypeC6,input$sampleSelectorC6,NULL)[['genecounts']]
-  #}
-  # <- function()
-  #{
-  #  return(dapFrameHeight)
-  #}
-  
+
+
   getHeightUserPlotC6 <- reactive({
     
     input$refreshPlotC6
@@ -277,55 +259,7 @@ shinyServer(function(input, output, session) {
   })
 
   
-#   ## gene selection procedure
-#   output$geneSelectionPanelC1 <- renderUI({
-#     if(is.null(input$geneSelectionMethodC1Value))
-#     {
-#       return()
-#     }
-#     if (input$selectScoreTypeC1 == "combined.score")
-#     {
-#       choicesToPass = list(">=2" = 2, ">=3" = 3, ">=4" = 4, "=<-2" = -2, "=<-3" = -3, "=<-4" = -4)      
-#     }
-#     if (input$actionAutoFillGeneTextArea > 0)
-#     {
-#       copyPastedGenes <- "ATM,ZNF3"
-#     }
-#     switch(input$geneSelectionMethodC1Value,
-#            "type1" = selectInput("scoreCutoff", label = "Score cut-off", 
-#                                                              choices = choicesToPass,
-#                                                              selected = 3),
-#            "type2" = fileInput('geneListUploadC1', 'Upload Gene List File',accept = c(".tsv")),
-#            "type3" = shiny::tags$textarea(id="geneListValuesC1", rows=10, cols=20, copyPastedGenes)
-#            )
-#   })
-#   
-  ## auto fill gene text area
-#   observe({
-#     if (input$actionAutoFillGeneTextArea == 0)
-#     {
-#       return()
-#     }
-#     isolate({
-#       copyPastedGenes <- c('ATM','ZNF3')      
-#     })
-#   })
-  
-#   ## score cut off selector comp1
-#   if(input$geneSelectionMethodC1Value == "type1")
-#   {
-#     output$scoreCutoffSelectorC1 <- renderUI({
-#       input$selectScoreTypeC1
-#       if (input$selectScoreTypeC1 == 'combined.score'){  
-#         selectInput("scoreCutoff", label = "Score cut-off", 
-#                     choices = list(">2" = 2, ">3" = 3, ">4" = 4, "<-2" = -2, "<-3" = -3, "<-4" = -4),selected = 3)
-#       }else{
-#         selectInput("scoreCutoff", label = "Score cut-off", 
-#                     choices = list(">2" = 2, ">3" = 3, ">4" = 4),selected = 3)      
-#       }
-#       
-#     })    
-#   }
+
   restable <- NULL
   ## tables
   output$genesResTable <- shiny::renderDataTable({
@@ -460,7 +394,7 @@ shinyServer(function(input, output, session) {
   ## detail abberation plot
   output$downloadPlotDAPlot <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
+      paste('plot-', Sys.Date(), '.png', sep="")
     },
     content <- function(file){
       device <- function(..., width, height) {
@@ -479,7 +413,7 @@ shinyServer(function(input, output, session) {
   ## summary heatmap
   output$downloadPlotHPlot <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
+      paste('plot-', Sys.Date(), '.png', sep="")
     },
     content <- function(file){
       device <- function(..., width, height) {
@@ -795,7 +729,7 @@ shinyServer(function(input, output, session) {
   ## detail abberation plot
   output$downloadPlotDAPlotC6 <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
+      paste('plot-', Sys.Date(), '.png', sep="")
     },
     content <- function(file){
       device <- function(..., width, height) {
@@ -832,7 +766,7 @@ shinyServer(function(input, output, session) {
   ## summary heatmap
   output$downloadPlotHPlotC6 <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
+      paste('plot-', Sys.Date(), '.png', sep="")
     },
     content <- function(file){
       device <- function(..., width, height) {
@@ -1000,7 +934,7 @@ shinyServer(function(input, output, session) {
   ## downloads
   output$downloadPlotC2GE <- downloadHandler(
   filename = function() {
-    paste('plot-', Sys.Date(), '.jpeg', sep="")
+    paste('plot-', Sys.Date(), '.png', sep="")
   },
   content <- function(file){
     device <- function(..., width, height) {
@@ -1014,7 +948,7 @@ shinyServer(function(input, output, session) {
   )
   output$downloadPlotC2CNA <- downloadHandler(
   filename = function() {
-    paste('plot-', Sys.Date(), '.jpeg', sep="")
+    paste('plot-', Sys.Date(), '.png', sep="")
   },
   content <- function(file){
     device <- function(..., width, height) {
@@ -1028,7 +962,7 @@ shinyServer(function(input, output, session) {
   )
   output$downloadPlotC2A <- downloadHandler(
   filename = function() {
-    paste('plot-', Sys.Date(), '.jpeg', sep="")
+    paste('plot-', Sys.Date(), '.png', sep="")
   },
   content <- function(file){
     device <- function(..., width, height) {
@@ -1151,7 +1085,7 @@ shinyServer(function(input, output, session) {
   ## downloads
   output$downloadDataView1C3 <- downloadHandler(
     filename = function() {
-      paste('plot-', Sys.Date(), '.jpeg', sep="")
+      paste('plot-', Sys.Date(), '.png', sep="")
     },
     content <- function(file){
       file.copy(comp3view1PlotNew(NULL,input$cancerSelectorChoiceC3,input$selectScoreTypeC3,input$selectSampleTypeC3),file)
@@ -1201,7 +1135,14 @@ shinyServer(function(input, output, session) {
                                "Combined score" = "combined.score"), selected = "og.score")
   })  
   ## pathway selector comp4
-  updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = NULL, server = TRUE)
+  output$pathSelC4 <- renderUI({
+    selectizeInput(
+      'pathwaySelectorChoiceC4', label = "Select Pathway", choices = pathways,
+      options = list(maxItems = 1,placeholder="Type and Select a Pathway")
+    )    
+  })
+
+  #updateSelectizeInput(session, 'pathwaySelectorChoiceC4', choices = pathways, selected = NULL, server = TRUE)
   ## sample set selector comp4
   output$sampleSelectorC4 <- renderUI({
     if (is.null(input$cancerSelectorChoiceC4))
@@ -1247,12 +1188,12 @@ shinyServer(function(input, output, session) {
              #height = 500,
              alt = "Empty")
       }else{
-        list(src = generatePathview2(updateProgress,isolate(input$pathwaySelectorChoiceC4), isolate(input$cancerSelectorChoiceC4),isolate(input$sampleSelectorC4),
-                                     isolate(input$selectScoreTypeC4)),
+        list(src = "",
              contentType = 'image/png',
              #width = 800,
              #height = 500,
-             alt = "Empty")      }
+             alt = "")      
+      }
       
     })    
     })#)

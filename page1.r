@@ -6,7 +6,7 @@ load("starter.RData")
 ##' @param cancerType cancer type selected by the user
 ##' @return a subset of the data.frame that fits the user's selection
 ##' @author Andreas Schlicker
-page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
+page1DataFramePlot = function(results, scoreCutoff, cancerType, comstring) {
   
   if (is.null(scoreCutoff))
   {
@@ -26,6 +26,44 @@ page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
     # gene.order = subset(result.df, score.type=="combined" & gene %in% genes)
     gene.order = subset(results, score.type == comstring & gene %in% genes)
     gene.order$gene = droplevels(gene.order$gene)
+    
+    # Do the sorting
+    gene.order = names(sort(unlist(lapply(split(gene.order$score, gene.order$gene), sum, na.rm=TRUE))))
+    
+    # Get the data.frame for plotting
+    result.df = subset(results, gene %in% genes)
+    ## filter / limit rows
+    result.df <- limitRes (result.df,scoreCutoff,cancerType)
+    # result.df$gene = factor(result.df$gene, levels=gene.order)
+    # result.df$cancer = factor(result.df$cancer, levels=sort(unique(as.character(result.df$cancer))))    
+  }else{
+    result.df <- data.frame(gene= character(0), score= character(0), score.type = character(0), cancer = character(0))
+  }
+	
+	result.df
+}
+
+page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
+  
+  if (is.null(scoreCutoff))
+  {
+    return()
+  }
+  result.df = ''
+  # Filter the genes according to user's criteria
+  if (scoreCutoff > 0 || scoreCutoff == -10) {
+    genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score >= as.integer(scoreCutoff))$gene)
+  } else {
+    genes = as.character(subset(results, cancer == cancerType & score.type == comstring & score <= as.integer(scoreCutoff))$gene)
+  }
+  
+  if (length(genes)>0){
+    # Sort the genes according to highest sum across all cancer types
+    # Get the subset with the selected genes and drop unused levels
+    # gene.order = subset(result.df, score.type=="combined" & gene %in% genes)
+    gene.order = subset(results, score.type == comstring & gene %in% genes)
+    gene.order$gene = droplevels(gene.order$gene)
+    
     # Do the sorting
     gene.order = names(sort(unlist(lapply(split(gene.order$score, gene.order$gene), sum, na.rm=TRUE))))
     
@@ -36,9 +74,10 @@ page1DataFrame = function(results, scoreCutoff, cancerType, comstring) {
   }else{
     result.df <- data.frame(gene= character(0), score= character(0), score.type = character(0), cancer = character(0))
   }
-	
-	result.df
+  
+  result.df
 }
+
 
 ##' Get the heatmap for view 1 of page 1.
 ##' @params results a subsetted data.frame as returned by page1DataFrame()
@@ -140,7 +179,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }
   
   ## subset data frame based on user input
-  resultsSub <- page1DataFrame(df, cutoff, cancer,"Combined")
+  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined")
   resultsSub <- resultsSub[resultsSub$score.type == "Combined",]
   ## if input dataframe is not null then update the target dataframe with the inputdf genes
   if (!(is.null(inputdf)))
@@ -177,6 +216,55 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
 
   list(hplot=hplot, genecounts=((genecounts*20)+200))
 }
+
+## summary heatmap plot gene count
+comp1view1PlotGC = function(updateProgress = NULL,cutoff,cancer,score,sample,inputdf = NULL){
+  
+  if (is.null(cancer) || is.null(score) || is.null(sample) || is.null(cutoff))
+  {
+    return(list(genecounts=500))
+  }
+  
+  genecounts = 0
+  
+  if (sample == 'tumors'){
+    if(score == 'og.score'){
+      df = tcgaResultsHeatmapOG
+    }else if(score == 'ts.score'){
+      df = tcgaResultsHeatmapTS
+    }else{
+      df = tcgaResultsHeatmapCombined
+    }
+  }else{
+    if(score == 'og.score'){
+      df = ccleResultsHeatmapOG
+    }else if(score == 'ts.score'){
+      df = ccleResultsHeatmapTS
+    }else{
+      df = ccleResultsHeatmapCombined
+    }
+  }
+  
+  ## subset data frame based on user input
+  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined")
+  resultsSub <- resultsSub[resultsSub$score.type == "Combined",]
+  #resultsSub <- limitRes (resultsSub,cutoff)
+  ## if input dataframe is not null then update the target dataframe with the inputdf genes
+  if (!(is.null(inputdf)))
+  {
+    temp <- as.data.frame(inputdf[,1])
+    colnames(temp) <- c("gene")
+    resultsSub <- plyr::join(temp,resultsSub,type="inner")          
+  }
+  if (nrow(resultsSub) > 0){
+    genecounts <- length(unique(resultsSub$gene))
+  }else{
+    genecounts=500    
+  }  
+  
+  list(genecounts=((genecounts*20)+200))
+}
+
 
 ## for user file input
 comp1view1FilePlot = function(updateProgress = NULL,cancer,inputdf,sample)
@@ -229,7 +317,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -266,7 +354,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
-      resultsSub <- page1DataFrame(tcgaResultsHeatmapTS, cutoff, cancer,"Combined") 
+      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapTS, cutoff, cancer,"Combined") 
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -303,7 +391,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else{
       ## subset data frame based on user input
-      com <- page1DataFrame(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")
+      com <- page1DataFramePlot(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")
       genes <- unique(com$gene)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
@@ -351,7 +439,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }else{
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapOG, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(ccleResultsHeatmapOG, cutoff, cancer,"Combined")
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -388,7 +476,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFrame(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -425,7 +513,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else{
       ## subset data frame based on user input
-      com <- page1DataFrame(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")
+      com <- page1DataFramePlot(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")
       genes <- unique(com$gene)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
@@ -1020,4 +1108,35 @@ mapCancerTextToCode <- function(cancer){
   }
   
   clink  
+}
+
+
+limitRes <- function (data,cutoff,cancer)
+{
+   res <- NULL
+   temp <- data[data$cancer == cancer,]
+   data <- data[data$cancer != cancer,]
+   if (cutoff > 0 || cutoff == -10)
+   {
+     temp <- temp[order(-temp$score),]
+   }else{
+     temp <- temp[order(temp$score),]
+   }
+   tg <- unique(temp$gene)
+   tg.fil <- NULL
+   if (length(tg)>1000)
+   {
+     tg.fil <- tg[1:1000]
+     temp <- temp[temp$gene %in% tg.fil,]
+     data <- data[data$gene %in% tg.fil,]
+     res <- rbind(temp,data)
+     rm(temp)
+     rm(tg)
+     rm(tg.fil)
+     res
+   }else{
+    res <- rbind(temp,data) 
+   }
+  res
+
 }

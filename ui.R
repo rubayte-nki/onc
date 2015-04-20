@@ -1,6 +1,7 @@
 library(shiny)
 library(shinysky)
 
+
 shinyUI(
   bootstrapPage(
   includeCSS("www/styles.css"),
@@ -459,7 +460,7 @@ shinyUI(
                                  uiOutput("cancerSelectorC2"),
                                  
                                  ## gene select
-                                 selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Select Gene")),
+                                 selectizeInput('geneSelectorChoiceC2', label = "Select Gene", choices = NULL, options = list(maxItems = 1,placeholder="Type gene & select")),
                                  
                                  ## select sample set
                                  uiOutput("sampleSelectorC2"),
@@ -591,7 +592,8 @@ shinyUI(
                                  
                                  
                                  ## pathway select
-                                 selectizeInput('pathwaySelectorChoiceC4', label = "Select Pathway",  choices = NULL, options = list(maxItems = 1,placeholder="Type and Select a Pathway")),
+                                 uiOutput("pathSelC4"),
+                                 #selectizeInput('pathwaySelectorChoiceC4', label = "Select Pathway",  choices = pathways, options = list(maxItems = 1,placeholder="Type and Select a Pathway")),
                                  
                                  ## tumors or cell lines
                                  uiOutput("sampleSelectorC4"),

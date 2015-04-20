@@ -73,6 +73,11 @@ load("pathwayMatrices.RData")
 
 generatePathview2 = function(updateProgress = NULL,pathway, cancer,sample,scores) {
   
+  if (is.null(pathway))
+  {
+    return()
+  }
+  
   if (substr(pathway,1,3) == "hsa")
   {
     ## get the pathway code out of pathway parameter
