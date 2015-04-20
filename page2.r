@@ -62,7 +62,8 @@ getPage2Plots = function(updateProgress = NULL,cancer, gene, sampleSelection) {
 	#meth.anno = infinium450.probe.ann
   if (is.element(gene,rownames(achilles)) || length(cls) == 0)
   {
-   achls = achilles[gene, cls, drop=FALSE] # achilles[gene,]    
+   achls = achilles[gene, cls] # achilles[gene,]
+   names(achls) = cls
   }else{
     achls = NULL
   }
