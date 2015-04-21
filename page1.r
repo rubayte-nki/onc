@@ -6,7 +6,7 @@ load("starter.RData")
 ##' @param cancerType cancer type selected by the user
 ##' @return a subset of the data.frame that fits the user's selection
 ##' @author Andreas Schlicker
-page1DataFramePlot = function(results, scoreCutoff, cancerType, comstring) {
+page1DataFramePlot = function(results, scoreCutoff, cancerType, comstring, filter) {
   
   if (is.null(scoreCutoff))
   {
@@ -33,7 +33,10 @@ page1DataFramePlot = function(results, scoreCutoff, cancerType, comstring) {
     # Get the data.frame for plotting
     result.df = subset(results, gene %in% genes)
     ## filter / limit rows
-    result.df <- limitRes (result.df,scoreCutoff,cancerType)
+    if (filter == "yes")
+    {
+      result.df <- limitRes (result.df,scoreCutoff,cancerType)
+    }
     # result.df$gene = factor(result.df$gene, levels=gene.order)
     # result.df$cancer = factor(result.df$cancer, levels=sort(unique(as.character(result.df$cancer))))    
   }else{
@@ -160,6 +163,12 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   df = NULL
   genecounts = 0
   
+  is_inputdf = "yes"
+  if (!(is.null(inputdf)))
+  {
+    is_inputdf = "no" 
+  }
+  
   if (sample == 'tumors'){
     if(score == 'og.score'){
       df = tcgaResultsHeatmapOG
@@ -179,7 +188,7 @@ comp1view1Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }
   
   ## subset data frame based on user input
-  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined")
+  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined",is_inputdf)
   resultsSub <- resultsSub[resultsSub$score.type == "Combined",]
   ## if input dataframe is not null then update the target dataframe with the inputdf genes
   if (!(is.null(inputdf)))
@@ -226,6 +235,11 @@ comp1view1PlotGC = function(updateProgress = NULL,cutoff,cancer,score,sample,inp
   }
   
   genecounts = 0
+  is_inputdf = "yes"
+  if (!(is.null(inputdf)))
+  {
+    is_inputdf = "no" 
+  }
   
   if (sample == 'tumors'){
     if(score == 'og.score'){
@@ -246,7 +260,7 @@ comp1view1PlotGC = function(updateProgress = NULL,cutoff,cancer,score,sample,inp
   }
   
   ## subset data frame based on user input
-  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined")
+  resultsSub <- page1DataFramePlot(df, cutoff, cancer,"Combined", is_inputdf)
   resultsSub <- resultsSub[resultsSub$score.type == "Combined",]
   #resultsSub <- limitRes (resultsSub,cutoff)
   ## if input dataframe is not null then update the target dataframe with the inputdf genes
@@ -303,6 +317,12 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }
   genecounts = 0
   scoreText = ""
+  is_inputdf = "yes"
+  if (!(is.null(inputdf)))
+  {
+    is_inputdf = "no" 
+  }
+  
   ## map score text for ploting
   if (score == 'og.score')
   {
@@ -317,7 +337,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   if (sample == 'tumors'){
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapOG, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapOG, cutoff, cancer,"Combined",is_inputdf)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -354,7 +374,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user inputn 
-      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapTS, cutoff, cancer,"Combined") 
+      resultsSub <- page1DataFramePlot(tcgaResultsHeatmapTS, cutoff, cancer,"Combined",is_inputdf) 
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -391,7 +411,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else{
       ## subset data frame based on user input
-      com <- page1DataFramePlot(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined")
+      com <- page1DataFramePlot(tcgaResultsHeatmapCombined, cutoff, cancer,"Combined",is_inputdf)
       genes <- unique(com$gene)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
@@ -439,7 +459,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
   }else{
     if(score == 'og.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFramePlot(ccleResultsHeatmapOG, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(ccleResultsHeatmapOG, cutoff, cancer,"Combined",is_inputdf)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -476,7 +496,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else if(score == 'ts.score'){
       ## subset data frame based on user input
-      resultsSub <- page1DataFramePlot(ccleResultsHeatmapTS, cutoff, cancer,"Combined")
+      resultsSub <- page1DataFramePlot(ccleResultsHeatmapTS, cutoff, cancer,"Combined",is_inputdf)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
       {
@@ -513,7 +533,7 @@ comp1view2Plot = function(updateProgress = NULL,cutoff,cancer,score,sample,input
       }      
     }else{
       ## subset data frame based on user input
-      com <- page1DataFramePlot(ccleResultsHeatmapCombined, cutoff, cancer,"Combined")
+      com <- page1DataFramePlot(ccleResultsHeatmapCombined, cutoff, cancer,"Combined",is_inputdf)
       genes <- unique(com$gene)
       ## if input dataframe is not null then update the target dataframe with the inputdf genes
       if (!(is.null(inputdf)))
