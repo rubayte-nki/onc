@@ -234,16 +234,28 @@ shinyUI(
 
                                         tabsetPanel(
                                           ## view type 1
-                                          tabPanel("Detailed Aberration Profiles",
+                                          tabPanel("Detailed Aberration Profiles",     
                                                    HTML("<h4>Cancer-type-specific top candidate genes"),
                                                    downloadButton('downloadPlotDAPlot', 'Download', class='btn btn-link'),
                                                    HTML("</h4>"),
+                                                   HTML("<div align='center' class='alert alert-warning alert-dismissible' role='alert'>
+                                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                                  <strong>If your selections return more than 1000 genes, then only top 1000 genes are plotted! You can 
+                                                  find all the candidate genes in the 'Scores' tab!</strong>
+                                                  </div>
+                                                  "),
                                                    plotOutput("distPlot2")),
                                           ## view type 2
                                           tabPanel("Summary Heat-Map",
                                                    HTML("<h4>Cancer-type-specific top candidate genes"),
                                                    downloadButton('downloadPlotHPlot', 'Download', class='btn btn-link'),
                                                    HTML("</h4>"),
+                                                   HTML("<div align='center' class='alert alert-warning alert-dismissible' role='alert'>
+                                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                                  <strong>If your selections return more than 1000 genes, then only top 1000 genes are plotted! You can 
+                                                  find all the candidate genes in the 'Scores' tab!</strong>
+                                                  </div>
+                                                  "),
                                                    plotOutput("distPlot")),
                                           #tabPanel("Summary Heat-Map",dygraphOutput("distPlot",height="4000px"))
                                           tabPanel("Scores",
@@ -754,7 +766,14 @@ shinyUI(
                               shiny::tags$p("If user uploads a gene which is not a valid HGNC/HUGO gene symbol, then it is not shown in the plots. However, the 
                                             scores table will show a data row for this gene but all the scores column will be set to '-'. This incident can 
                                             also occour if some user uploaded gene is not found in the database."),
+                              shiny::tags$br(),
+                              
+                              shiny::tags$h4("Why number of genes not same in table and plots in 'Top Candidate Genes' page?"),
+                              shiny::tags$hr(),
+                              shiny::tags$p("According to user selection criteria, top candidate genes are selected and shown into plots and table. However, 
+                                            all the geens are shown in the table, but only top 1000 genes are shown in the plots."),
                               shiny::tags$br()
+                              
                               
                               
 
